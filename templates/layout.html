@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8"/>
+
+  <!--KEYWORDS-->
+  <meta name="keywords"
+	content="top 5, rappers, hip hop artists, jay z, nas, tupac, biggie, best,
+  best of all time, best rappers of all time, best hip hop artists of all time,
+  greatest of all time, greatest rappers of all time, GOAT, G.O.A.T, GOAT,
+  drake, kendrick lamar, j cole, big sean, migos, ice cube, snoop dogg,
+  lil wayne, classic, illmatic, new york, east coast, west coast, beef"/>
+
+  <!--Index Info-->
+  <meta name="robots" content="index,follow"/>
+
+  <!--CSS Style sheet-->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="css/bootstrap.css")}}"/>
+
+  <!--Website Icon (16x16)-->
+  <!--<link rel="icon" href="images/website-icon.png"/>-->
+
+  <title>All Time Hip Hop Artist</title>
+
+</head>
+
+<!-- HEADER -->
+<header class="main-header" role="banner">
+</header>
+
+<body>
+  {% include 'includes/_navbar.html' %}
+  <div class="container" style="margin-left: 20px; margin-top: 20px;">
+    {% block body %}{% endblock %}
+  </div>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="{{ url_for('static', filename="js/bootstrap.min.js")}}"></script>
+</body>

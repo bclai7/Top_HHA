@@ -1,0 +1,13 @@
+{%extends 'layout.html'%}
+
+{% block body %}
+  <h1>Ratings</h1>
+  <div class="artist_dropdown">
+    <select name=artists method="GET" action="/" style="width: 200px">
+      {% for artist in artistList %}
+        <option value= "{{artist}}">{{artist}}</option>"
+      {% endfor %}
+    </select>
+  </div>
+
+{% endblock %}
