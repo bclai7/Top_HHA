@@ -10,7 +10,7 @@ def index():
 def mycriteria():
     return render_template('mycriteria.html')
 
-@app.route('/artistratings', methods=['GET','POST'])
+@app.route('/artistratings')
 def myratings():
     with open("Resources/RapperList.txt", "r") as f:
         content = f.readlines()
