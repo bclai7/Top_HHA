@@ -5,9 +5,11 @@
   <p>Select an artist to rate</p>
   <div class="artist-dropdown">
     <select class="selectpicker" data-live-search="true">
+      <option disabled selected value style="display:none"> -- select an artist -- </option>
       {% for artist in artistList %}
         <option data-tokens="{{artist}}">{{artist}}</option>
       {% endfor %}
+      <option disabled value style="display:none"> -- END -- </option> <!--This is to remove the blank space at the bottom when scrolling all the way down-->
     </select>
   </div>
 
