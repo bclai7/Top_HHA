@@ -3,18 +3,18 @@
   border-color: #0033cc;
   width: 100px;
   border-radius: 15px;
-  border-width: 2px;
+  border-width: 1px;
 }
 
 .artist-dropdown .custom-select{
   width: 225px;
   border-radius: 15px;
-  border-width: 2px;
+  border-width: 1px;
   border-color: #0033cc;
 }
 
 .jumbotron{
   width: 80%;
-  border-color: #0033cc;
-  border-width: 3px;
+  border: 1px solid #0033cc;
+  border-radius: 15px;
 }
