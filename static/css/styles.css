@@ -1,5 +1,5 @@
 /*CUSTOMIZATIONS*/
-.form-group .form-control {
+.criteria-form .form-group .form-control {
   border-color: #0033cc;
   width: 100px;
   border-radius: 15px;
@@ -12,6 +12,12 @@
   border-radius: 15px;
 }
 
+.register-form .form-group .form-control{
+  border-color: #0033cc;
+  width: 60%;
+  border-radius: 15px;
+  border-width: 1px;
+}
 /*
 body{
   background: #404040;
