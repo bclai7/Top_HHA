@@ -3,14 +3,23 @@
 {% block body %}
   <h1>Ratings</h1>
   <p>Select an artist to rate</p>
-  <div class="artist-dropdown">
-    <select class="selectpicker" data-live-search="true">
+  <div class="artist-dropdown" onchange="getArtistName();">
+    <select class="selectpicker" data-live-search="true" id="artist_name">
       <option disabled selected value style="display:none"> -- select an artist -- </option>
       {% for artist in artistList %}
         <option data-tokens="{{artist}}">{{artist}}</option>
       {% endfor %}
       <option disabled value style="display:none"> -- END -- </option> <!--This is to remove the blank space at the bottom when scrolling all the way down-->
     </select>
+    <p id="name_display"></p>
   </div>
+
+  <script>
+    function getArtistName(){
+      var x = document.getElementById("artist_name").selectedIndex;
+      var a = document.getElementsByTagName("option")[x].value;
+      document.getElementById('name_display').innerHTML = a;
+    }
+  </script>
 
 {% endblock %}

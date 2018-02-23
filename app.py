@@ -28,23 +28,70 @@ def index():
     return render_template('home.html')
 
 # Criteria Settings
-@app.route('/mycriteria')
+@app.route('/mycriteria', methods=['GET', 'POST'])
 def mycriteria():
-    return render_template('mycriteria.html')
+    if request.method == 'POST':
+        user_id = session['user_id']
+
+        # get criteria values from form
+        content = request.form['content']
+        delivery = request.form['delivery']
+        hits = request.form['hits']
+        albums = request.form['albums']
+        consistency = request.form['consistency']
+        longevity = request.form['longevity']
+        impact = request.form['impact']
+        sales = request.form['sales']
+        personality = request.form['personality']
+        creativity = request.form['creativity']
+        popularity = request.form['popularity']
+
+        # Load criteria values into session
+        session['content']=content
+        session['delivery']=delivery
+        session['hits']=hits
+        session['albums']=albums
+        session['consistency']=consistency
+        session['longevity']=longevity
+        session['impact']=impact
+        session['sales']=sales
+        session['personality']=personality
+        session['creativity']=creativity
+        session['popularity']=popularity
+
+        # Create MySQL Cursor
+        cur = mysql.connection.cursor()
+
+        # Update Values
+        query = "UPDATE user SET content = %s, delivery=%s, hits=%s, albums=%s,  consistency=%s,  longevity=%s, impact=%s,  sales=%s,  personality=%s,  creativity=%s, popularity=%s WHERE id = %s"
+        # Execute Query
+        cur.execute(query, (content, delivery, hits, albums, consistency, longevity, impact, sales, personality, creativity, popularity, user_id))
+        # Commit to MySQL database
+        mysql.connection.commit()
+
+        # Close DB
+        cur.close()
+        flash('Saved', 'success')
+        return redirect(url_for('mycriteria'))
+    return render_template('mycriteria.html', methods=['GET', 'POST'])
 
 # Page for rating artists
-@app.route('/artistratings')
+@app.route('/artistratings', methods=['GET', 'POST'])
 def myratings():
     # Create MySQL Cursor
     cur = mysql.connection.cursor()
     # Execute MySQL Query
-    cur.execute("SELECT name FROM artist ORDER BY name")
+    query="SELECT name FROM artist ORDER BY name"
+    cur.execute(query)
     DictArtist = cur.fetchall() # returns dictionary of artists
     ArtistList=[] # create empty list to add artist names to
     # add artists to ArtistList
     for artist in DictArtist:
         ArtistList.append(artist["name"])
     # content = [x.strip() for x in ArtistList]
+
+    # Close DB
+    cur.close()
 
     return render_template('myratings.html', artistList=ArtistList)
 
@@ -103,18 +150,48 @@ def login():
         cur = mysql.connection.cursor()
 
         # Find user by email in database
-        result = cur.execute("SELECT * FROM user WHERE email=%s", [email])
+        query = "SELECT * FROM user WHERE email=%s"
+        em = [email]
+        result = cur.execute(query, em)
 
         if result > 0:
             data = cur.fetchone()
             password = data['password']
             name = data['name']
+            user_id = data['id']
+
+            # Load criteria values
+            content = data['content']
+            delivery = data['delivery']
+            hits = data['hits']
+            albums = data['albums']
+            consistency = data['consistency']
+            longevity = data['longevity']
+            impact = data['impact']
+            sales = data['sales']
+            personality = data['personality']
+            creativity = data['creativity']
+            popularity = data['popularity']
 
             # Compare entered password to hash value
             if (bcrypt.check_password_hash(password, password_candidate)):
                 session['logged_in']=True
                 session['email']=email
                 session['name']=name
+                session['user_id']=user_id
+
+                # Load criteria values into session
+                session['content']=content
+                session['delivery']=delivery
+                session['hits']=hits
+                session['albums']=albums
+                session['consistency']=consistency
+                session['longevity']=longevity
+                session['impact']=impact
+                session['sales']=sales
+                session['personality']=personality
+                session['creativity']=creativity
+                session['popularity']=popularity
 
                 flash('Successfully Logged In', 'success')
                 return redirect(url_for('rankings'))
