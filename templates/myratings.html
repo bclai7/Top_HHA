@@ -15,11 +15,14 @@
 
     <!-- sliders -->
     <div class="slidercontainer" id="slidercontainer" style="display: none;">
-    {% for category in categoryList %}
-      <div class="slider-label">{{category}}</div><br />
-      <input type="range" min="1" max="10" value="1" class="slider" id="{{category}}">
-      <br /><br />
-    {% endfor %}
+      <form class="rating-sliders" action="index.html" method="POST">
+        {% for category in categoryList %}
+          <div class="slider-label">{{category}}</div><br />
+          <input type="range" min="1" max="10" value="1" class="slider" id="{{category}}">
+          <br /><br />
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Save</button>
+      </form>
     </div>
   </div>
 
@@ -29,7 +32,6 @@
       var artist_name = document.getElementsByTagName("option")[selected_artist].value;
       document.getElementById('name_display').innerHTML = artist_name;
     }
-
 
     window.onchange = function hideDefaultOnChange(){
       var sliderSet = document.getElementById("slidercontainer");
