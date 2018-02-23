@@ -12,11 +12,24 @@
   border-radius: 15px;
 }
 
+/* REGISTER FORM*/
 .register-form .form-group .form-control{
   border-color: #0033cc;
   width: 60%;
   border-radius: 15px;
   border-width: 1px;
+}
+
+/* LOGIN FORM */
+.login-form .form-group .form-control{
+  border-color: #0033cc;
+  width: 60%;
+  border-radius: 15px;
+  border-width: 1px;
+}
+
+.login-form .form-group label{
+  font-weight: bold;
 }
 
 /* SLIDER */
