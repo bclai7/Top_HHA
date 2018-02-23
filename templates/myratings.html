@@ -30,16 +30,6 @@
       document.getElementById('name_display').innerHTML = artist_name;
     }
 
-    window.onload = function hideDefaultOnLoad(){
-      var sliderSet = document.getElementById("slidercontainer");
-      var selectedOption = document.getElementById("artist_name").selectedIndex;
-      if(selectedOption == 0){
-        sliderSet.style.display = "none";
-      }
-      else {
-        sliderSet.style.display = "block";
-      }
-    }
 
     window.onchange = function hideDefaultOnChange(){
       var sliderSet = document.getElementById("slidercontainer");
