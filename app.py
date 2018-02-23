@@ -31,7 +31,6 @@ def index():
 @app.route('/mycriteria', methods=['GET', 'POST'])
 def mycriteria():
     if request.method == 'POST':
-        user_id = session['user_id']
 
         # get criteria values from form
         content = request.form['content']
@@ -59,20 +58,46 @@ def mycriteria():
         session['creativity']=creativity
         session['popularity']=popularity
 
-        # Create MySQL Cursor
-        cur = mysql.connection.cursor()
+        if 'logged_in' in session and session['logged_in'] == True:
+            user_id = session['user_id']
+            # Create MySQL Cursor
+            cur = mysql.connection.cursor()
 
-        # Update Values
-        query = "UPDATE user SET content = %s, delivery=%s, hits=%s, albums=%s,  consistency=%s,  longevity=%s, impact=%s,  sales=%s,  personality=%s,  creativity=%s, popularity=%s WHERE id = %s"
-        # Execute Query
-        cur.execute(query, (content, delivery, hits, albums, consistency, longevity, impact, sales, personality, creativity, popularity, user_id))
-        # Commit to MySQL database
-        mysql.connection.commit()
+            # Update Values
+            query = "UPDATE user SET content = %s, delivery=%s, hits=%s, albums=%s,  consistency=%s,  longevity=%s, impact=%s,  sales=%s,  personality=%s,  creativity=%s, popularity=%s WHERE id = %s"
+            # Execute Query
+            cur.execute(query, (content, delivery, hits, albums, consistency, longevity, impact, sales, personality, creativity, popularity, user_id))
+            # Commit to MySQL database
+            mysql.connection.commit()
 
-        # Close DB
-        cur.close()
+            # Close DB
+            cur.close()
         flash('Saved', 'success')
         return redirect(url_for('mycriteria'))
+    else:
+        # If user is not logged in, default the count to 0
+        if 'content' not in session:
+            session['content'] = 0
+        if 'delivery' not in session:
+            session['delivery'] = 0
+        if 'hits' not in session:
+            session['hits'] = 0
+        if 'albums' not in session:
+            session['albums'] = 0
+        if 'consistency' not in session:
+            session['consistency'] = 0
+        if 'longevity' not in session:
+            session['longevity'] = 0
+        if 'impact' not in session:
+            session['impact'] = 0
+        if 'sales' not in session:
+            session['sales'] = 0
+        if 'personality' not in session:
+            session['personality'] = 0
+        if 'creativity' not in session:
+            session['creativity'] = 0
+        if 'popularity' not in session:
+            session['popularity'] = 0
     return render_template('mycriteria.html', methods=['GET', 'POST'])
 
 # Page for rating artists
@@ -88,12 +113,13 @@ def myratings():
     # add artists to ArtistList
     for artist in DictArtist:
         ArtistList.append(artist["name"])
-    # content = [x.strip() for x in ArtistList]
 
+    # Rating Category list
+    categoryList = ['content', 'delivery', 'hits', 'albums', 'consistency', 'longevity', 'impact', 'sales', 'personality', 'creativity', 'popularity']
     # Close DB
     cur.close()
 
-    return render_template('myratings.html', artistList=ArtistList)
+    return render_template('myratings.html', artistList=ArtistList, categoryList=categoryList)
 
 # Rankings page
 @app.route('/rankings')
@@ -142,6 +168,8 @@ def register():
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
     if request.method == 'POST':
+        # clear session just in case user made changes before logging in
+        session.clear()
         # Get form fields
         email = request.form['email']
         password_candidate = request.form['password']

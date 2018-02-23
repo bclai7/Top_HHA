@@ -3,107 +3,57 @@
 {% block body %}
   {% if session.logged_in %}
     <h1>{{session.name}}'s Criteria</h1>
-    <div class="criteria-form">
-      <form action="" method="POST">
-        <div class="form-group">
-          <label for="content">Content</label>
-          <input type="number" class="form-control" name="content" value="{{session.content}}">
-        </div>
-        <div class="form-group">
-          <label for="delivery">Delivery</label>
-          <input type="number" class="form-control" name="delivery" value="{{session.delivery}}">
-        </div>
-        <div class="form-group">
-          <label for="hits">Hits</label>
-          <input type="number" class="form-control" name="hits" value="{{session.hits}}">
-        </div>
-        <div class="form-group">
-          <label for="albums">Albums</label>
-          <input type="number" class="form-control" name="albums" value="{{session.albums}}">
-        </div>
-        <div class="form-group">
-          <label for="consistency">Consistency</label>
-          <input type="number" class="form-control" name="consistency" value="{{session.consistency}}">
-        </div>
-        <div class="form-group">
-          <label for="longevity">Longevity</label>
-          <input type="number" class="form-control" name="longevity" value="{{session.longevity}}">
-        </div>
-        <div class="form-group">
-          <label for="impact">Impact</label>
-          <input type="number" class="form-control" name="impact" value="{{session.impact}}">
-        </div>
-        <div class="form-group">
-          <label for="sales">Sales</label>
-          <input type="number" class="form-control" name="sales" value="{{session.sales}}">
-        </div>
-        <div class="form-group">
-          <label for="personality">Personality</label>
-          <input type="number" class="form-control" name="personality" value="{{session.personality}}">
-        </div>
-        <div class="form-group">
-          <label for="creativity">Creativity</label>
-          <input type="number" class="form-control" name="creativity" value="{{session.creativity}}">
-        </div>
-        <div class="form-group">
-          <label for="popularity">Popularity</label>
-          <input type="number" class="form-control" name="popularity" value="{{session.popularity}}">
-        </div>
-        <button type="submit" class="btn btn-primary">Save</button>
-      </form>
-    </div>
   {% else %}
     <h1>Criteria</h1>
-    <div class="criteria-form">
-      <form action="" method="POST">
-        <div class="form-group">
-          <label for="content">Content</label>
-          <input type="number" class="form-control" name="content" value=0>
-        </div>
-        <div class="form-group">
-          <label for="delivery">Delivery</label>
-          <input type="number" class="form-control" name="delivery" value=0>
-        </div>
-        <div class="form-group">
-          <label for="hits">Hits</label>
-          <input type="number" class="form-control" name="hits" value=0>
-        </div>
-        <div class="form-group">
-          <label for="albums">Albums</label>
-          <input type="number" class="form-control" name="albums" value=0>
-        </div>
-        <div class="form-group">
-          <label for="consistency">Consistency</label>
-          <input type="number" class="form-control" name="consistency" value=0>
-        </div>
-        <div class="form-group">
-          <label for="longevity">Longevity</label>
-          <input type="number" class="form-control" name="longevity" value=0>
-        </div>
-        <div class="form-group">
-          <label for="impact">Impact</label>
-          <input type="number" class="form-control" name="impact" value=0>
-        </div>
-        <div class="form-group">
-          <label for="sales">Sales</label>
-          <input type="number" class="form-control" name="sales" value=0>
-        </div>
-        <div class="form-group">
-          <label for="personality">Personality</label>
-          <input type="number" class="form-control" name="personality" value=0>
-        </div>
-        <div class="form-group">
-          <label for="creativity">Creativity</label>
-          <input type="number" class="form-control" name="creativity" value=0>
-        </div>
-        <div class="form-group">
-          <label for="popularity">Popularity</label>
-          <input type="number" class="form-control" name="popularity" value=0>
-        </div>
-        <button type="submit" class="btn btn-primary">Save</button>
-      </form>
-    </div>
   {% endif %}
-
+  <div class="criteria-form">
+    <form action="" method="POST">
+      <div class="form-group">
+        <label for="content">Content</label>
+        <input type="number" class="form-control" name="content" value="{{session.content}}">
+      </div>
+      <div class="form-group">
+        <label for="delivery">Delivery</label>
+        <input type="number" class="form-control" name="delivery" value="{{session.delivery}}">
+      </div>
+      <div class="form-group">
+        <label for="hits">Hits</label>
+        <input type="number" class="form-control" name="hits" value="{{session.hits}}">
+      </div>
+      <div class="form-group">
+        <label for="albums">Albums</label>
+        <input type="number" class="form-control" name="albums" value="{{session.albums}}">
+      </div>
+      <div class="form-group">
+        <label for="consistency">Consistency</label>
+        <input type="number" class="form-control" name="consistency" value="{{session.consistency}}">
+      </div>
+      <div class="form-group">
+        <label for="longevity">Longevity</label>
+        <input type="number" class="form-control" name="longevity" value="{{session.longevity}}">
+      </div>
+      <div class="form-group">
+        <label for="impact">Impact</label>
+        <input type="number" class="form-control" name="impact" value="{{session.impact}}">
+      </div>
+      <div class="form-group">
+        <label for="sales">Sales</label>
+        <input type="number" class="form-control" name="sales" value="{{session.sales}}">
+      </div>
+      <div class="form-group">
+        <label for="personality">Personality</label>
+        <input type="number" class="form-control" name="personality" value="{{session.personality}}">
+      </div>
+      <div class="form-group">
+        <label for="creativity">Creativity</label>
+        <input type="number" class="form-control" name="creativity" value="{{session.creativity}}">
+      </div>
+      <div class="form-group">
+        <label for="popularity">Popularity</label>
+        <input type="number" class="form-control" name="popularity" value="{{session.popularity}}">
+      </div>
+      <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+  </div>
 
 {% endblock %}
