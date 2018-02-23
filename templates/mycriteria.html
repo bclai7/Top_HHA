@@ -1,7 +1,11 @@
 {%extends 'layout.html'%}
 
 {% block body %}
-  <h1>Criteria</h1>
+  {% if session.logged_in %}
+    <h1>{{session.name}}'s Criteria</h1>
+  {% else %}
+    <h1>Criteria</h1>
+  {% endif %}
   <div class="criteria-form">
     <form>
       <div class="form-group">

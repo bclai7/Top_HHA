@@ -2,8 +2,24 @@
   {% if messages %}
     <ul class=flashes>
     {% for category, message in messages %}
-      <div class="alert alert-{{ category }}">{{ message }}</li>
+      <div class="alert alert-{{ category }}">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        {{ message }}</li>
     {% endfor %}
     </ul>
   {% endif %}
 {% endwith %}
+
+{% if error %}
+  <div class="alert alert-danger">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    {{error}}
+  </div>
+{% endif %}
+
+{% if msg %}
+  <div class="alert alert-danger">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    {{msg}}
+  </div>
+{% endif %}
