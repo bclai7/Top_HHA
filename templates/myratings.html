@@ -4,26 +4,27 @@
   <h1>Ratings</h1>
   <p>Select an artist to rate</p>
   <div class="artist-rating" onchange="getArtistName();">
-    <select class="selectpicker" data-live-search="true" id="artist_name">
-      <option disabled selected value style="display:none" id="default-option"> -- select an artist -- </option>
-      {% for artist in artistList %}
-        <option data-tokens="{{artist}}">{{artist}}</option>
-      {% endfor %}
-      <option disabled value style="display:none"> -- END -- </option> <!--This is to remove the blank space at the bottom when scrolling all the way down-->
-    </select>
-    <p id="name_display"></p>
-
-    <!-- sliders -->
-    <div class="slidercontainer" id="slidercontainer" style="display: none;">
-      <form class="rating-sliders" action="index.html" method="POST">
-        {% for category in categoryList %}
-          <div class="slider-label">{{category}}</div><br />
-          <input type="range" min="1" max="10" value="1" class="slider" id="{{category}}">
-          <br /><br />
+    <form class="artist-rater" method="POST">
+      <!-- Artist Select -->
+      <select class="selectpicker" data-live-search="true" id="artist_name" name="artist_name">
+        <option disabled selected value style="display:none" id="default-option"> -- select an artist -- </option>
+        {% for artist in artistList %}
+          <option data-tokens="{{artist}}">{{artist}}</option>
         {% endfor %}
-        <button type="submit" class="btn btn-primary">Save</button>
-      </form>
-    </div>
+        <option disabled value style="display:none"> -- END -- </option> <!--This is to remove the blank space at the bottom when scrolling all the way down-->
+      </select>
+      <p id="name_display"></p>
+
+      <!-- sliders -->
+      <div class="slidercontainer" id="slidercontainer" style="display: none;">
+          {% for category in categoryList %}
+            <div class="slider-label">{{category}}</div><br />
+            <input type="range" min="1" max="10" value="1" class="slider" id="slider-{{category}}" name="slider-{{category}}">
+            <br /><br />
+          {% endfor %}
+          <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </form>
   </div>
 
   <script>
@@ -31,6 +32,18 @@
       var selected_artist = document.getElementById("artist_name").selectedIndex;
       var artist_name = document.getElementsByTagName("option")[selected_artist].value;
       document.getElementById('name_display').innerHTML = artist_name;
+    }
+
+    // Added this back just in case user backspaces after submitting form
+    window.onload = function hideDefaultOnChange(){
+      var sliderSet = document.getElementById("slidercontainer");
+      var selectedOption = document.getElementById("artist_name").selectedIndex;
+      if(selectedOption == 0){
+        sliderSet.style.display = "none";
+      }
+      else {
+        sliderSet.style.display = "block";
+      }
     }
 
     window.onchange = function hideDefaultOnChange(){

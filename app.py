@@ -105,7 +105,17 @@ def mycriteria():
 def myratings():
     # Create MySQL Cursor
     cur = mysql.connection.cursor()
-    # Execute MySQL Query
+
+    # Detect onchange of <select> object, whenever there is a change:
+    # If user is logged in
+    #   get rating values from database based off of selected artist and user
+    #   then store the values into session variables (with artist name as key)
+    # else if not logged in
+    #    just load the current session variables based off of the selected artist (artist name as key)
+
+    # After the ratings variables are found, load the values into the slider objects in the HTML
+
+    # MySQL query to get list of artist names from database
     query="SELECT name FROM artist ORDER BY name"
     cur.execute(query)
     DictArtist = cur.fetchall() # returns dictionary of artists
@@ -113,9 +123,41 @@ def myratings():
     # add artists to ArtistList
     for artist in DictArtist:
         ArtistList.append(artist["name"])
-
     # Rating Category list
     categoryList = ['content', 'delivery', 'hits', 'albums', 'consistency', 'longevity', 'impact', 'sales', 'personality', 'creativity', 'popularity']
+
+    if request.method == 'POST':
+        # Get selected artist name
+        artist_name = request.form.get('artist_name')
+        artist_name = str(artist_name)
+
+        # Get rating values from sliders
+        content_rating = request.form['slider-content']
+        delivery_rating = request.form['slider-delivery']
+        hits_rating = request.form['slider-hits']
+        albums_rating = request.form['slider-albums']
+        consistency = request.form['slider-consistency']
+        longevity_rating = request.form['slider-longevity']
+        impact_rating = request.form['slider-impact']
+        sales_rating = request.form['slider-sales']
+        personality_rating = request.form['slider-personality']
+        creativity_rating = request.form['slider-creativity']
+        popularity_rating = request.form['slider-popularity']
+
+        # is user is registered and logged in, store values to data base
+        if 'logged_in' in session and session['logged_in']:
+            # first check if there are any ratings already for that artist on that account
+            query = "SELECT * FROM user WHERE email=%s"
+            result = cur.execute(query, artist_name)
+            #   if so, then do an UPDATE query to edit table row for that rating
+            # else, do an INSERT INTO query to enter new rating into the database
+        # Save the rating info to the corresponding session variables (whether or not user is registered)
+
+        # Close DB
+        cur.close()
+        flash('Saved', 'success')
+        return redirect(url_for('myratings'))
+
     # Close DB
     cur.close()
 
