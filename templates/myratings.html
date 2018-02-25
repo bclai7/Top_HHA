@@ -3,7 +3,7 @@
 {% block body %}
   <h1>Ratings</h1>
   <p>Select an artist to rate</p>
-  <div class="artist-rating" onchange="displayArtistName();">
+  <div class="artist-rating" onchange="displayArtistName(); hideDefaultOnChange();">
     <form class="artist-rater" method="POST">
       <!-- Artist Select -->
       <select class="selectpicker" data-live-search="true" id="artist_name" name="artist_name">
@@ -60,7 +60,7 @@
       displayArtistName();
     }
 
-    window.onchange = function hideDefaultOnChange(){
+    function hideDefaultOnChange(){
       var sliderSet = document.getElementById("slidercontainer");
       var selectedOption = document.getElementById("artist_name").selectedIndex;
       if(selectedOption == 0){
