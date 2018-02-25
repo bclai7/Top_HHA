@@ -128,8 +128,8 @@ def myratings():
 
     if request.method == 'POST':
         # Get selected artist name
-        artist_name = request.form.get('artist_name')
-        artist_name = str(artist_name)
+        a = request.form.get('artist_name')
+        artist_name = str(a)
 
         # Get rating values from sliders
         content_rating = request.form['slider-content']
@@ -156,12 +156,12 @@ def myratings():
         # Close DB
         cur.close()
         flash('Saved', 'success')
-        return redirect(url_for('myratings'))
+        return render_template('myratings.html', artistList=ArtistList, categoryList=categoryList, selected_artist=artist_name)
 
     # Close DB
     cur.close()
 
-    return render_template('myratings.html', artistList=ArtistList, categoryList=categoryList)
+    return render_template('myratings.html', artistList=ArtistList, categoryList=categoryList, selected_artist='-- select an artist --')
 
 # Rankings page
 @app.route('/rankings')
