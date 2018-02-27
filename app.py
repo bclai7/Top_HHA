@@ -64,7 +64,11 @@ def mycriteria():
             cur = mysql.connection.cursor()
 
             # Update Values
-            query = "UPDATE user SET content = %s, delivery=%s, hits=%s, albums=%s,  consistency=%s,  longevity=%s, impact=%s,  sales=%s,  personality=%s,  creativity=%s, popularity=%s WHERE id = %s"
+            query = """UPDATE user SET criteria_content = %s, criteria_delivery=%s,
+                    criteria_hits=%s, criteria_albums=%s, criteria_consistency=%s,
+                    criteria_longevity=%s, criteria_impact=%s,  criteria_sales=%s,
+                    criteria_personality=%s,  criteria_creativity=%s,
+                    criteria_popularity=%s WHERE id = %s"""
             # Execute Query
             cur.execute(query, (content, delivery, hits, albums, consistency, longevity, impact, sales, personality, creativity, popularity, user_id))
             # Commit to MySQL database
@@ -196,16 +200,12 @@ def rated():
             mysql.connection.commit()
 
     # Save the rating info to the corresponding session variables (whether or not user is registered)
-    session[artist_name] = (('content', content_rating), ('delivery', delivery_rating),
-                            ('hits', hits_rating), ('albums', albums_rating),
-                            ('consistency', consistency_rating), ('longevity', longevity_rating),
-                            ('impact', impact_rating), ('sales', sales_rating),
-                            ('personality', personality_rating), ('creativity', creativity_rating),
-                            ('popularity', popularity_rating))
-    # tuple test
-    # app.logger.info(session[artist_name][0][1])
-    # app.logger.info(session[artist_name][1][1])
-    # app.logger.info(session[artist_name][2][1])
+    session[artist_name] = [content_rating, delivery_rating, hits_rating, albums_rating,
+                            consistency_rating, longevity_rating, impact_rating,
+                            sales_rating, personality_rating, creativity_rating,
+                            popularity_rating]
+    # filler
+
 
     # Close DB
     cur.close()
@@ -223,7 +223,7 @@ def about():
 
 # Registration Form
 class RegistrationForm(Form):
-    name = StringField('Name', [validators.Length(min=4, max=25)])
+    name = StringField('Name', [validators.Length(min=4, max=50)])
     email = StringField('Email Address', [validators.Length(min=6, max=35)])
     password = PasswordField('Password', [
         validators.DataRequired(),
@@ -279,17 +279,17 @@ def login():
             user_id = data['id']
 
             # Load criteria values
-            content = data['content']
-            delivery = data['delivery']
-            hits = data['hits']
-            albums = data['albums']
-            consistency = data['consistency']
-            longevity = data['longevity']
-            impact = data['impact']
-            sales = data['sales']
-            personality = data['personality']
-            creativity = data['creativity']
-            popularity = data['popularity']
+            content = data['criteria_content']
+            delivery = data['criteria_delivery']
+            hits = data['criteria_hits']
+            albums = data['criteria_albums']
+            consistency = data['criteria_consistency']
+            longevity = data['criteria_longevity']
+            impact = data['criteria_impact']
+            sales = data['criteria_sales']
+            personality = data['criteria_personality']
+            creativity = data['criteria_creativity']
+            popularity = data['criteria_popularity']
 
             # Compare entered password to hash value
             if (bcrypt.check_password_hash(password, password_candidate)):
