@@ -200,12 +200,12 @@ def rated():
             mysql.connection.commit()
 
     # Save the rating info to the corresponding session variables (whether or not user is registered)
+    # Save the list into a session variable with the artist name as the key
     session[artist_name] = [content_rating, delivery_rating, hits_rating, albums_rating,
                             consistency_rating, longevity_rating, impact_rating,
                             sales_rating, personality_rating, creativity_rating,
                             popularity_rating]
-    # filler
-
+    #filler
 
     # Close DB
     cur.close()

@@ -6,7 +6,7 @@
   <div class="artist-rating" onchange="displayArtistName(); hideDefaultOnChange();">
     <form class="artist-rater">
       <!-- Artist Select -->
-      <select class="selectpicker" data-live-search="true" id="artist_name" name="artist_name">
+      <select class="selectpicker" data-live-search="true" id="artist_name" name="artist_name" onchange="changeSliders();">
         <option disabled selected value style="display:none" id="default-option"> -- select an artist -- </option>
         {% for artist in artistList %}
           <option data-tokens="{{artist}}">{{artist}}</option>
@@ -42,7 +42,19 @@
       document.getElementById('name_display').innerHTML = artist_name;
     }
 
-    
+    function changeSliders(){
+      // Get selected artist name
+      var selected_artist = document.getElementById("artist_name").selectedIndex;
+      var artist_name = document.getElementsByTagName("option")[selected_artist].value;
+      var session = {{ session | tojson }}; // session variable
+      if(session[artist_name]){
+        alert(session[artist_name]);
+      }
+      else{
+        alert('NOTHING');
+      }
+
+    }
     // Operations to run after page is loaded
     window.onload = function loadOperations(){
       //Hide slider set when the default option is selected
