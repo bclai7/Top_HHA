@@ -141,13 +141,6 @@ def rated():
     artist_name = request.form.get('artist_name')
     artist_name = str(artist_name)
 
-    # Get artist id from database
-    query = "SELECT id FROM artist WHERE name=%s"
-    cur.execute(query, [artist_name])
-    data=cur.fetchone()
-    artist_id=data['id']
-    app.logger.info(artist_id)
-
     # Get rating values from sliders
     content_rating = request.form['slider_content']
     delivery_rating = request.form['slider_delivery']
@@ -164,11 +157,11 @@ def rated():
     # is user is registered and logged in, store values to data base
     if 'logged_in' in session and session['logged_in']:
         # first check if there are any ratings already for that artist on that account
-        query = """SELECT artist_id, content, delivery, hits, albums,
+        query = """SELECT artist_name, content, delivery, hits, albums,
                         consistency, longevity, impact, sales,
                         personality, creativity, popularity
-                    FROM rating WHERE user_id = %s AND artist_id = %s"""
-        result = cur.execute(query, [session['user_id'], artist_id])
+                    FROM rating WHERE user_id = %s AND artist_name = %s"""
+        result = cur.execute(query, [session['user_id'], artist_name])
         #   if so, then do an UPDATE query to edit table row for that rating
         if result > 0:
             # save artist id
@@ -178,23 +171,23 @@ def rated():
                             hits = %s, albums = %s, consistency = %s,
                             longevity = %s, impact = %s, sales = %s,
                             personality = %s, creativity = %s, popularity = %s
-                        WHERE rating.user_id = %s AND rating.artist_id = %s"""
+                        WHERE rating.user_id = %s AND rating.artist_name = %s"""
             cur.execute(query, [content_rating, delivery_rating, hits_rating,
                                 albums_rating, consistency_rating, longevity_rating,
                                 impact_rating, sales_rating, personality_rating,
                                 creativity_rating, popularity_rating, session['user_id'],
-                                artist_id])
+                                artist_name])
 
             # Commit to MySQL database
             mysql.connection.commit()
         # else, do an INSERT INTO query to enter new rating into the database
         else:
             # Write query to insert into the table
-            query = """INSERT INTO rating(user_id, artist_id, content, delivery,
+            query = """INSERT INTO rating(user_id, artist_name, content, delivery,
                         hits, albums, consistency, longevity, impact, sales,
                         personality, creativity, popularity)
                         VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
-            cur.execute(query, [session['user_id'], artist_id, content_rating,
+            cur.execute(query, [session['user_id'], artist_name, content_rating,
                                 delivery_rating, hits_rating, albums_rating,
                                 consistency_rating, longevity_rating,
                                 impact_rating, sales_rating, personality_rating,
