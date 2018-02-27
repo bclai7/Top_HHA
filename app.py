@@ -139,13 +139,14 @@ def rated():
 
     # Get selected artist name
     artist_name = request.form.get('artist_name')
+    artist_name = str(artist_name)
 
     # Get rating values from sliders
     content_rating = request.form['slider_content']
     delivery_rating = request.form['slider_delivery']
     hits_rating = request.form['slider_hits']
     albums_rating = request.form['slider_albums']
-    consistency = request.form['slider_consistency']
+    consistency_rating = request.form['slider_consistency']
     longevity_rating = request.form['slider_longevity']
     impact_rating = request.form['slider_impact']
     sales_rating = request.form['slider_sales']
@@ -156,13 +157,38 @@ def rated():
     # is user is registered and logged in, store values to data base
     if 'logged_in' in session and session['logged_in']:
         # first check if there are any ratings already for that artist on that account
-        query = "SELECT * FROM user WHERE email=%s"
-        result = cur.execute(query, artist_name)
+        query = """SELECT rating.artist_id, rating.content, rating.longevity, rating.hits, rating.albums,
+                        rating.consistency, rating.longevity, rating.impact, rating.sales,
+                        rating.personality, rating.creativity, rating.popularity
+                    FROM user, artist, rating
+                    WHERE rating.user_id = %s
+                        AND artist.name = %s
+                        AND artist.id = rating.artist_id"""
+        result = cur.execute(query, [session['user_id'], artist_name])
+        app.logger.info(result)
         #   if so, then do an UPDATE query to edit table row for that rating
+        if result > 0:
+            # save artist id
+            data = cur.fetchone()
+            artist_id = data['artist_id']
+            app.logger.info(artist_id)
+
+            # Write query to update the table
+            query = """UPDATE rating SET content = %s, longevity = %s, hits = %s, albums = %s,
+                            consistency = %s, longevity = %s, impact = %s, sales = %s,
+                            personality = %s, creativity = %s, popularity = %s
+                        WHERE rating.user_id = %s AND rating.artist_id = %s"""
+            cur.execute(query, [content_rating, longevity_rating, hits_rating,
+                                albums_rating, consistency_rating, longevity_rating,
+                                impact_rating, sales_rating, personality_rating,
+                                creativity_rating, popularity_rating, session['user_id'],
+                                artist_id])
+
+            # Commit to MySQL database
+            mysql.connection.commit()
         # else, do an INSERT INTO query to enter new rating into the database
     # Save the rating info to the corresponding session variables (whether or not user is registered)
 
-    app.logger.info('IN RATER')
     # Close DB
     cur.close()
     return jsonify({'success': 'Saved'})
