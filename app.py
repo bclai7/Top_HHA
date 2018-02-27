@@ -22,6 +22,11 @@ mysql = MySQL(app)
 # init bcrypt for hashing
 bcrypt = Bcrypt(app)
 
+def getCategoryList():
+    # Rating Category list
+    categoryList = ['content', 'delivery', 'hits', 'albums', 'consistency', 'longevity', 'impact', 'sales', 'personality', 'creativity', 'popularity']
+    return categoryList
+
 # Home Page
 @app.route('/')
 def index():
@@ -127,13 +132,11 @@ def myratings():
     # add artists to ArtistList
     for artist in DictArtist:
         ArtistList.append(artist["name"])
-    # Rating Category list
-    categoryList = ['content', 'delivery', 'hits', 'albums', 'consistency', 'longevity', 'impact', 'sales', 'personality', 'creativity', 'popularity']
 
     # Close DB
     cur.close()
 
-    return render_template('myratings.html', artistList=ArtistList, categoryList=categoryList, selected_artist='-- select an artist --')
+    return render_template('myratings.html', artistList=ArtistList, categoryList=getCategoryList(), selected_artist='-- select an artist --')
 
 # rated
 @app.route('/rated', methods=['POST'])

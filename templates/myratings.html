@@ -42,18 +42,32 @@
       document.getElementById('name_display').innerHTML = artist_name;
     }
 
+    // Function to load slider values for a particular artist
     function changeSliders(){
       // Get selected artist name
       var selected_artist = document.getElementById("artist_name").selectedIndex;
       var artist_name = document.getElementsByTagName("option")[selected_artist].value;
-      var session = {{ session | tojson }}; // session variable
-      if(session[artist_name]){
-        alert(session[artist_name]);
-      }
-      else{
-        alert('NOTHING');
-      }
 
+      // Store session variable
+      var session = {{ session | tojson }}; // session variable
+      var categoryList = {{ categoryList | tojson }}; // list of categories
+
+      if(!('logged_in' in session)){
+        // For each rating, set the the corresponding slider value
+        if(session[artist_name]){
+          var rating_list = session[artist_name];
+          for(i=0; i < categoryList.length; i++){
+            var slider_name = "slider_"+categoryList[i];
+            document.getElementById(slider_name).value = rating_list[i];
+          }
+        }
+        else{
+          for(i=0; i < categoryList.length; i++){
+            var slider_name = "slider_"+categoryList[i];
+            document.getElementById(slider_name).value = 1;
+          }
+        }
+      }
     }
     // Operations to run after page is loaded
     window.onload = function loadOperations(){
