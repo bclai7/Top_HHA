@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, redirect, url_for, session, logging, request
+from flask import Flask, render_template, flash, redirect, url_for, session, logging, request, jsonify
 from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
@@ -101,7 +101,7 @@ def mycriteria():
     return render_template('mycriteria.html', methods=['GET', 'POST'])
 
 # Page for rating artists
-@app.route('/artistratings', methods=['GET', 'POST'])
+@app.route('/artistratings')
 def myratings():
     # Create MySQL Cursor
     cur = mysql.connection.cursor()
@@ -126,42 +126,46 @@ def myratings():
     # Rating Category list
     categoryList = ['content', 'delivery', 'hits', 'albums', 'consistency', 'longevity', 'impact', 'sales', 'personality', 'creativity', 'popularity']
 
-    if request.method == 'POST':
-        # Get selected artist name
-        a = request.form.get('artist_name')
-        artist_name = str(a)
-
-        # Get rating values from sliders
-        content_rating = request.form['slider-content']
-        delivery_rating = request.form['slider-delivery']
-        hits_rating = request.form['slider-hits']
-        albums_rating = request.form['slider-albums']
-        consistency = request.form['slider-consistency']
-        longevity_rating = request.form['slider-longevity']
-        impact_rating = request.form['slider-impact']
-        sales_rating = request.form['slider-sales']
-        personality_rating = request.form['slider-personality']
-        creativity_rating = request.form['slider-creativity']
-        popularity_rating = request.form['slider-popularity']
-
-        # is user is registered and logged in, store values to data base
-        if 'logged_in' in session and session['logged_in']:
-            # first check if there are any ratings already for that artist on that account
-            query = "SELECT * FROM user WHERE email=%s"
-            result = cur.execute(query, artist_name)
-            #   if so, then do an UPDATE query to edit table row for that rating
-            # else, do an INSERT INTO query to enter new rating into the database
-        # Save the rating info to the corresponding session variables (whether or not user is registered)
-
-        # Close DB
-        cur.close()
-        flash('Saved', 'success')
-        return render_template('myratings.html', artistList=ArtistList, categoryList=categoryList, selected_artist=artist_name)
-
     # Close DB
     cur.close()
 
     return render_template('myratings.html', artistList=ArtistList, categoryList=categoryList, selected_artist='-- select an artist --')
+
+# rated
+@app.route('/rated', methods=['POST'])
+def rated():
+    # Create MySQL Cursor
+    cur = mysql.connection.cursor()
+
+    # Get selected artist name
+    artist_name = request.form.get('artist_name')
+
+    # Get rating values from sliders
+    content_rating = request.form['slider_content']
+    delivery_rating = request.form['slider_delivery']
+    hits_rating = request.form['slider_hits']
+    albums_rating = request.form['slider_albums']
+    consistency = request.form['slider_consistency']
+    longevity_rating = request.form['slider_longevity']
+    impact_rating = request.form['slider_impact']
+    sales_rating = request.form['slider_sales']
+    personality_rating = request.form['slider_personality']
+    creativity_rating = request.form['slider_creativity']
+    popularity_rating = request.form['slider_popularity']
+
+    # is user is registered and logged in, store values to data base
+    if 'logged_in' in session and session['logged_in']:
+        # first check if there are any ratings already for that artist on that account
+        query = "SELECT * FROM user WHERE email=%s"
+        result = cur.execute(query, artist_name)
+        #   if so, then do an UPDATE query to edit table row for that rating
+        # else, do an INSERT INTO query to enter new rating into the database
+    # Save the rating info to the corresponding session variables (whether or not user is registered)
+
+    app.logger.info('IN RATER')
+    # Close DB
+    cur.close()
+    return jsonify({'success': 'Saved'})
 
 # Rankings page
 @app.route('/rankings')

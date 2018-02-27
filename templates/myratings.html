@@ -4,7 +4,7 @@
   <h1>Ratings</h1>
   <p>Select an artist to rate</p>
   <div class="artist-rating" onchange="displayArtistName(); hideDefaultOnChange();">
-    <form class="artist-rater" method="POST">
+    <form class="artist-rater">
       <!-- Artist Select -->
       <select class="selectpicker" data-live-search="true" id="artist_name" name="artist_name">
         <option disabled selected value style="display:none" id="default-option"> -- select an artist -- </option>
@@ -19,12 +19,24 @@
       <div class="slidercontainer" id="slidercontainer" style="display: none;">
           {% for category in categoryList %}
             <div class="slider-label">{{category}}</div><br />
-            <input type="range" min="1" max="10" value="1" class="slider" id="slider-{{category}}" name="slider-{{category}}">
+            <input type="range" min="1" max="10" value="1" class="slider" id="slider_{{category}}" name="slider_{{category}}">
             <br /><br />
           {% endfor %}
-          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="submit" class="btn btn-primary" id="save_button">Save</button>
       </div>
     </form>
+
+    <br />
+
+    <!-- Success and Error Messages -->
+    <div id="successAlert" class="alert alert-success" role="alert" style="display:none;">
+      Saved
+    </div>
+	  <div id="errorAlert" class="alert alert-danger" role="alert" style="display:none;">
+      Error
+    </div>
+    <br />
+
   </div>
 
   <script>
@@ -36,16 +48,6 @@
 
     // Operations to run after page is loaded
     window.onload = function loadOperations(){
-      // automatically select previously selected artist after page refreshes (when saving a rating)
-      var list = {{artistList|tojson}}; // full list of artists
-      var prev_selected = {{selected_artist|tojson}}; // previously selected artist before saving/refreshing
-      // loop through list until you find the previously selected artist, then set the selected index to that position
-      for(i=0; i<list.length; i++){
-        if(list[i] === prev_selected){
-          document.getElementById("artist_name").selectedIndex = i+1; // need to do +1 since the first option is --select an artist--
-        }
-      }
-
       //Hide slider set when the default option is selected
       var sliderSet = document.getElementById("slidercontainer");
       var selectedOption = document.getElementById("artist_name").selectedIndex;
@@ -55,9 +57,6 @@
       else {
         sliderSet.style.display = "block";
       }
-
-      // Display Artist Name
-      displayArtistName();
     }
 
     function hideDefaultOnChange(){
