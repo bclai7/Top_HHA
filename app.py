@@ -169,7 +169,6 @@ def rated():
                         personality, creativity, popularity
                     FROM rating WHERE user_id = %s AND artist_id = %s"""
         result = cur.execute(query, [session['user_id'], artist_id])
-        app.logger.info(result)
         #   if so, then do an UPDATE query to edit table row for that rating
         if result > 0:
             # save artist id
@@ -204,7 +203,17 @@ def rated():
             mysql.connection.commit()
 
     # Save the rating info to the corresponding session variables (whether or not user is registered)
-    
+    session[artist_name] = (('content', content_rating), ('delivery', delivery_rating),
+                            ('hits', hits_rating), ('albums', albums_rating),
+                            ('consistency', consistency_rating), ('longevity', longevity_rating),
+                            ('impact', impact_rating), ('sales', sales_rating),
+                            ('personality', personality_rating), ('creativity', creativity_rating),
+                            ('popularity', popularity_rating))
+    # tuple test
+    # app.logger.info(session[artist_name][0][1])
+    # app.logger.info(session[artist_name][1][1])
+    # app.logger.info(session[artist_name][2][1])
+
     # Close DB
     cur.close()
     return jsonify({'success': 'Saved'})
