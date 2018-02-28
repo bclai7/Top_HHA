@@ -19,7 +19,7 @@
       <div class="slidercontainer" id="slidercontainer" style="display: none;">
           {% for category in categoryList %}
             <div class="slider-label">{{category}}</div><br />
-            <input type="range" min="1" max="10" value="1" class="slider" id="slider_{{category}}" name="slider_{{category}}">
+            <input type="range" min="1" max="10" value="1" class="slider" id="rating_{{category}}" name="rating_{{category}}">
             <br /><br />
           {% endfor %}
           <button type="submit" class="btn btn-primary" id="rating_save_button">Save</button>

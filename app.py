@@ -144,17 +144,17 @@ def rated():
     artist_name = str(artist_name)
 
     # Get rating values from sliders
-    content_rating = request.form['slider_content']
-    delivery_rating = request.form['slider_delivery']
-    hits_rating = request.form['slider_hits']
-    albums_rating = request.form['slider_albums']
-    consistency_rating = request.form['slider_consistency']
-    longevity_rating = request.form['slider_longevity']
-    impact_rating = request.form['slider_impact']
-    sales_rating = request.form['slider_sales']
-    personality_rating = request.form['slider_personality']
-    creativity_rating = request.form['slider_creativity']
-    popularity_rating = request.form['slider_popularity']
+    content_rating = request.form['rating_content']
+    delivery_rating = request.form['rating_delivery']
+    hits_rating = request.form['rating_hits']
+    albums_rating = request.form['rating_albums']
+    consistency_rating = request.form['rating_consistency']
+    longevity_rating = request.form['rating_longevity']
+    impact_rating = request.form['rating_impact']
+    sales_rating = request.form['rating_sales']
+    personality_rating = request.form['rating_personality']
+    creativity_rating = request.form['rating_creativity']
+    popularity_rating = request.form['rating_popularity']
 
     # is user is registered and logged in, store values to data base
     if 'logged_in' in session and session['logged_in']:

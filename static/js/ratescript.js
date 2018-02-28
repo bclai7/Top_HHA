@@ -5,12 +5,12 @@ $(document).ready(function() {
 
     $.ajax({
       data : {
-        artist_name : $('#artist_name').val(), slider_content : $('#slider_content').val(),
-        slider_delivery : $('#slider_delivery').val(), slider_hits : $('#slider_hits').val(),
-        slider_albums : $('#slider_albums').val(), slider_consistency : $('#slider_consistency').val(),
-        slider_longevity : $('#slider_longevity').val(), slider_impact : $('#slider_impact').val(),
-        slider_sales : $('#slider_sales').val(), slider_personality : $('#slider_personality').val(),
-        slider_creativity : $('#slider_creativity').val(), slider_popularity : $('#slider_popularity').val()
+        artist_name : $('#artist_name').val(), rating_content : $('#rating_content').val(),
+        rating_delivery : $('#rating_delivery').val(), rating_hits : $('#rating_hits').val(),
+        rating_albums : $('#rating_albums').val(), rating_consistency : $('#rating_consistency').val(),
+        rating_longevity : $('#rating_longevity').val(), rating_impact : $('#rating_impact').val(),
+        rating_sales : $('#rating_sales').val(), rating_personality : $('#rating_personality').val(),
+        rating_creativity : $('#rating_creativity').val(), rating_popularity : $('#rating_popularity').val()
       },
       type : 'POST',
       url : '/rated'
