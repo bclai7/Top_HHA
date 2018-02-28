@@ -1,7 +1,7 @@
 $(function() {
     $('#artist_name').change(function() {
         $.ajax({
-            url: '/sliderchanged',
+            url: '/artistchanged',
             type: 'GET',
             // This is query string i.e. country_id=123
             data: {artist_name : $('#artist_name').val()},

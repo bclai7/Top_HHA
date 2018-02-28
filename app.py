@@ -34,82 +34,66 @@ def index():
     return render_template('home.html')
 
 # Criteria Settings
-@app.route('/mycriteria', methods=['GET', 'POST'])
+@app.route('/mycriteria')
 def mycriteria():
-    if request.method == 'POST':
-        # get criteria values from form
-        content = request.form['criteria_content']
-        delivery = request.form['criteria_delivery']
-        hits = request.form['criteria_hits']
-        albums = request.form['criteria_albums']
-        consistency = request.form['criteria_consistency']
-        longevity = request.form['criteria_longevity']
-        impact = request.form['criteria_impact']
-        sales = request.form['criteria_sales']
-        personality = request.form['criteria_personality']
-        creativity = request.form['criteria_creativity']
-        popularity = request.form['criteria_popularity']
+    # If user is not logged in and has not yet set criteria ratings, default the count to 0
+    for category in getCategoryList():
+        if category not in session:
+            session[category] = 0
 
+    return render_template('mycriteria.html', categoryList=getCategoryList())
 
+# Route that saves artist rating when clicking the save button, called through AJAX
+@app.route('/changecriteria', methods=['POST'])
+def changecriteria():
+    # Create MySQL Cursor
+    cur = mysql.connection.cursor()
 
-        # Load criteria values into session
-        session['content']=content
-        session['delivery']=delivery
-        session['hits']=hits
-        session['albums']=albums
-        session['consistency']=consistency
-        session['longevity']=longevity
-        session['impact']=impact
-        session['sales']=sales
-        session['personality']=personality
-        session['creativity']=creativity
-        session['popularity']=popularity
+    # get criteria values from form
+    content = request.form['criteria_content']
+    delivery = request.form['criteria_delivery']
+    hits = request.form['criteria_hits']
+    albums = request.form['criteria_albums']
+    consistency = request.form['criteria_consistency']
+    longevity = request.form['criteria_longevity']
+    impact = request.form['criteria_impact']
+    sales = request.form['criteria_sales']
+    personality = request.form['criteria_personality']
+    creativity = request.form['criteria_creativity']
+    popularity = request.form['criteria_popularity']
 
-        if 'logged_in' in session and session['logged_in'] == True:
-            user_id = session['user_id']
-            # Create MySQL Cursor
-            cur = mysql.connection.cursor()
+    # Load criteria values into session variables
+    session['content']=content
+    session['delivery']=delivery
+    session['hits']=hits
+    session['albums']=albums
+    session['consistency']=consistency
+    session['longevity']=longevity
+    session['impact']=impact
+    session['sales']=sales
+    session['personality']=personality
+    session['creativity']=creativity
+    session['popularity']=popularity
 
-            # Update Values
-            query = """UPDATE user SET criteria_content = %s, criteria_delivery=%s,
-                    criteria_hits=%s, criteria_albums=%s, criteria_consistency=%s,
-                    criteria_longevity=%s, criteria_impact=%s,  criteria_sales=%s,
-                    criteria_personality=%s,  criteria_creativity=%s,
-                    criteria_popularity=%s WHERE id = %s"""
-            # Execute Query
-            cur.execute(query, (content, delivery, hits, albums, consistency, longevity, impact, sales, personality, creativity, popularity, user_id))
-            # Commit to MySQL database
-            mysql.connection.commit()
+    if 'logged_in' in session and session['logged_in'] == True:
+        user_id = session['user_id']
+        # Create MySQL Cursor
+        cur = mysql.connection.cursor()
 
-            # Close DB
-            cur.close()
-        flash('Saved', 'success')
-        return redirect(url_for('mycriteria'))
-    else:
-        # If user is not logged in, default the count to 0
-        if 'content' not in session:
-            session['content'] = 0
-        if 'delivery' not in session:
-            session['delivery'] = 0
-        if 'hits' not in session:
-            session['hits'] = 0
-        if 'albums' not in session:
-            session['albums'] = 0
-        if 'consistency' not in session:
-            session['consistency'] = 0
-        if 'longevity' not in session:
-            session['longevity'] = 0
-        if 'impact' not in session:
-            session['impact'] = 0
-        if 'sales' not in session:
-            session['sales'] = 0
-        if 'personality' not in session:
-            session['personality'] = 0
-        if 'creativity' not in session:
-            session['creativity'] = 0
-        if 'popularity' not in session:
-            session['popularity'] = 0
-    return render_template('mycriteria.html', methods=['GET', 'POST'], categoryList=getCategoryList())
+        # Update Values
+        query = """UPDATE user SET criteria_content = %s, criteria_delivery=%s,
+                criteria_hits=%s, criteria_albums=%s, criteria_consistency=%s,
+                criteria_longevity=%s, criteria_impact=%s,  criteria_sales=%s,
+                criteria_personality=%s,  criteria_creativity=%s,
+                criteria_popularity=%s WHERE id = %s"""
+        # Execute Query
+        cur.execute(query, (content, delivery, hits, albums, consistency, longevity, impact, sales, personality, creativity, popularity, user_id))
+        # Commit to MySQL database
+        mysql.connection.commit()
+
+        # Close DB
+        cur.close()
+    return jsonify({'success': 'Saved'})
 
 # Page for rating artists
 @app.route('/artistratings')
@@ -131,9 +115,9 @@ def myratings():
     # Close DB
     cur.close()
 
-    return render_template('myratings.html', artistList=ArtistList, categoryList=getCategoryList(), selected_artist='-- select an artist --')
+    return render_template('myratings.html', artistList=ArtistList, categoryList=getCategoryList())
 
-# rated
+# Route that saves artist rating when clicking the save button, called through AJAX
 @app.route('/rated', methods=['POST'])
 def rated():
     # Create MySQL Cursor
@@ -209,9 +193,9 @@ def rated():
     cur.close()
     return jsonify({'success': 'Saved'})
 
-# rated
-@app.route('/sliderchanged', methods=['GET'])
-def sliderchanged():
+# AJAX calls this function whenever the artist changes in the dropdown to load their rating values
+@app.route('/artistchanged', methods=['GET'])
+def artistchanged():
     # Get selected artist name
     artist_name = request.args.get('artist_name')
     artist_name = str(artist_name)
