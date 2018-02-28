@@ -11,10 +11,11 @@
       <div class="criteria_container">
         {% for category in categoryList %}
           <div class="criteria-label">{{category}}</div><br />
-          <input type="range" min="0" max="100" value="1" class="slider" id="criteria_{{category}}" name="criteria_{{category}}" oninput="maxCombinedValues('{{category}}');">
+          <input type="range" min="0" max="100" value="0" class="slider" id="criteria_{{category}}" name="criteria_{{category}}" oninput="maxCombinedValues('{{category}}');">
         {% endfor %}
       </div>
       <button type="submit" class="btn btn-primary" id="criteria_save_button">Save</button>
+      <button type="reset" class="btn btn-primary" id="criteria_reset_button">Reset</button>
     </form>
 
     <br />
