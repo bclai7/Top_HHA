@@ -24,17 +24,7 @@ $(function() {
 
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                $('#slider_content').val(1);
-                $('#slider_delivery').val(1);
-                $('#slider_hits').val(1);
-                $('#slider_albums').val(1);
-                $('#slider_consistency').val(1);
-                $('#slider_longevity').val(1);
-                $('#slider_impact').val(1);
-                $('#slider_sales').val(1);
-                $('#slider_personality').val(1);
-                $('#slider_creativity').val(1);
-                $('#slider_popularity').val(1);
+                console.log(errorThrown);
             }
         });
     });

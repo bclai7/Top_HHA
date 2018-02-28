@@ -225,7 +225,13 @@ def sliderchanged():
     artist_name = request.args.get('artist_name')
     artist_name = str(artist_name)
 
-    rating_list = session[artist_name]
+    # load rating list
+    if artist_name in session:
+        rating_list = session[artist_name]
+    else:
+        # If use did not rate that artist, default all ratings to 1
+        rating_list = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    
     # return as json list, will be parsed in AJAX function
     return json.dumps(rating_list)
 
