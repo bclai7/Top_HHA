@@ -108,22 +108,13 @@ def mycriteria():
             session['creativity'] = 0
         if 'popularity' not in session:
             session['popularity'] = 0
-    return render_template('mycriteria.html', methods=['GET', 'POST'])
+    return render_template('mycriteria.html', methods=['GET', 'POST'], categoryList=getCategoryList())
 
 # Page for rating artists
 @app.route('/artistratings')
 def myratings():
     # Create MySQL Cursor
     cur = mysql.connection.cursor()
-
-    # Detect onchange of <select> object, whenever there is a change:
-    # If user is logged in
-    #   get rating values from database based off of selected artist and user
-    #   then store the values into session variables (with artist name as key)
-    # else if not logged in
-    #    just load the current session variables based off of the selected artist (artist name as key)
-
-    # After the ratings variables are found, load the values into the slider objects in the HTML
 
     # MySQL query to get list of artist names from database
     query="SELECT name FROM artist ORDER BY name"

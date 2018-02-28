@@ -8,49 +8,11 @@
   {% endif %}
   <div class="criteria-form">
     <form action="" method="POST">
-      <div class="form-group">
-        <label for="content">Content</label>
-        <input type="number" class="form-control" name="content" value="{{session.content}}">
-      </div>
-      <div class="form-group">
-        <label for="delivery">Delivery</label>
-        <input type="number" class="form-control" name="delivery" value="{{session.delivery}}">
-      </div>
-      <div class="form-group">
-        <label for="hits">Hits</label>
-        <input type="number" class="form-control" name="hits" value="{{session.hits}}">
-      </div>
-      <div class="form-group">
-        <label for="albums">Albums</label>
-        <input type="number" class="form-control" name="albums" value="{{session.albums}}">
-      </div>
-      <div class="form-group">
-        <label for="consistency">Consistency</label>
-        <input type="number" class="form-control" name="consistency" value="{{session.consistency}}">
-      </div>
-      <div class="form-group">
-        <label for="longevity">Longevity</label>
-        <input type="number" class="form-control" name="longevity" value="{{session.longevity}}">
-      </div>
-      <div class="form-group">
-        <label for="impact">Impact</label>
-        <input type="number" class="form-control" name="impact" value="{{session.impact}}">
-      </div>
-      <div class="form-group">
-        <label for="sales">Sales</label>
-        <input type="number" class="form-control" name="sales" value="{{session.sales}}">
-      </div>
-      <div class="form-group">
-        <label for="personality">Personality</label>
-        <input type="number" class="form-control" name="personality" value="{{session.personality}}">
-      </div>
-      <div class="form-group">
-        <label for="creativity">Creativity</label>
-        <input type="number" class="form-control" name="creativity" value="{{session.creativity}}">
-      </div>
-      <div class="form-group">
-        <label for="popularity">Popularity</label>
-        <input type="number" class="form-control" name="popularity" value="{{session.popularity}}">
+      <div class="criteria_container">
+        {% for category in categoryList %}
+          <div class="criteria-label">{{category}}</div><br />
+          <input type="range" min="1" max="100" value="1" class="slider" id="criteria_{{category}}" name="criteria_{{category}}">
+        {% endfor %}
       </div>
       <button type="submit" class="btn btn-primary">Save</button>
     </form>

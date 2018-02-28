@@ -33,12 +33,12 @@
 }
 
 /* SLIDER */
-.slidecontainer {
+.slidecontainer, .criteria_container {
     width: 100%; /* Width of the outside container */
 }
 
 /* The slider itself */
-.artist-rating .slider {
+.artist-rating .slider, .criteria_container .slider {
     -webkit-appearance: none;  /* Override default CSS styles */
     appearance: none;
     width: 100%; /* Full-width */
@@ -51,12 +51,12 @@
 }
 
 /* Mouse-over effects */
-.artist-rating .slider:hover {
+.artist-rating .slider:hover, .criteria_container .slider:hover {
     opacity: 1; /* Fully shown on mouse-over */
 }
 
 /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
-.artist-rating .slider::-webkit-slider-thumb {
+.artist-rating .slider::-webkit-slider-thumb, .criteria_container .slider::-webkit-slider-thumb {
     -webkit-appearance: none; /* Override default look */
     appearance: none;
     width: 25px; /* Set a specific slider handle width */
@@ -65,14 +65,14 @@
     cursor: pointer; /* Cursor on hover */
 }
 
-.artist-rating.slider::-moz-range-thumb {
+.artist-rating. slider::-moz-range-thumb, .criteria_container .slider::-moz-range-thumb  {
     width: 25px; /* Set a specific slider handle width */
     height: 25px; /* Slider handle height */
     background: #4CAF50; /* Green background */
     cursor: pointer; /* Cursor on hover */
 }
 
-.slider-label{
+.slider-label, .criteria-label{
   text-transform: capitalize;
 }
 /*
