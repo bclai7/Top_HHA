@@ -37,19 +37,20 @@ def index():
 @app.route('/mycriteria', methods=['GET', 'POST'])
 def mycriteria():
     if request.method == 'POST':
-
         # get criteria values from form
-        content = request.form['content']
-        delivery = request.form['delivery']
-        hits = request.form['hits']
-        albums = request.form['albums']
-        consistency = request.form['consistency']
-        longevity = request.form['longevity']
-        impact = request.form['impact']
-        sales = request.form['sales']
-        personality = request.form['personality']
-        creativity = request.form['creativity']
-        popularity = request.form['popularity']
+        content = request.form['criteria_content']
+        delivery = request.form['criteria_delivery']
+        hits = request.form['criteria_hits']
+        albums = request.form['criteria_albums']
+        consistency = request.form['criteria_consistency']
+        longevity = request.form['criteria_longevity']
+        impact = request.form['criteria_impact']
+        sales = request.form['criteria_sales']
+        personality = request.form['criteria_personality']
+        creativity = request.form['criteria_creativity']
+        popularity = request.form['criteria_popularity']
+
+
 
         # Load criteria values into session
         session['content']=content

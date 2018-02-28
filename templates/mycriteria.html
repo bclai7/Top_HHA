@@ -18,4 +18,18 @@
     </form>
   </div>
 
+  <script>
+    window.onload = function loadCriteria(){
+      // Store session variable
+      var session = {{ session | tojson }}; // session variable
+      var categoryList = {{ categoryList | tojson }}; // list of categories
+
+      // For each rating, set the the corresponding slider value
+      for(i=0; i < categoryList.length; i++){
+        var slider_name = "criteria_"+categoryList[i];
+        document.getElementById(slider_name).value = session[categoryList[i]];
+      }
+    }
+  </script>
+
 {% endblock %}

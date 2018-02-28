@@ -1,7 +1,7 @@
 // Update ratings
 $(document).ready(function() {
 
-  $('#save_button').click(function(event) {
+  $('#rating_save_button').click(function(event) {
 
     $.ajax({
       data : {
