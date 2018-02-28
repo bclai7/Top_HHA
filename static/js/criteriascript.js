@@ -21,7 +21,7 @@ $(document).ready(function() {
         $('#errorAlert').text(data.error).hide().fadeIn(1000).delay(1000).fadeOut(1000);
       }
       else {
-        $('#successAlert').text('Saved').hide().fadeIn(1000).delay(1000).fadeOut(1000);
+        $('#successAlert').text(data.success).hide().fadeIn(1000).delay(1000).fadeOut(1000);
       }
 
     });

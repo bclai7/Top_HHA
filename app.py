@@ -48,6 +48,15 @@ def mycriteria():
 def changecriteria():
     # Create MySQL Cursor
     cur = mysql.connection.cursor()
+    totalValue=0
+    for category in getCategoryList():
+        formName = 'criteria_'+category
+        totalValue += int(request.form[formName])
+
+    app.logger.info(totalValue)
+    # If combined total is not equal to 100, return error
+    if totalValue != 100:
+        return jsonify({'error': 'Category scores must add up to 100'})
 
     # get criteria values from form
     content = request.form['criteria_content']
