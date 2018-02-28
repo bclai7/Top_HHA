@@ -5,6 +5,7 @@ from passlib.hash import sha256_crypt
 from flask.ext.bcrypt import Bcrypt
 from functools import wraps
 import config as cf
+import simplejson as json
 
 
 app = Flask(__name__)
@@ -213,6 +214,17 @@ def rated():
     # Close DB
     cur.close()
     return jsonify({'success': 'Saved'})
+
+# rated
+@app.route('/sliderchanged', methods=['GET'])
+def sliderchanged():
+    # Get selected artist name
+    artist_name = request.args.get('artist_name')
+    artist_name = str(artist_name)
+
+    rating_list = session[artist_name]
+    # return as json list, will be parsed in AJAX function
+    return json.dumps(rating_list)
 
 # Rankings page
 @app.route('/rankings')

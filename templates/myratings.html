@@ -6,7 +6,7 @@
   <div class="artist-rating" onchange="displayArtistName(); hideDefaultOnChange();">
     <form class="artist-rater">
       <!-- Artist Select -->
-      <select class="selectpicker" data-live-search="true" id="artist_name" name="artist_name" onchange="changeSliders();">
+      <select class="selectpicker" data-live-search="true" id="artist_name" name="artist_name">
         <option disabled selected value style="display:none" id="default-option"> -- select an artist -- </option>
         {% for artist in artistList %}
           <option data-tokens="{{artist}}">{{artist}}</option>
@@ -42,33 +42,6 @@
       document.getElementById('name_display').innerHTML = artist_name;
     }
 
-    // Function to load slider values for a particular artist
-    function changeSliders(){
-      // Get selected artist name
-      var selected_artist = document.getElementById("artist_name").selectedIndex;
-      var artist_name = document.getElementsByTagName("option")[selected_artist].value;
-
-      // Store session variable
-      var session = {{ session | tojson }}; // session variable
-      var categoryList = {{ categoryList | tojson }}; // list of categories
-
-      if(!('logged_in' in session)){
-        // For each rating, set the the corresponding slider value
-        if(session[artist_name]){
-          var rating_list = session[artist_name];
-          for(i=0; i < categoryList.length; i++){
-            var slider_name = "slider_"+categoryList[i];
-            document.getElementById(slider_name).value = rating_list[i];
-          }
-        }
-        else{
-          for(i=0; i < categoryList.length; i++){
-            var slider_name = "slider_"+categoryList[i];
-            document.getElementById(slider_name).value = 1;
-          }
-        }
-      }
-    }
     // Operations to run after page is loaded
     window.onload = function loadOperations(){
       //Hide slider set when the default option is selected
