@@ -204,15 +204,14 @@ def rated():
                                 creativity_rating, popularity_rating])
             # Commit to MySQL database
             mysql.connection.commit()
-
-    # Save the rating info to the corresponding session variables (whether or not user is registered)
-    # Save the list into a session variable with the artist name as the key
-    session[artist_name] = [content_rating, delivery_rating, hits_rating, albums_rating,
-                            consistency_rating, longevity_rating, impact_rating,
-                            sales_rating, personality_rating, creativity_rating,
-                            popularity_rating]
-    # add artist to list of rated artists
-    session['rated_artists'].append(artist_name)
+    else:
+        # Save the list into a session variable with the artist name as the key
+        session[artist_name] = [content_rating, delivery_rating, hits_rating, albums_rating,
+                                consistency_rating, longevity_rating, impact_rating,
+                                sales_rating, personality_rating, creativity_rating,
+                                popularity_rating]
+        # add artist to list of rated artists
+        session['rated_artists'].append(artist_name)
 
     # Close DB
     cur.close()
@@ -225,12 +224,30 @@ def sliderchanged():
     artist_name = request.args.get('artist_name')
     artist_name = str(artist_name)
 
-    # load rating list
-    if artist_name in session:
-        rating_list = session[artist_name]
+    # Default list of ratings for if the user has not yet rated this artist
+    rating_list = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
+    # Check if user is logged in
+    if 'logged_in' in session:
+        # If so, check database to see if they have rated the artist
+        # Create MySQL Cursor
+        cur = mysql.connection.cursor()
+        query = "SELECT * FROM rating WHERE user_id=%s AND artist_name=%s"
+        result = cur.execute(query, (session['user_id'], artist_name))
+        if result > 0:
+            data = cur.fetchone()
+            rating_list = [data['content'], data['delivery'], data['hits'],
+                        data['albums'], data['consistency'], data['longevity'],
+                        data['impact'], data['sales'], data['personality'],
+                        data['creativity'], data['popularity']]
+            # close connection
+            cur.close()
+
     else:
-        # If use did not rate that artist, default all ratings to 1
-        rating_list = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        # Otherwise check session variable to see if they have rated artist
+        if artist_name in session:
+            # If so, load rating list from session variable
+            rating_list = session[artist_name]
 
     # return as json list, will be parsed in AJAX function
     return json.dumps(rating_list)
