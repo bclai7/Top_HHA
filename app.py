@@ -134,6 +134,8 @@ def myratings():
     for artist in DictArtist:
         ArtistList.append(artist["name"])
 
+    # Keep list of rated artists for offline users so its easier to keep track of who they rated
+    rated_artists=[]
     # Close DB
     cur.close()
 
@@ -209,7 +211,8 @@ def rated():
                             consistency_rating, longevity_rating, impact_rating,
                             sales_rating, personality_rating, creativity_rating,
                             popularity_rating]
-    #filler
+    # add artist to list of rated artists
+    rated_artists.append(artist_name)
 
     # Close DB
     cur.close()
