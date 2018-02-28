@@ -11,7 +11,7 @@
       <div class="criteria_container">
         {% for category in categoryList %}
           <div class="criteria-label">{{category}}</div><br />
-          <input type="range" min="1" max="100" value="1" class="slider" id="criteria_{{category}}" name="criteria_{{category}}">
+          <input type="range" min="0" max="100" value="1" class="slider" id="criteria_{{category}}" name="criteria_{{category}}" oninput="maxCombinedValues('{{category}}');">
         {% endfor %}
       </div>
       <button type="submit" class="btn btn-primary" id="criteria_save_button">Save</button>
@@ -34,6 +34,30 @@
       for(i=0; i < categoryList.length; i++){
         var slider_name = "criteria_"+categoryList[i];
         document.getElementById(slider_name).value = session[categoryList[i]];
+      }
+    }
+
+    // Function to ensure that the combined max values of the sliders equal 100
+    function maxCombinedValues(activeCategory){
+      var categoryList = {{ categoryList | tojson }}; // list of categories
+      var totalValue=0; // total value between all sliders
+      var active_slider_name = "criteria_"+activeCategory;
+
+      for(i=0; i < categoryList.length; i++){
+        var slider_name = "criteria_"+categoryList[i];
+        totalValue += Number(document.getElementById(slider_name).value);
+      }
+      if(totalValue > 100){
+        // get combined values of other sliders
+        var other_sliders_value = 0;
+        for(i=0; i < categoryList.length; i++){
+          var slider_name = "criteria_"+categoryList[i];
+          if(slider_name != active_slider_name){
+            other_sliders_value += Number(document.getElementById(slider_name).value);
+          }
+        }
+        var newVal = 100 - other_sliders_value;
+        document.getElementById(active_slider_name).value = newVal;
       }
     }
   </script>
