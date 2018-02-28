@@ -135,7 +135,7 @@ def myratings():
         ArtistList.append(artist["name"])
 
     # Keep list of rated artists for offline users so its easier to keep track of who they rated
-    rated_artists=[]
+    session['rated_artists']=[]
     # Close DB
     cur.close()
 
@@ -212,7 +212,7 @@ def rated():
                             sales_rating, personality_rating, creativity_rating,
                             popularity_rating]
     # add artist to list of rated artists
-    rated_artists.append(artist_name)
+    session['rated_artists'].append(artist_name)
 
     # Close DB
     cur.close()
@@ -231,7 +231,7 @@ def sliderchanged():
     else:
         # If use did not rate that artist, default all ratings to 1
         rating_list = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-    
+
     # return as json list, will be parsed in AJAX function
     return json.dumps(rating_list)
 
