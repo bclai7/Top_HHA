@@ -291,8 +291,9 @@ def rankings():
     # Check for button clicks from POST
     if request.method == 'POST':
         app.logger.info('IN POST')
-        if request.form['submit'] == 'delete_all_ratings':
+        if request.form['action_button'] == 'delete_all_ratings':
             app.logger.info("DELETE ALL") # do something
+            return redirect(url_for('rankings'))
         elif request.form['submit'] == 'Do Something Else':
             pass # do something else
         else:
