@@ -51,13 +51,11 @@ def index():
 # Criteria Settings
 @app.route('/mycriteria')
 def mycriteria():
-    # Boolean to check if criteria page has been visited. Used for ranking page
-    session['visited_criteria']=True
-    # If user is not logged in and has not yet set criteria ratings, default the count to 0
+    # If user is not logged in and has not yet set criteria ratings,
+    # default the sliders to 0
     for category in getCategoryList():
         if category not in session:
             session[category] = 0
-
     return render_template('mycriteria.html', categoryList=getCategoryList())
 
 # Route that saves artist rating when clicking the save button, called through AJAX
@@ -119,13 +117,17 @@ def changecriteria():
 
         # Close DB
         cur.close()
+
+    # Boolean to check if user has set a criteria. Used for ranking page
+    session['saved_criteria']=True
     return jsonify({'success': 'Saved'})
 
 # Page for rating artists
 @app.route('/artistratings')
 def myratings():
-    # Keep list of rated artists for offline users so its easier to keep track of who they rated
-    session['rated_artists']=[]
+    if 'rated_artists' not in session:
+        # Keep list of rated artists for offline users so its easier to keep track of who they rated
+        session['rated_artists']=[]
     return render_template('myratings.html', artistList=getArtistList(), categoryList=getCategoryList())
 
 # Route that saves artist rating when clicking the save button, called through AJAX
@@ -267,7 +269,7 @@ def rankings():
     else:
         # check if user has visited criteria page, if not then criteria session
         # values will be null
-        if 'visited_criteria' not in session:
+        if 'saved_criteria' not in session:
             return render_template('rankings.html', rankingList=[], isEmpty=True)
         if 'rated_artists' in session:
             for artist in session['rated_artists']:
