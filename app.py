@@ -242,7 +242,7 @@ def artistchanged():
     return json.dumps(rating_list)
 
 # Page to display top artist rankings
-@app.route('/rankings')
+@app.route('/rankings', methods=['GET', 'POST'])
 def rankings():
     # List of artists containing tuples with artist name and their overall rating
     ranking_list = []
@@ -287,6 +287,17 @@ def rankings():
         isEmpty=False
     # Sort rated artist list by score from largest to smallest
     sorted_ranking_list = sorted(ranking_list, key=lambda tup: tup[1])[::-1]
+
+    # Check for button clicks from POST
+    if request.method == 'POST':
+        app.logger.info('IN POST')
+        if request.form['submit'] == 'delete_all_ratings':
+            app.logger.info("DELETE ALL") # do something
+        elif request.form['submit'] == 'Do Something Else':
+            pass # do something else
+        else:
+            pass # unknown
+
     return render_template('rankings.html', rankingList=sorted_ranking_list, isEmpty=isEmpty)
 
 # About page

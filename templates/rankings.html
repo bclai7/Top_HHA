@@ -24,7 +24,9 @@
   {% endif %}
 
   <br />
+
   <button class="btn btn-primary" id="delete_all_ratings" data-toggle="modal" data-target="#delete_all_confirmation">Delete All Ratings</button>
+
 
   <!-- Confirmation Message Popup -->
   <!-- Modal -->
@@ -41,8 +43,10 @@
           Clicking confirm will delete all of your artist ratings. Are you sure?
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary">Confirm</button>
+          <form method="POST">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary" name="submit" value="delete_all_ratings">Confirm</button>
+          </form>
         </div>
       </div>
     </div>
