@@ -2,11 +2,17 @@
 
 {% block body %}
 <div class="rankings">
-  {% if session.logged_in%}
+  {% if session.logged_in %}
     <h1>{{session.name}}'s Artist Rankings</h1>
   {% else %}
     <h1>Artist Rankings</h1>
   {% endif %}
+
+  {% for artist in rankingList %}
+    {{artist[0]}}
+    {{artist[1]}}
+    <br />
+  {% endfor %}
 
 </div>
 {% endblock %}

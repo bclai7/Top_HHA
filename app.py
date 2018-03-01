@@ -237,10 +237,34 @@ def artistchanged():
     # return as json list, will be parsed in AJAX function
     return json.dumps(rating_list)
 
-# Rankings page
+# Page to display top artist rankings
 @app.route('/rankings')
 def rankings():
-    return render_template('rankings.html')
+    # List of artists containing tuples with artist name and their overall rating
+    ranking_list = []
+
+    # check if user is logged in
+    if 'logged_in' in session:
+        # MySQL cursor
+        cur = mysql.connection.cursor()
+
+        # Find all ratings made by user
+        query = "SELECT * FROM rating WHERE user_id = %s"
+        result = cur.execute(query, str(session['user_id']))
+
+        # For each rating, calculate total score for that artist
+        for row in cur.fetchall():
+            totalScore = 0
+            for category in getCategoryList():
+                categoryScore = int(session[category]) * int(row[category])
+                totalScore += categoryScore
+            ranking_list.append((row['artist_name'], totalScore))
+            app.logger.info((row['artist_name'], totalScore))
+
+        # Sort rated artist list
+        sorted_ranking_list = sorted(ranking_list, key=lambda tup: tup[1])[::-1]
+
+    return render_template('rankings.html', rankingList=sorted_ranking_list)
 
 # About page
 @app.route('/about')
