@@ -17,16 +17,13 @@
         <div class="artist_rank">{{loop.index}}</div>
         <div class="artist_name">{{artist[0]}}</div>
         <div class="artist_score">{{artist[1]}}</div>
-        <button type="button" class="close" aria-label="Close" id="{{artist}}_delete"><span aria-hidden="true">&times;</span></button>
+        <button type="button" class="close" aria-label="Close" id="delete_{{artist}}"><span aria-hidden="true">&times;</span></button>
       </li>
     {% endfor %}
     </ul>
+    <br />
+    <button class="btn btn-primary" id="delete_all_ratings" data-toggle="modal" data-target="#delete_all_confirmation">Delete All Ratings</button>
   {% endif %}
-
-  <br />
-
-  <button class="btn btn-primary" id="delete_all_ratings" data-toggle="modal" data-target="#delete_all_confirmation">Delete All Ratings</button>
-
 
   <!-- Confirmation Message Popup -->
   <!-- Modal -->

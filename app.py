@@ -194,13 +194,18 @@ def rated():
             # Commit to MySQL database
             mysql.connection.commit()
     else:
+        # Add artist to list of rated artists
+        # This check is to see if the artist has been rated at least once before
+        # if so, then it will not add to the list of rated artists again, otherise
+        # the rankings page will show duplicates of the same artists
+        if artist_name not in session:
+            session['rated_artists'].append(artist_name)
+
         # Save the list into a session variable with the artist name as the key
         session[artist_name] = [content_rating, delivery_rating, hits_rating, albums_rating,
                                 consistency_rating, longevity_rating, impact_rating,
                                 sales_rating, personality_rating, creativity_rating,
                                 popularity_rating]
-        # add artist to list of rated artists
-        session['rated_artists'].append(artist_name)
 
     # Close DB
     cur.close()
@@ -290,11 +295,26 @@ def rankings():
 
     # Check for button clicks from POST
     if request.method == 'POST':
-        app.logger.info('IN POST')
+        # Delete all artist ratings
         if request.form['action_button'] == 'delete_all_ratings':
-            app.logger.info("DELETE ALL") # do something
+            # If user is logged in
+            if 'logged_in' in session:
+                # Run query to delete all ratings tied to their user id
+                cur = mysql.connection.cursor()
+                query = """DELETE FROM rating
+                            WHERE user_id IN (SELECT *
+                            FROM (SELECT id FROM user WHERE id=%s) x)"""
+                cur.execute(query, (str(session['user_id'])))
+                mysql.connection.commit()
+                cur.close()
+            # If user is not logged in
+            else:
+                for artist in session['rated_artists']:
+                    # Remove artist key from session dict
+                    session.pop(artist, None)
+                session['rated_artists'].clear()
             return redirect(url_for('rankings'))
-        elif request.form['submit'] == 'Do Something Else':
+        elif request.form['action_button'] == 'Do Something Else':
             pass # do something else
         else:
             pass # unknown
