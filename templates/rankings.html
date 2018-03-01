@@ -1,7 +1,7 @@
 {%extends 'layout.html'%}
 
 {% block body %}
-<div class="rankings">
+<div class="rankings_container">
   {% if session.logged_in %}
     <h1>{{session.name}}'s Artist Rankings</h1>
   {% else %}
@@ -11,13 +11,41 @@
   {% if isEmpty %}
     To view your list, you must first set your criteria and rate at least one artist
   {% else %}
+    <ul class="list-group" id="artist_ranking_list">
     {% for artist in rankingList %}
-      {{artist[0]}}
-      {{artist[1]}}
-      <br />
+      <li class="list-group-item" id="{{artist}}_item">
+        <div class="artist_rank">{{loop.index}}</div>
+        <div class="artist_name">{{artist[0]}}</div>
+        <div class="artist_score">{{artist[1]}}</div>
+        <button type="button" class="close" aria-label="Close" id="{{artist}}_delete"><span aria-hidden="true">&times;</span></button>
+      </li>
     {% endfor %}
+    </ul>
   {% endif %}
 
+  <br />
+  <button class="btn btn-primary" id="delete_all_ratings" data-toggle="modal" data-target="#delete_all_confirmation">Delete All Ratings</button>
 
-</div>
+  <!-- Confirmation Message Popup -->
+  <!-- Modal -->
+  <div class="modal fade" id="delete_all_confirmation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmationTitle">Delete All</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Clicking confirm will delete all of your artist ratings. Are you sure?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
 {% endblock %}
