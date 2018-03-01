@@ -242,6 +242,8 @@ def artistchanged():
 def rankings():
     # List of artists containing tuples with artist name and their overall rating
     ranking_list = []
+    # Boolean checking whether or not list is empty
+    isEmpty = True
 
     # check if user is logged in
     if 'logged_in' in session:
@@ -263,8 +265,12 @@ def rankings():
 
         # Sort rated artist list
         sorted_ranking_list = sorted(ranking_list, key=lambda tup: tup[1])[::-1]
+    else:
+        sorted_ranking_list=[]
 
-    return render_template('rankings.html', rankingList=sorted_ranking_list)
+    if sorted_ranking_list:
+        isEmpty=False
+    return render_template('rankings.html', rankingList=sorted_ranking_list, isEmpty=isEmpty)
 
 # About page
 @app.route('/about')

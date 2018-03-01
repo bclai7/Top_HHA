@@ -8,11 +8,16 @@
     <h1>Artist Rankings</h1>
   {% endif %}
 
-  {% for artist in rankingList %}
-    {{artist[0]}}
-    {{artist[1]}}
-    <br />
-  {% endfor %}
+  {% if isEmpty %}
+    You have not yet rated any artists
+  {% else %}
+    {% for artist in rankingList %}
+      {{artist[0]}}
+      {{artist[1]}}
+      <br />
+    {% endfor %}
+  {% endif %}
+
 
 </div>
 {% endblock %}
