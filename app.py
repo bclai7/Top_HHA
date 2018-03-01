@@ -27,6 +27,21 @@ def getCategoryList():
     # Rating Category list
     categoryList = ['content', 'delivery', 'hits', 'albums', 'consistency', 'longevity', 'impact', 'sales', 'personality', 'creativity', 'popularity']
     return categoryList
+def getArtistList():
+    # Create MySQL Cursor
+    cur = mysql.connection.cursor()
+
+    # MySQL query to get list of artist names from database
+    query="SELECT name FROM artist ORDER BY name"
+    cur.execute(query)
+    DictArtist = cur.fetchall() # returns dictionary of artists
+    artistList=[] # create empty list to add artist names to
+    # add artists to ArtistList
+    for artist in DictArtist:
+        artistList.append(artist["name"])
+    # Close DB
+    cur.close()
+    return artistList
 
 # Home Page
 @app.route('/')
@@ -107,24 +122,9 @@ def changecriteria():
 # Page for rating artists
 @app.route('/artistratings')
 def myratings():
-    # Create MySQL Cursor
-    cur = mysql.connection.cursor()
-
-    # MySQL query to get list of artist names from database
-    query="SELECT name FROM artist ORDER BY name"
-    cur.execute(query)
-    DictArtist = cur.fetchall() # returns dictionary of artists
-    ArtistList=[] # create empty list to add artist names to
-    # add artists to ArtistList
-    for artist in DictArtist:
-        ArtistList.append(artist["name"])
-
     # Keep list of rated artists for offline users so its easier to keep track of who they rated
     session['rated_artists']=[]
-    # Close DB
-    cur.close()
-
-    return render_template('myratings.html', artistList=ArtistList, categoryList=getCategoryList())
+    return render_template('myratings.html', artistList=getArtistList(), categoryList=getCategoryList())
 
 # Route that saves artist rating when clicking the save button, called through AJAX
 @app.route('/rated', methods=['POST'])
