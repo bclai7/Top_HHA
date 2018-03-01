@@ -51,6 +51,8 @@ def index():
 # Criteria Settings
 @app.route('/mycriteria')
 def mycriteria():
+    # Boolean to check if criteria page has been visited. Used for ranking page
+    session['visited_criteria']=True
     # If user is not logged in and has not yet set criteria ratings, default the count to 0
     for category in getCategoryList():
         if category not in session:
@@ -261,15 +263,28 @@ def rankings():
                 categoryScore = int(session[category]) * int(row[category])
                 totalScore += categoryScore
             ranking_list.append((row['artist_name'], totalScore))
-            app.logger.info((row['artist_name'], totalScore))
 
-        # Sort rated artist list
-        sorted_ranking_list = sorted(ranking_list, key=lambda tup: tup[1])[::-1]
     else:
-        sorted_ranking_list=[]
+        # check if user has visited criteria page, if not then criteria session
+        # values will be null
+        if 'visited_criteria' not in session:
+            return render_template('rankings.html', rankingList=[], isEmpty=True)
+        if 'rated_artists' in session:
+            for artist in session['rated_artists']:
+                artist_ratings=session[artist]
+                totalScore = 0
+                count=0
+                for category in getCategoryList():
+                    categoryScore = int(session[category]) * int(artist_ratings[count])
+                    totalScore += categoryScore
+                    count +=1
+                ranking_list.append((artist, totalScore))
 
-    if sorted_ranking_list:
+    # Check if rated artist list is empty (AKA user hasnt rated any artists yet)
+    if ranking_list:
         isEmpty=False
+    # Sort rated artist list by score from largest to smallest
+    sorted_ranking_list = sorted(ranking_list, key=lambda tup: tup[1])[::-1]
     return render_template('rankings.html', rankingList=sorted_ranking_list, isEmpty=isEmpty)
 
 # About page
