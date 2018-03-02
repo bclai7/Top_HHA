@@ -1,0 +1,7 @@
+{%extends 'layout.html'%}
+
+{% block body %}
+  {% if session.logged_in %}
+    You are logged in {{session['name']}}
+  {% endif %}
+{% endblock %}

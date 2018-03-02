@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, redirect, url_for, session, logging, request, jsonify
+from flask import Flask, render_template, flash, redirect, url_for, session, logging, request, jsonify, g
 from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
@@ -42,6 +42,15 @@ def getArtistList():
     # Close DB
     cur.close()
     return artistList
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'logged_in' not in session:
+            flash('You must be logged in to access that page', 'danger')
+            return redirect(url_for('login', next=request.url))
+        return f(*args, **kwargs)
+    return decorated_function
 
 # Home Page
 @app.route('/')
@@ -354,6 +363,10 @@ class RegistrationForm(Form):
 # Registration Page
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    # If user is already registered, redirect them to home page
+    if 'logged_in' in session:
+        flash('You are already registered', 'danger')
+        return redirect(url_for('index'))
     form = RegistrationForm(request.form)
     if request.method == 'POST' and form.validate():
         name = form.name.data
@@ -377,6 +390,10 @@ def register():
 # Login
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
+    # If user is already logged in, redirect them to home page
+    if 'logged_in' in session:
+        flash('You are already logged in', 'danger')
+        return redirect(url_for('index'))
     if request.method == 'POST':
         # clear session just in case user made changes before logging in
         session.clear()
@@ -440,6 +457,12 @@ def login():
         else:
             return render_template('login.html', error = 'No user found with that email address')
     return render_template('login.html')
+
+# User Dashboard
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    return render_template('dashboard.html')
 
 # Logout
 @app.route('/logout')
