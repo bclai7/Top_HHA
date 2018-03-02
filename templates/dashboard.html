@@ -2,6 +2,35 @@
 
 {% block body %}
   {% if session.logged_in %}
-    You are logged in {{session['name']}}
+    <h1>{{session['name']}}'s Dashboard</h1>
+    <div class="dashboard_container">
+      <div class="user_info">
+        <form class="edit_name" method="POST">
+          <div class="form_element">
+            <b>Name:</b><br />
+            <input type="text" class="form-control" name="name" value="{{session['name']}}" />
+            <div class="dashboard_save_button">
+              <button type="submit" class="btn btn-primary" name="save_button" value="change_name">Change Name</button>
+            </div>
+          </div>
+        </form>
+
+        <br /><br /><br />
+
+        <form class="edit_email">
+          <div class="form_element">
+            <b>Email:</b><br />
+            <input type="email" class="form-control" name="email" value="{{session['email']}}" />
+              <div class="dashboard_save_button">
+                <button type="submit" class="btn btn-primary" name="save_button" value="change_email">Change Email</button>
+              </div>
+            </div>
+        </form>
+        </div>
+        <br /><br /><br />
+    </div>
+
+
+
   {% endif %}
 {% endblock %}

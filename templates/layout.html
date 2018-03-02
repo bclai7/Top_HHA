@@ -34,10 +34,12 @@
 </header>
 
 <body>
-  {% include 'includes/_navbar.html' %}
-  <div class="container" style="margin-left: 20px; margin-top: 20px;">
-    {% include 'includes/_messages.html' %}
-    {% block body %}{% endblock %}
+  <div class="full_page_container">
+    {% include 'includes/_navbar.html' %}
+    <div class="body_container">
+      {% include 'includes/_messages.html' %}
+      {% block body %}{% endblock %}
+    </div>
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> <!-- JQuery AJAX -->
   <script src="{{ url_for('static', filename="js/ratescript.js") }}"></script> <!-- JQuery Script that saves the ratings -->

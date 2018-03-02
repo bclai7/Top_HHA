@@ -459,9 +459,28 @@ def login():
     return render_template('login.html')
 
 # User Dashboard
-@app.route('/dashboard')
+@app.route('/dashboard', methods=['GET','POST'])
 @login_required
 def dashboard():
+    if request.method == 'POST':
+        user_id = str(session['user_id'])
+        if request.form['save_button'] == 'change_name':
+            new_name = str(request.form['name'])
+
+            # Change name for account in database
+            cur = mysql.connection.cursor()
+            query = "UPDATE user SET name=%s WHERE id=%s"
+            cur.execute(query, (new_name, user_id))
+            mysql.connection.commit()
+            cur.close()
+
+            # Update name for session as well
+            session['name'] = new_name
+
+
+        elif request.form['save_button'] == 'change_email':
+            # Change email for account, verify first
+            pass
     return render_template('dashboard.html')
 
 # Logout
