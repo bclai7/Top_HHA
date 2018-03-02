@@ -4,21 +4,26 @@ from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from flask.ext.bcrypt import Bcrypt
 from functools import wraps
-import config as cf
 import simplejson as json
-
+from flask_mail import Mail, Message
 
 app = Flask(__name__)
 
+# Load from config file
+app.config.from_pyfile('config.cfg')
+
 #Configure MySQL database
 app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = cf.DATABASE_USER
-app.config['MYSQL_PASSWORD'] = cf.DATABASE_PW
-app.config['MYSQL_DB'] = cf.DATABASE_NAME
+app.config['MYSQL_USER'] = app.config['DATABASE_USER']
+app.config['MYSQL_PASSWORD'] = app.config['DATABASE_PW']
+app.config['MYSQL_DB'] = app.config['DATABASE_NAME']
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 # init MySQL
 mysql = MySQL(app)
+
+# init Mail
+mail = Mail(app)
 
 # init bcrypt for hashing
 bcrypt = Bcrypt(app)
@@ -503,5 +508,5 @@ def logout():
     return redirect(url_for('login'))
 
 if __name__ == '__main__':
-    app.secret_key=cf.SECRET_KEY
+    app.secret_key=app.config['SECRET_KEY']
     app.run(debug=True)
