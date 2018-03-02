@@ -10,26 +10,34 @@
             <b>Name:</b><br />
             <input type="text" class="form-control" name="name" value="{{session['name']}}" />
             <div class="dashboard_save_button">
-              <button type="submit" class="btn btn-primary" name="save_button" value="change_name">Change Name</button>
+              <button type="submit" class="btn btn-primary" name="save_button" value="change_name" id="change_name">Change Name</button>
             </div>
           </div>
         </form>
 
         <br /><br /><br />
 
-        <form class="edit_email">
+        <form class="edit_email" method="POST">
+          {% from 'includes/_formhelpers.html' import render_field %}
           <div class="form_element">
-            <b>Email:</b><br />
-            <input type="email" class="form-control" name="email" value="{{session['email']}}" />
-              <div class="dashboard_save_button">
-                <button type="submit" class="btn btn-primary" name="save_button" value="change_email">Change Email</button>
-              </div>
+            <div class="form-group">
+              {{render_field(emailForm.email, class_="form-control")}}
             </div>
+            <div class="dashboard_save_button">
+              <button type="submit" class="btn btn-primary" name="save_button" value="change_email">Change Email</button>
+            </div>
+            <br /><br />
+            {% if emailForm.email.errors %}
+              <ul class="errors">{% for error in emailForm.email.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+            {% endif %}
+          </div>
         </form>
-        </div>
         <br /><br /><br />
     </div>
 
+    <script>
+
+    </script>
 
 
   {% endif %}

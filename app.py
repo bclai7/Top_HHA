@@ -353,7 +353,7 @@ def about():
 # Registration Form
 class RegistrationForm(Form):
     name = StringField('Name', [validators.Length(min=4, max=50)])
-    email = StringField('Email Address', [validators.Length(min=6, max=35)])
+    email = StringField('Email Address', [validators.Length(min=6, max=35), validators.email()])
     password = PasswordField('Password', [
         validators.DataRequired(),
         validators.EqualTo('confirm', message='Passwords must match')
@@ -462,7 +462,9 @@ def login():
 @app.route('/dashboard', methods=['GET','POST'])
 @login_required
 def dashboard():
+    emailForm = ChangeEmailForm(request.form)
     if request.method == 'POST':
+
         user_id = str(session['user_id'])
         if request.form['save_button'] == 'change_name':
             new_name = str(request.form['name'])
@@ -476,12 +478,21 @@ def dashboard():
 
             # Update name for session as well
             session['name'] = new_name
+            flash('Name Changed', 'success')
+            return redirect(url_for('dashboard'))
+        elif emailForm.validate():
+            email = emailForm.email.data
+            app.logger.info(email)
+            # First check if the email is already tied to an account
+            # If not, then send verifcation email
+            # When verified, change email in database
+            return redirect(url_for('dashboard'))
 
+    return render_template('dashboard.html', emailForm=emailForm)
 
-        elif request.form['save_button'] == 'change_email':
-            # Change email for account, verify first
-            pass
-    return render_template('dashboard.html')
+# Change Email Form
+class ChangeEmailForm(Form):
+    email = StringField('Email Address', [validators.Length(min=6, max=35), validators.email()])
 
 # Logout
 @app.route('/logout')
