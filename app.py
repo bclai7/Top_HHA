@@ -6,6 +6,7 @@ from flask.ext.bcrypt import Bcrypt
 from functools import wraps
 import simplejson as json
 from flask_mail import Mail, Message
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadTimeSignature
 
 app = Flask(__name__)
 
@@ -24,6 +25,9 @@ mysql = MySQL(app)
 
 # init Mail
 mail = Mail(app)
+
+# init serializer
+s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 # init bcrypt for hashing
 bcrypt = Bcrypt(app)
@@ -378,19 +382,57 @@ def register():
         email = form.email.data
         password = pw_hash = bcrypt.generate_password_hash(str(form.password.data)).decode('utf-8')
 
-        # Create MySQL Cursor
+        # Verify Email
+        # First create token for email link
+        token = s.dumps(email, salt='confirm_email_registration')
+
+        # Create email message
+        msg = Message('Confirm Email at MyTopHHA.com', sender=app.config['MAIL_USERNAME'], recipients=[email])
+        # Create confirmation link
+        link = url_for('confirm_email', token=token, external=True)
+        # Message body
+        msg.body = """Thank you for registering at MyTopHHA.com. Please confirm
+                        your email by clicking the link below:\n\n{}\n\n
+                        This link will expire after 24 hours and you will have
+                        to request a new one""".format(link)
+        mail.send(msg)
+
+        # Add user to database
         cur = mysql.connection.cursor()
-        # Execute MySQL Query
-        cur.execute("INSERT INTO user(name, email, password) VALUES(%s, %s, %s)", (name, email, password))
-        # Commit to MySQL database
+        query = "INSERT INTO user(name, email, password) VALUES(%s, %s, %s)"
+        cur.execute(query, (name, email, password))
         mysql.connection.commit()
-        # Close connection
         cur.close()
+
         # Thank you message
-        flash('Thank you for registering. You may now log in.', 'success')
+        flash('Thank you for registering. You may now log in. Please confirm your email in case you forget your password.', 'success')
 
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
+
+@app.route('/confirm_email/<token>')
+def confirm_email(token):
+    try:
+        email = s.loads(token, salt='confirm_email_registration', max_age=86400)
+        app.logger.info(email)
+
+        confirmed = '1'
+        # Set email confirmed to true in database
+        cur = mysql.connection.cursor()
+        query = "UPDATE user SET email_confirmed=%s WHERE email=%s"
+        cur.execute(query, (confirmed, email))
+        mysql.connection.commit()
+        cur.close()
+
+        flash('Email Confirmed. Thank You.', 'success')
+        return redirect(url_for('login'))
+    except SignatureExpired:
+        flash('Confirmation Link has expired. Please request another confirmation email on the \"My Account\" page', 'danger')
+        return redirect(url_for('login'))
+    except BadTimeSignature:
+        flash('Invalid confirmation link', 'danger')
+        return redirect(url_for('login'))
+
 
 # Login
 @app.route('/login', methods = ['GET', 'POST'])
