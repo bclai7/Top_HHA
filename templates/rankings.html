@@ -17,7 +17,9 @@
         <div class="artist_rank">{{loop.index}}</div>
         <div class="artist_name">{{artist[0]}}</div>
         <div class="artist_score">{{artist[1]}}</div>
-        <button type="button" class="close" aria-label="Close" id="delete_{{artist}}"><span aria-hidden="true">&times;</span></button>
+        <button type="button" class="deleteArtistDialog close" aria-label="Close" id="delete_{{artist[0]}}" data-toggle="modal" data-target="#delete_single_confirmation">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </li>
     {% endfor %}
     </ul>
@@ -25,8 +27,32 @@
     <button class="btn btn-primary" id="delete_all_ratings" data-toggle="modal" data-target="#delete_all_confirmation">Delete All Ratings</button>
   {% endif %}
 
-  <!-- Confirmation Message Popup -->
-  <!-- Modal -->
+  <!-- Confirmation Message Popups -->
+  <!-- DELETE SINGLE RATINGS -->
+  <div class="modal fade" id="delete_single_confirmation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmationTitle">Delete Artist Rating</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="confirmationBody">
+          Clicking confirm will delete the rating for the selected artist. Are you sure?
+        </div>
+        <div class="deleteSingleArtist modal-footer">
+          <form method="POST">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary" name="action_button">Confirm</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- DELETE ALL RATINGS -->
   <div class="modal fade" id="delete_all_confirmation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -42,7 +68,7 @@
         <div class="modal-footer">
           <form method="POST">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-primary" name="action_button" value="delete_all_ratings">Confirm</button>
+            <button type="submit" class="btn btn-primary" name="action_button" value="all_ratings_delete">Confirm</button>
           </form>
         </div>
       </div>

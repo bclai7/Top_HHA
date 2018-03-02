@@ -295,15 +295,14 @@ def rankings():
 
     # Check for button clicks from POST
     if request.method == 'POST':
-        # Delete all artist ratings
-        if request.form['action_button'] == 'delete_all_ratings':
+        # Button clicked to delete all artist ratings
+        if request.form['action_button'] == 'all_ratings_delete':
             # If user is logged in
             if 'logged_in' in session:
                 # Run query to delete all ratings tied to their user id
                 cur = mysql.connection.cursor()
                 query = """DELETE FROM rating
-                            WHERE user_id IN (SELECT *
-                            FROM (SELECT id FROM user WHERE id=%s) x)"""
+                            WHERE user_id = %s """
                 cur.execute(query, (str(session['user_id'])))
                 mysql.connection.commit()
                 cur.close()
@@ -313,11 +312,27 @@ def rankings():
                     # Remove artist key from session dict
                     session.pop(artist, None)
                 session['rated_artists'].clear()
-            return redirect(url_for('rankings'))
-        elif request.form['action_button'] == 'Do Something Else':
-            pass # do something else
-        else:
-            pass # unknown
+
+        # Button clicked to delete single artist rating
+        if request.form['action_button'][0:7] == 'delete_' and request.form['action_button']:
+            artist_to_delete = request.form['action_button'][7:]
+            # If artist is logged in
+            if 'logged_in' in session:
+                # Run query to delete single artist from database
+                cur = mysql.connection.cursor()
+                query = """DELETE FROM rating
+                            WHERE user_id = %s AND artist_name=%s"""
+                cur.execute(query, (str(session['user_id']), artist_to_delete))
+                mysql.connection.commit()
+                cur.close()
+            # if artist is not logged in
+            else:
+                # Remove artist key from session dictionary
+                session.pop(artist_to_delete, None)
+                # And remove him from list of artists
+                session['rated_artists'].remove(artist_to_delete)
+
+        return redirect(url_for('rankings'))
 
     return render_template('rankings.html', rankingList=sorted_ranking_list, isEmpty=isEmpty)
 
