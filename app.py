@@ -37,7 +37,9 @@ bcrypt = Bcrypt(app)
 
 def getCategoryList():
     # Rating Category list
-    categoryList = ['content', 'delivery', 'hits', 'albums', 'consistency', 'longevity', 'impact', 'sales', 'personality', 'creativity', 'popularity']
+    categoryList = ['content', 'delivery', 'hits', 'albums', 'consistency',
+        'longevity', 'impact', 'sales', 'personality', 'creativity',
+        'popularity']
     return categoryList
 def getArtistList():
     # Create MySQL Cursor
@@ -79,7 +81,7 @@ def mycriteria():
             session[category] = 0
     return render_template('mycriteria.html', categoryList=getCategoryList())
 
-# Route that saves artist rating when clicking the save button, called through AJAX
+# Saves artist rating when clicking the save button, called through AJAX
 @app.route('/changecriteria', methods=['POST'])
 def changecriteria():
     # Create MySQL Cursor
@@ -132,7 +134,8 @@ def changecriteria():
                 criteria_personality=%s,  criteria_creativity=%s,
                 criteria_popularity=%s WHERE id = %s"""
         # Execute Query
-        cur.execute(query, (content, delivery, hits, albums, consistency, longevity, impact, sales, personality, creativity, popularity, user_id))
+        cur.execute(query, (content, delivery, hits, albums, consistency,
+        longevity, impact, sales, personality, creativity, popularity, user_id))
         # Commit to MySQL database
         mysql.connection.commit()
 
@@ -147,11 +150,13 @@ def changecriteria():
 @app.route('/artistratings')
 def myratings():
     if 'rated_artists' not in session:
-        # Keep list of rated artists for offline users so its easier to keep track of who they rated
+        # Keep list of rated artists for offline users so its easier to keep
+        # track of who they rated
         session['rated_artists']=[]
-    return render_template('myratings.html', artistList=getArtistList(), categoryList=getCategoryList())
+    return render_template('myratings.html', artistList=getArtistList(),
+        categoryList=getCategoryList())
 
-# Route that saves artist rating when clicking the save button, called through AJAX
+# Saves artist rating when clicking the save button, called through AJAX
 @app.route('/rated', methods=['POST'])
 def rated():
     # Create MySQL Cursor
@@ -176,7 +181,8 @@ def rated():
 
     # is user is registered and logged in, store values to data base
     if 'logged_in' in session and session['logged_in']:
-        # first check if there are any ratings already for that artist on that account
+        # first check if there are any ratings already for that artist on that
+        # account
         query = """SELECT artist_name, content, delivery, hits, albums,
                         consistency, longevity, impact, sales,
                         personality, creativity, popularity
@@ -193,9 +199,10 @@ def rated():
                             personality = %s, creativity = %s, popularity = %s
                         WHERE rating.user_id = %s AND rating.artist_name = %s"""
             cur.execute(query, [content_rating, delivery_rating, hits_rating,
-                                albums_rating, consistency_rating, longevity_rating,
-                                impact_rating, sales_rating, personality_rating,
-                                creativity_rating, popularity_rating, session['user_id'],
+                                albums_rating, consistency_rating,
+                                longevity_rating, impact_rating, sales_rating,
+                                personality_rating, creativity_rating,
+                                popularity_rating, session['user_id'],
                                 artist_name])
 
             # Commit to MySQL database
@@ -203,10 +210,11 @@ def rated():
         # else, do an INSERT INTO query to enter new rating into the database
         else:
             # Write query to insert into the table
-            query = """INSERT INTO rating(user_id, artist_name, content, delivery,
-                        hits, albums, consistency, longevity, impact, sales,
-                        personality, creativity, popularity)
-                        VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+            query = """INSERT INTO rating(user_id, artist_name, content,
+                    delivery, hits, albums, consistency, longevity, impact,
+                    sales, personality, creativity, popularity)
+                    VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+                    %s)"""
             cur.execute(query, [session['user_id'], artist_name, content_rating,
                                 delivery_rating, hits_rating, albums_rating,
                                 consistency_rating, longevity_rating,
@@ -217,22 +225,24 @@ def rated():
     else:
         # Add artist to list of rated artists
         # This check is to see if the artist has been rated at least once before
-        # if so, then it will not add to the list of rated artists again, otherise
-        # the rankings page will show duplicates of the same artists
+        # if so, then it will not add to the list of rated artists again,
+        # otherise the rankings page will show duplicates of the same artists
         if artist_name not in session:
             session['rated_artists'].append(artist_name)
 
         # Save the list into a session variable with the artist name as the key
-        session[artist_name] = [content_rating, delivery_rating, hits_rating, albums_rating,
-                                consistency_rating, longevity_rating, impact_rating,
-                                sales_rating, personality_rating, creativity_rating,
+        session[artist_name] = [content_rating, delivery_rating, hits_rating,
+                                albums_rating, consistency_rating,
+                                longevity_rating, impact_rating, sales_rating,
+                                personality_rating, creativity_rating,
                                 popularity_rating]
 
     # Close DB
     cur.close()
     return jsonify({'success': 'Saved'})
 
-# AJAX calls this function whenever the artist changes in the dropdown to load their rating values
+# AJAX calls this function whenever the artist changes in the dropdown to load
+# their rating values
 @app.route('/artistchanged', methods=['GET'])
 def artistchanged():
     # Get selected artist name
@@ -270,7 +280,7 @@ def artistchanged():
 # Page to display top artist rankings
 @app.route('/rankings', methods=['GET', 'POST'])
 def rankings():
-    # List of artists containing tuples with artist name and their overall rating
+    # List of artists containing tuples with artist name and their overall score
     ranking_list = []
     # Boolean checking whether or not list is empty
     isEmpty = True
@@ -296,7 +306,8 @@ def rankings():
         # check if user has visited criteria page, if not then criteria session
         # values will be null
         if 'saved_criteria' not in session:
-            return render_template('rankings.html', rankingList=[], isEmpty=True)
+            return render_template('rankings.html', rankingList=[],
+                isEmpty=True)
         if 'rated_artists' in session:
             for artist in session['rated_artists']:
                 artist_ratings=session[artist]
@@ -355,7 +366,8 @@ def rankings():
 
         return redirect(url_for('rankings'))
 
-    return render_template('rankings.html', rankingList=sorted_ranking_list, isEmpty=isEmpty)
+    return render_template('rankings.html', rankingList=sorted_ranking_list,
+        isEmpty=isEmpty)
 
 # About page
 @app.route('/about')
@@ -365,7 +377,8 @@ def about():
 # Registration Form
 class RegistrationForm(Form):
     name = StringField('Name', [validators.Length(min=1, max=50)])
-    email = StringField('Email Address', [validators.Length(min=6, max=35), validators.email()])
+    email = StringField('Email Address', [validators.Length(min=6, max=35),
+        validators.email()])
     password = PasswordField('Password', [
         validators.DataRequired(),
         validators.EqualTo('confirm', message='Passwords must match')
@@ -383,7 +396,7 @@ def register():
     if request.method == 'POST' and form.validate():
         name = form.name.data
         email = form.email.data
-        password = pw_hash = bcrypt.generate_password_hash(str(form.password.data)).decode('utf-8')
+        password = bcrypt.generate_password_hash(str(form.password.data)).decode('utf-8')
 
         try:
             # Add user to database
@@ -395,19 +408,21 @@ def register():
 
             # Verify Email
             # First create token for email link
-            token = s.dumps(email, salt='confirm_email_registration')
+            token = s.dumps(email)
 
             # Create email message
-            msg = Message('Confirm Email at MyTopHHA.com', sender=app.config['MAIL_USERNAME'], recipients=[email])
+            msg = Message('Confirm Email at MyTopHHA.com',
+                sender=app.config['MAIL_USERNAME'], recipients=[email])
             # Create confirmation link
             link = url_for('confirm_email', token=token, _external=True)
 
             # Message body
             msg.html = """Hello {}, <br /><br /> Thank you for registering at
-                        MyTopHHA.com. Please confirm your email by clicking the link
-                        below: <br /><br />{}<br /><br />This link will expire after
-                        24 hours and you will have to request a new one. <br /> <br />
-                        If you feel this email is in error, please contact us at
+                        MyTopHHA.com. Please confirm your email by clicking the
+                        link below: <br /><br />{}<br /><br />This link will
+                        expire after 24 hours and you will have to request a new
+                         one.<br /> <br />If you feel this email is in error,
+                        please contact us at
                         support@mytophha.com.""".format(name, link)
             # Finally, send confirmation email
             mail.send(msg)
@@ -418,7 +433,8 @@ def register():
             return redirect(url_for('register'))
 
         # Thank you message
-        flash('Thank you for registering. You may now log in. Please confirm your email in case you forget your password.', 'success')
+        flash("""Thank you for registering. You may now log in. Please confirm
+                your email in case you forget your password.', 'success""")
 
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
@@ -426,7 +442,7 @@ def register():
 @app.route('/confirm_email/<token>')
 def confirm_email(token):
     try:
-        email = s.loads(token, salt='confirm_email_registration', max_age=86400)
+        email = s.loads(token)
         app.logger.info(email)
 
         confirmed = '1'
@@ -439,7 +455,8 @@ def confirm_email(token):
         flash('Email Confirmed. Thank You.', 'success')
         return redirect(url_for('login'))
     except SignatureExpired:
-        flash('Confirmation Link has expired. Please request another confirmation email on the \"My Account\" page', 'danger')
+        flash("""Confirmation Link has expired. Please request another
+                confirmation email on the \"My Account\" page', 'danger""")
         return redirect(url_for('login'))
     except BadTimeSignature:
         flash('Invalid confirmation link', 'danger')
@@ -512,11 +529,13 @@ def login():
                 flash('Successfully Logged In', 'success')
                 return redirect(url_for('rankings'))
             else:
-                return render_template('login.html', error = 'Email and password combination is incorrect')
+                return render_template('login.html',
+                    error = 'Email and password combination is incorrect')
             # Close connection
             cur.close()
         else:
-            return render_template('login.html', error = 'No user found with that email address')
+            return render_template('login.html',
+                error = 'No user found with that email address')
     return render_template('login.html')
 
 # User Dashboard
@@ -568,10 +587,47 @@ def dashboard():
                 session['email']=new_email
 
                 # If not, then send verifcation email
+                # First create token for email link
+                token = s.dumps(new_email)
 
-                # Also send email to old email notifying them that their email has changed
+                # Create email message to NEW email
+                msg = Message('Confirm Email at MyTopHHA.com',
+                    sender=app.config['MAIL_USERNAME'],
+                    recipients=[new_email])
+                # Create confirmation link
+                link = url_for('confirm_email', token=token, _external=True)
 
-                # also set session email_confirmed (as well as database) flag to false
+                # Message body
+                msg.html = """Hello {}, <br /><br /> You have set this email
+                            address for your account at MyTopHHA.com. Please
+                            confirm your email by clicking the link
+                            below: <br /><br />{}<br /><br />This link will
+                            expire after 24 hours and you will have to request
+                            a new one. <br /> <br /> If you feel this email is
+                            in error, please contact us at
+                            support@mytophha.com.""".format(name, link)
+                # Finally, send confirmation email
+                mail.send(msg)
+
+                #------------------------------------------------------------#
+
+                # Send email to old email saying that their email has changed
+                # Create email message to OLD email
+                msg = Message('Email changed at MyTopHHA.com',
+                    sender=app.config['MAIL_USERNAME'],
+                    recipients=[old_email])
+
+                # Message body
+                msg.html = """Hello {}, <br /><br /> You have changed your email
+                            address for your account at MyTopHHA.com. Please
+                            confirm by clinking the confirmation link sent to
+                            the new email address. <br /> <br /> If you feel
+                            this email is in error, please contact us at
+                            support@mytophha.com.""".format(name)
+                # Finally, send confirmation email
+                mail.send(msg)
+
+                # also set  email_confirmed flag to false
                 unconfirmed = '0'
                 cur = mysql.connection.cursor()
                 query = "UPDATE user SET email_confirmed=%s WHERE id=%s"
@@ -580,7 +636,8 @@ def dashboard():
                 cur.close()
                 session['email_confirmed']=0
 
-                flash('Email changed. Please confirm your new email.', 'warning')
+                flash('Email changed. Please confirm your new email.',
+                    'warning')
                 return redirect(url_for('dashboard'))
             except IntegrityError:
                 # Error thrown if email is already tied to another account
@@ -589,11 +646,13 @@ def dashboard():
                 cur.close()
                 return redirect(url_for('dashboard'))
 
-    return render_template('dashboard.html', emailForm=emailForm, current_email=str(session['email']))
+    return render_template('dashboard.html', emailForm=emailForm,
+        current_email=str(session['email']))
 
 # Change Email Form
 class ChangeEmailForm(Form):
-    email = StringField('Email Address', [validators.Length(min=6, max=35), validators.email()])
+    email = StringField('Email Address', [validators.Length(min=6, max=35),
+        validators.email()])
 
 # Logout
 @app.route('/logout')
