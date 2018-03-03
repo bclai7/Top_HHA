@@ -7,6 +7,9 @@ from functools import wraps
 import simplejson as json
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadTimeSignature
+import sys
+from _mysql_exceptions import IntegrityError
+
 
 app = Flask(__name__)
 
@@ -382,28 +385,37 @@ def register():
         email = form.email.data
         password = pw_hash = bcrypt.generate_password_hash(str(form.password.data)).decode('utf-8')
 
-        # Verify Email
-        # First create token for email link
-        token = s.dumps(email, salt='confirm_email_registration')
+        try:
+            # Add user to database
+            cur = mysql.connection.cursor()
+            query = "INSERT INTO user(name, email, password) VALUES(%s, %s, %s)"
+            cur.execute(query, (name, email, password))
+            mysql.connection.commit()
+            cur.close()
 
-        # Create email message
-        msg = Message('Confirm Email at MyTopHHA.com', sender=app.config['MAIL_USERNAME'], recipients=[email])
-        # Create confirmation link
-        link = url_for('confirm_email', token=token, _external=True)
-        # Message body
-        msg.html = """Hello {}, <br /><br /> Thank you for registering at
-                    MyTopHHA.com. Please confirm your email by clicking the link
-                    below: <br /><br />{}<br /><br />This link will expire after
-                    24 hours and you will have to request a new one""".format(name, link)
-        # Finally, send confirmation email
-        mail.send(msg)
+            # Verify Email
+            # First create token for email link
+            token = s.dumps(email, salt='confirm_email_registration')
 
-        # Add user to database
-        cur = mysql.connection.cursor()
-        query = "INSERT INTO user(name, email, password) VALUES(%s, %s, %s)"
-        cur.execute(query, (name, email, password))
-        mysql.connection.commit()
-        cur.close()
+            # Create email message
+            msg = Message('Confirm Email at MyTopHHA.com', sender=app.config['MAIL_USERNAME'], recipients=[email])
+            # Create confirmation link
+            link = url_for('confirm_email', token=token, _external=True)
+
+            # Message body
+            msg.html = """Hello {}, <br /><br /> Thank you for registering at
+                        MyTopHHA.com. Please confirm your email by clicking the link
+                        below: <br /><br />{}<br /><br />This link will expire after
+                        24 hours and you will have to request a new one. <br /> <br />
+                        If you feel this email is in error, please contact us at
+                        support@mytophha.com.""".format(name, link)
+            # Finally, send confirmation email
+            mail.send(msg)
+
+        except IntegrityError:
+            # Error thrown if email is already tied to another account
+            flash('Email aready in use', 'danger')
+            return redirect(url_for('register'))
 
         # Thank you message
         flash('Thank you for registering. You may now log in. Please confirm your email in case you forget your password.', 'success')
@@ -512,10 +524,19 @@ def login():
 @app.route('/dashboard', methods=['GET','POST'])
 @login_required
 def dashboard():
-    emailForm = ChangeEmailForm(request.form)
-    emailForm.email.data = session['email']
-    if request.method == 'POST':
+    emailForm = ChangeEmailForm(request.form, email=session['email'])
+    emailForm.email.process_data=session['email']
 
+    # Check if email is verified and store in session variable
+    cur = mysql.connection.cursor()
+    query = "SELECT * FROM user WHERE id=%s"
+    result = cur.execute(query, [str(session['user_id'])])
+    if result > 0:
+        data=cur.fetchone()
+        session['email_confirmed']=data['email_confirmed']
+    cur.close()
+
+    if request.method == 'POST':
         user_id = str(session['user_id'])
         if request.form['save_button'] == 'change_name':
             new_name = str(request.form['name'])
@@ -533,16 +554,30 @@ def dashboard():
             return redirect(url_for('dashboard'))
         elif emailForm.validate():
             email = emailForm.email.data
-            # Check to make sure email isnt the one they are already using
-            if email == str(session['email']):
+            # Make sure you aren't using the previous email
+            if email == session['email']:
                 flash('You are already using that email', 'danger')
                 return redirect(url_for('dashboard'))
-            # First check if the email is already tied to an account
+            try:
+                # First check if the email is already tied to an account
+                cur = mysql.connection.cursor()
+                query = "UPDATE user SET email=%s WHERE email=%s"
+                cur.execute(query, (email, str(session['email'])))
+                mysql.connection.commit()
+                cur.close()
+                app.logger.info("DONE")
+                flash('Email changed. Please confirm your new email.', 'success')
+            except IntegrityError:
+                # Error thrown if email is already tied to another account
+                flash('Email aready in use', 'danger')
+            finally:
+                cur.close()
+                return redirect(url_for('dashboard'))
             # If not, then send verifcation email, also set session email_confirmed flag to false
             # When verified, change email in database
             return redirect(url_for('dashboard'))
 
-    return render_template('dashboard.html', emailForm=emailForm)
+    return render_template('dashboard.html', emailForm=emailForm, current_email=str(session['email']))
 
 # Change Email Form
 class ChangeEmailForm(Form):
