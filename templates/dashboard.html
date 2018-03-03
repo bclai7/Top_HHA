@@ -8,7 +8,7 @@
         <form class="edit_name" method="POST">
           <div class="form_element">
             <b>Name:</b><br />
-            <input type="text" class="form-control" name="name" value="{{session['name']}}" />
+            <input type="text" class="form-control" name="name" value="{{session['name']}}" maxlength="50"/>
             <div class="dashboard_save_button">
               <button type="submit" class="btn btn-primary" name="save_button" value="change_name" id="change_name">Change Name</button>
             </div>
@@ -21,7 +21,23 @@
           {% from 'includes/_formhelpers.html' import render_field %}
           <div class="form_element">
             <div class="form-group">
-              {{render_field(emailForm.email, class_="form-control")}}
+              <div class="email_label">
+                <dt>{{ emailForm.email.label }}
+              </div>
+              {% if session['email_confirmed'] == 1 %}
+                <div class="verified_text">
+                  Verified
+                </div>
+              {% elif session['email_confirmed'] == 0 %}
+                <div class="unverified_text">
+                  Unverified
+                </div>
+                <a href="">Send Confirmation</a>
+              {% endif %}
+              <br />
+              <div class="email_box">
+                {{render_field(emailForm.email, class_="form-control")}}
+              </div>
             </div>
             <div class="dashboard_save_button">
               <button type="submit" class="btn btn-primary" name="save_button" value="change_email">Change Email</button>

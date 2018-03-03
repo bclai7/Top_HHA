@@ -279,7 +279,7 @@ def rankings():
 
         # Find all ratings made by user
         query = "SELECT * FROM rating WHERE user_id = %s"
-        result = cur.execute(query, str(session['user_id']))
+        result = cur.execute(query, [str(session['user_id'])])
 
         # For each rating, calculate total score for that artist
         for row in cur.fetchall():
@@ -395,6 +395,7 @@ def register():
                     MyTopHHA.com. Please confirm your email by clicking the link
                     below: <br /><br />{}<br /><br />This link will expire after
                     24 hours and you will have to request a new one""".format(name, link)
+        # Finally, send confirmation email
         mail.send(msg)
 
         # Add user to database
@@ -461,6 +462,7 @@ def login():
             password = data['password']
             name = data['name']
             user_id = data['id']
+            email_confirmed = data['email_confirmed']
 
             # Load criteria values
             content = data['criteria_content']
@@ -481,6 +483,7 @@ def login():
                 session['email']=email
                 session['name']=name
                 session['user_id']=user_id
+                session['email_confirmed']=email_confirmed
 
                 # Load criteria values into session
                 session['content']=content
@@ -510,6 +513,7 @@ def login():
 @login_required
 def dashboard():
     emailForm = ChangeEmailForm(request.form)
+    emailForm.email.data = session['email']
     if request.method == 'POST':
 
         user_id = str(session['user_id'])
@@ -529,9 +533,12 @@ def dashboard():
             return redirect(url_for('dashboard'))
         elif emailForm.validate():
             email = emailForm.email.data
-            app.logger.info(email)
+            # Check to make sure email isnt the one they are already using
+            if email == str(session['email']):
+                flash('You are already using that email', 'danger')
+                return redirect(url_for('dashboard'))
             # First check if the email is already tied to an account
-            # If not, then send verifcation email
+            # If not, then send verifcation email, also set session email_confirmed flag to false
             # When verified, change email in database
             return redirect(url_for('dashboard'))
 

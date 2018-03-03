@@ -9,6 +9,7 @@
     <form method="POST" action="">
       {% from 'includes/_formhelpers.html' import render_field %}
       <div class="form-group">
+        <dt>{{ form.name.label }}
         {{render_field(form.name, class_="form-control")}}
       </div>
       {% if form.name.errors %}
@@ -16,6 +17,7 @@
       {% endif %}
 
       <div class="form-group">
+        <dt>{{ form.email.label }}
         {{render_field(form.email, class_="form-control")}}
       </div>
       {% if form.email.errors %}
@@ -23,6 +25,7 @@
       {% endif %}
 
       <div class="form-group">
+        <dt>{{ form.password.label }}
         {{render_field(form.password, class_="form-control")}}
       </div>
       {% if form.password.errors %}
@@ -30,6 +33,7 @@
       {% endif %}
 
       <div class="form-group">
+        <dt>{{ form.confirm.label }}
         {{render_field(form.confirm, class_="form-control")}}
       </div>
       {% if form.confirm.errors %}
