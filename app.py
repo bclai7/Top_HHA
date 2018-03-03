@@ -607,7 +607,7 @@ def dashboard():
                             in error, please contact us at
                             support@mytophha.com.""".format(name, link)
                 # Finally, send confirmation email
-                mail.send(msg)
+                # mail.send(msg)
 
                 #------------------------------------------------------------#
 
@@ -625,8 +625,8 @@ def dashboard():
                             this email is in error, please contact us at
                             support@mytophha.com.""".format(name)
                 # Finally, send confirmation email
-                mail.send(msg)
-
+                # mail.send(msg)
+                
                 # also set  email_confirmed flag to false
                 unconfirmed = '0'
                 cur = mysql.connection.cursor()
