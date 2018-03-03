@@ -53,15 +53,17 @@
                 <div class="unverified_text">
                   Unverified
                 </div>
-                <a href="">Send Confirmation</a>
+                <button type="submit" class="link-button" data-toggle="modal" data-target="#confirm_send_verification" onclick="event.preventDefault();">
+                  Send Confirmation
+                </button>
               {% endif %}
               <br />
               <div class="email_box">
                 {{render_field(emailForm.email, class_="form-control")}}
               </div>
-            </div>
-            <div class="dashboard_save_button">
-              <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#confirm_email_change" onclick="event.preventDefault();">Change Email</button>
+              <div class="dashboard_save_button">
+                <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#confirm_email_change" onclick="event.preventDefault();">Change Email</button>
+              </div>
             </div>
 
             <!-- Dialog to confirm decision to change email -->
@@ -92,6 +94,29 @@
           </div>
         </form>
         <br /><br /><br />
+    </div>
+
+    <!-- Dialog to confirm decision to send verification email -->
+    <div class="modal fade" id="confirm_send_verification" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="confirmationTitle">Send Confirmation Link</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="confirmationBody">
+            Are you sure you want to send a confirmation link to <b>{{session['email']}}</b>?
+          </div>
+          <div class="confirmVerification modal-footer">
+            <form method="POST">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-primary" name="save_button" value="send_verification">Send</button>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
 
   {% endif %}

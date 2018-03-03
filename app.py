@@ -453,14 +453,14 @@ def confirm_email(token):
         mysql.connection.commit()
         cur.close()
         flash('Email Confirmed. Thank You.', 'success')
-        return redirect(url_for('login'))
+        return redirect(url_for('index'))
     except SignatureExpired:
         flash("""Confirmation Link has expired. Please request another
                 confirmation email on the \"My Account\" page', 'danger""")
-        return redirect(url_for('login'))
+        return redirect(url_for('index'))
     except BadTimeSignature:
         flash('Invalid confirmation link', 'danger')
-        return redirect(url_for('login'))
+        return redirect(url_for('index'))
 
 
 # Login
@@ -570,9 +570,41 @@ def dashboard():
             session['name'] = new_name
             flash('Name Changed', 'success')
             return redirect(url_for('dashboard'))
-        elif emailForm.validate():
-            new_email = emailForm.email.data
+        elif request.form['save_button'] == 'send_verification':
+            email = str(session['email'])
+            name = str(session['name'])
+            # Send verifcation email
+            # First create token for email link
+            token = s.dumps(email)
+
+            # Create email message to NEW email
+            msg = Message('Confirm Email at MyTopHHA.com',
+                sender=app.config['MAIL_USERNAME'],
+                recipients=[email])
+            # Create confirmation link
+            link = url_for('confirm_email', token=token, _external=True)
+
+            # Message body
+            msg.html = """Hello {}, <br /><br /> You have requested a
+                        confirmation link be sent to this email
+                        address for your account at MyTopHHA.com. Please
+                        confirm your email by clicking the link
+                        below: <br /><br />{}<br /><br />This link will
+                        expire after 24 hours and you will have to request
+                        a new one. <br /> <br /> If you feel this email is
+                        in error, please contact us at
+                        support@mytophha.com.""".format(name, link)
+            # Finally, send confirmation email
+            mail.send(msg)
+            flash("""Your confirmation link has been sent. Please confirm at
+                    your email address""", 'warning')
+            return redirect(url_for('dashboard'))
+
+        elif request.form['save_button'] == 'change_email' and emailForm.validate():
             old_email = session['email']
+            new_email = emailForm.email.data
+            name =  session['name']
+            app.logger.info((old_email, new_email))
             user_id = str(session['user_id'])
             # Make sure you aren't using the previous email
             if new_email == old_email:
@@ -591,14 +623,14 @@ def dashboard():
                 token = s.dumps(new_email)
 
                 # Create email message to NEW email
-                msg = Message('Confirm Email at MyTopHHA.com',
+                msg1 = Message('Confirm Email at MyTopHHA.com',
                     sender=app.config['MAIL_USERNAME'],
                     recipients=[new_email])
                 # Create confirmation link
                 link = url_for('confirm_email', token=token, _external=True)
 
                 # Message body
-                msg.html = """Hello {}, <br /><br /> You have set this email
+                msg1.html = """Hello {}, <br /><br /> You have set this email
                             address for your account at MyTopHHA.com. Please
                             confirm your email by clicking the link
                             below: <br /><br />{}<br /><br />This link will
@@ -607,26 +639,29 @@ def dashboard():
                             in error, please contact us at
                             support@mytophha.com.""".format(name, link)
                 # Finally, send confirmation email
-                # mail.send(msg)
+                mail.send(msg1)
 
+                app.logger.info("HERE 1")
                 #------------------------------------------------------------#
 
                 # Send email to old email saying that their email has changed
                 # Create email message to OLD email
-                msg = Message('Email changed at MyTopHHA.com',
+                msg2 = Message('Email changed at MyTopHHA.com',
                     sender=app.config['MAIL_USERNAME'],
                     recipients=[old_email])
 
                 # Message body
-                msg.html = """Hello {}, <br /><br /> You have changed your email
+                msg2.html = """Hello {}, <br /><br /> You have changed your email
                             address for your account at MyTopHHA.com. Please
                             confirm by clinking the confirmation link sent to
                             the new email address. <br /> <br /> If you feel
                             this email is in error, please contact us at
                             support@mytophha.com.""".format(name)
                 # Finally, send confirmation email
-                # mail.send(msg)
-                
+                mail.send(msg2)
+
+                app.logger.info("HERE 2")
+
                 # also set  email_confirmed flag to false
                 unconfirmed = '0'
                 cur = mysql.connection.cursor()
@@ -636,15 +671,16 @@ def dashboard():
                 cur.close()
                 session['email_confirmed']=0
 
-                flash('Email changed. Please confirm your new email.',
-                    'warning')
+                app.logger.info("HERE 3")
+                flash("""Your email changed. Please click the confirmation
+                        link at your new email""", 'warning')
                 return redirect(url_for('dashboard'))
             except IntegrityError:
                 # Error thrown if email is already tied to another account
                 flash('Email aready in use', 'danger')
-            finally:
                 cur.close()
                 return redirect(url_for('dashboard'))
+
 
     return render_template('dashboard.html', emailForm=emailForm,
         current_email=str(session['email']))

@@ -108,7 +108,7 @@
   margin-left: 20px;
 }
 
-.dashboard_save_button #change_name{
+.dashboard_save_button{
   float: left;
   margin-top: 15px;
 }
@@ -138,6 +138,22 @@
 
 .email_box{
   padding-bottom: 2px;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: blue;
+  cursor: pointer;
+}
+.link-button:hover{
+  text-decoration: underline;
+}
+.link-button:focus {
+  outline: none;
+}
+.link-button:active {
+  color:red;
 }
 /*
 body{
