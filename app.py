@@ -436,7 +436,6 @@ def confirm_email(token):
         cur.execute(query, (confirmed, email))
         mysql.connection.commit()
         cur.close()
-
         flash('Email Confirmed. Thank You.', 'success')
         return redirect(url_for('login'))
     except SignatureExpired:
@@ -553,29 +552,42 @@ def dashboard():
             flash('Name Changed', 'success')
             return redirect(url_for('dashboard'))
         elif emailForm.validate():
-            email = emailForm.email.data
+            new_email = emailForm.email.data
+            old_email = session['email']
+            user_id = str(session['user_id'])
             # Make sure you aren't using the previous email
-            if email == session['email']:
+            if new_email == old_email:
                 flash('You are already using that email', 'danger')
                 return redirect(url_for('dashboard'))
             try:
-                # First check if the email is already tied to an account
                 cur = mysql.connection.cursor()
-                query = "UPDATE user SET email=%s WHERE email=%s"
-                cur.execute(query, (email, str(session['email'])))
+                query = "UPDATE user SET email=%s WHERE id=%s"
+                cur.execute(query, (new_email, user_id))
                 mysql.connection.commit()
                 cur.close()
-                app.logger.info("DONE")
-                flash('Email changed. Please confirm your new email.', 'success')
+                session['email']=new_email
+
+                # If not, then send verifcation email
+
+                # Also send email to old email notifying them that their email has changed
+
+                # also set session email_confirmed (as well as database) flag to false
+                unconfirmed = '0'
+                cur = mysql.connection.cursor()
+                query = "UPDATE user SET email_confirmed=%s WHERE id=%s"
+                cur.execute(query, (unconfirmed, user_id))
+                mysql.connection.commit()
+                cur.close()
+                session['email_confirmed']=0
+
+                flash('Email changed. Please confirm your new email.', 'warning')
+                return redirect(url_for('dashboard'))
             except IntegrityError:
                 # Error thrown if email is already tied to another account
                 flash('Email aready in use', 'danger')
             finally:
                 cur.close()
                 return redirect(url_for('dashboard'))
-            # If not, then send verifcation email, also set session email_confirmed flag to false
-            # When verified, change email in database
-            return redirect(url_for('dashboard'))
 
     return render_template('dashboard.html', emailForm=emailForm, current_email=str(session['email']))
 
