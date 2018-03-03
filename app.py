@@ -361,7 +361,7 @@ def about():
 
 # Registration Form
 class RegistrationForm(Form):
-    name = StringField('Name', [validators.Length(min=4, max=50)])
+    name = StringField('Name', [validators.Length(min=1, max=50)])
     email = StringField('Email Address', [validators.Length(min=6, max=35), validators.email()])
     password = PasswordField('Password', [
         validators.DataRequired(),
@@ -389,12 +389,12 @@ def register():
         # Create email message
         msg = Message('Confirm Email at MyTopHHA.com', sender=app.config['MAIL_USERNAME'], recipients=[email])
         # Create confirmation link
-        link = url_for('confirm_email', token=token, external=True)
+        link = url_for('confirm_email', token=token, _external=True)
         # Message body
-        msg.body = """Thank you for registering at MyTopHHA.com. Please confirm
-                        your email by clicking the link below:\n\n{}\n\n
-                        This link will expire after 24 hours and you will have
-                        to request a new one""".format(link)
+        msg.html = """Hello {}, <br /><br /> Thank you for registering at
+                    MyTopHHA.com. Please confirm your email by clicking the link
+                    below: <br /><br />{}<br /><br />This link will expire after
+                    24 hours and you will have to request a new one""".format(name, link)
         mail.send(msg)
 
         # Add user to database
