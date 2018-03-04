@@ -302,8 +302,8 @@ def rankings():
             ranking_list.append((row['artist_name'], totalScore))
 
     else:
-        # check if user has visited criteria page, if not then criteria session
-        # values will be null
+        # check if user has set criteria, if not, then return a page with
+        # error message
         if 'saved_criteria' not in session:
             return render_template('rankings.html', rankingList=[],
                 isEmpty=True)
