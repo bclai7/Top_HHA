@@ -92,7 +92,7 @@
   padding-bottom: 50px;
 }
 
-.user_info input{
+.user_info input, .forgot_password_form .form-control, .reset_password_form .form-control{
   width: 70%;
   border: solid 1px #0033cc;
   border-radius: 15px;

@@ -551,7 +551,7 @@ def dashboard():
         session['email']=data['email']
     cur.close()
 
-    emailForm = ChangeEmailForm(request.form, email=session['email'])
+    emailForm = EmailForm(request.form, email=session['email'])
     passwordForm = ChangePasswordForm(request.form)
 
     if request.method == 'POST':
@@ -718,11 +718,11 @@ def dashboard():
         current_email=str(session['email']), passwordForm=passwordForm)
 
 # Change Email Form
-class ChangeEmailForm(Form):
+class EmailForm(Form):
     email = StringField('Email Address', [validators.Length(min=6, max=35),
         validators.email()])
 
-# Change {assword Form
+# Change Password Form
 class ChangePasswordForm(Form):
     password = PasswordField('New Password', [
         validators.DataRequired(),
@@ -731,12 +731,97 @@ class ChangePasswordForm(Form):
     confirm = PasswordField('Confirm Password')
 
 # Logout
-@app.route('/forgot_password')
+@app.route('/forgot_password', methods = ['GET', 'POST'])
 def forgot_password():
     if 'logged_in' in session:
         flash('Cannot access that page', 'danger')
         return redirect(url_for('index'))
-    return render_template('forgot_password.html')
+    # Form for sending reset link
+    forgotPasswordForm = EmailForm(request.form)
+
+    if request.method == 'POST' and forgotPasswordForm.validate():
+        app.logger.info('IN POST')
+        email = forgotPasswordForm.email.data
+
+        # First make sure email has been verified
+        cur = mysql.connection.cursor()
+        query = "SELECT * FROM user WHERE email=%s"
+        result = cur.execute(query, [email])
+        if result > 0:
+            data=cur.fetchone()
+            email_confirmed=str(data['email_confirmed'])
+            name = data['name']
+            if email_confirmed != '1':
+                flash("""You must verify your email first before resetting
+                        your password. If your verification link has expired,
+                        please contact us at Support@MyTopHHA.com""", 'danger')
+                cur.close()
+                return redirect(url_for('forgot_password'))
+        else:
+            flash('That email address is not registered to this website',
+                'danger')
+            cur.close()
+            return redirect(url_for('forgot_password'))
+
+        # Send reset link
+        # First create token for email link
+        token = s.dumps(email, salt='password_recovery')
+
+        # Create email message to NEW email
+        msg = Message('Reset Password at MyTopHHA.com',
+            sender=app.config['MAIL_USERNAME'],
+            recipients=[email])
+        # Create confirmation link
+        link = url_for('reset_with_token', token=token, _external=True)
+
+        # Message body
+        msg.html = """Hello {}, <br /><br /> You have requested a
+                    password reset link be sent to this email
+                    address for your account at MyTopHHA.com. You can click the
+                    link below to reset your password<br /><br />{}<br /><br />
+                    This link will expire after 24 hours and you will have to
+                    request a new one. <br /> <br /> If you feel this email is
+                    in error, please contact us at
+                    support@mytophha.com.""".format(name, link)
+        # Finally, send pw reset email
+        mail.send(msg)
+        flash("""Password Reset Link has been sent. Click the link in your email
+                to reset your password""", 'warning')
+        return redirect(url_for('forgot_password'))
+
+    return render_template('forgot_password.html',
+        forgotPasswordForm=forgotPasswordForm)
+
+@app.route('/reset/<token>', methods=["GET", "POST"])
+def reset_with_token(token):
+    if 'logged_in' in session:
+        flash('Cannot access that page', 'danger')
+        return redirect(url_for('index'))
+    try:
+        email = s.loads(token, salt="password_recovery", max_age=86400)
+        passwordResetForm = ChangePasswordForm(request.form)
+
+        if passwordResetForm.validate():
+            pw = passwordResetForm.password.data
+            password = bcrypt.generate_password_hash(pw).decode('utf-8')
+
+            # change password in databse
+            cur = mysql.connection.cursor()
+            query = "UPDATE user SET password=%s WHERE email=%s"
+            cur.execute(query, [password, email])
+            mysql.connection.commit()
+            cur.close()
+
+            flash('Password successfully reset. You may now log in', 'success')
+            return redirect(url_for('login'))
+    except:
+        abort(404)
+
+
+
+    return render_template('reset_password.html',
+        passwordResetForm=passwordResetForm,
+        token=token)
 
 # Logout
 @app.route('/logout')
