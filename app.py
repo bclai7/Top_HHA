@@ -411,7 +411,8 @@ def register():
 
             # Create email message
             msg = Message('Confirm Email at MyTopHHA.com',
-                sender=app.config['MAIL_USERNAME'], recipients=[email])
+                sender=("MyTopHHA", app.config['MAIL_USERNAME']),
+                recipients=[email])
             # Create confirmation link
             link = url_for('confirm_email', token=token, _external=True)
 
@@ -582,7 +583,7 @@ def dashboard():
 
             # Create email message to NEW email
             msg = Message('Confirm Email at MyTopHHA.com',
-                sender=app.config['MAIL_USERNAME'],
+                sender=("MyTopHHA", app.config['MAIL_USERNAME']),
                 recipients=[email])
             # Create confirmation link
             link = url_for('confirm_email', token=token, _external=True)
@@ -626,7 +627,7 @@ def dashboard():
 
                 # Create email message to NEW email
                 msg1 = Message('Confirm Email at MyTopHHA.com',
-                    sender=app.config['MAIL_USERNAME'],
+                    sender=("MyTopHHA", app.config['MAIL_USERNAME']),
                     recipients=[new_email])
                 # Create confirmation link
                 link = url_for('confirm_email', token=token, _external=True)
@@ -651,7 +652,7 @@ def dashboard():
                 if session['email_confirmed'] == '1':
                     # Create email message to OLD email
                     msg2 = Message('Email changed at MyTopHHA.com',
-                        sender=app.config['MAIL_USERNAME'],
+                        sender=("MyTopHHA", app.config['MAIL_USERNAME']),
                         recipients=[old_email])
 
                     # Message body
@@ -699,7 +700,7 @@ def dashboard():
                 # Send email notifying them that their password has changed
                 # Create email message to
                 msg = Message('Password changed at MyTopHHA.com',
-                    sender=app.config['MAIL_USERNAME'],
+                    sender=("MyTopHHA", app.config['MAIL_USERNAME']),
                     recipients=[str(session['email'])])
 
                 # Message body
@@ -769,7 +770,7 @@ def forgot_password():
 
         # Create email message to NEW email
         msg = Message('Reset Password at MyTopHHA.com',
-            sender=app.config['MAIL_USERNAME'],
+            sender=("MyTopHHA", app.config['MAIL_USERNAME']),
             recipients=[email])
         # Create confirmation link
         link = url_for('reset_with_token', token=token, _external=True)
