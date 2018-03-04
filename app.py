@@ -407,7 +407,7 @@ def register():
 
             # Verify Email
             # First create token for email link
-            token = s.dumps(email)
+            token = s.dumps(email, salt='email_confirmation')
 
             # Create email message
             msg = Message('Confirm Email at MyTopHHA.com',
@@ -434,7 +434,7 @@ def register():
 
         # Thank you message
         flash("""Thank you for registering. You may now log in. Please confirm
-                your email in case you forget your password.', 'success""")
+                your email in case you forget your password.""", 'success')
 
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
@@ -442,7 +442,22 @@ def register():
 @app.route('/confirm_email/<token>')
 def confirm_email(token):
     try:
-        email = s.loads(token)
+        email = s.loads(token, salt='email_confirmation', max_age=86400)
+
+        # Check if the email has already been confirmed
+        cur = mysql.connection.cursor()
+        query = """SELECT * FROM user WHERE email = %s"""
+        result = cur.execute(query, [email])
+        if result > 0:
+            app.logger.info("RESULT > 0")
+            data = cur.fetchone()
+            email_confirmed = data['email_confirmed']
+            if email_confirmed == 1:
+                flash('This email is already confirmed', 'danger')
+                return redirect(url_for('index'))
+        else:
+            flash('That email does not belong to a registered user', 'danger')
+            return redirect(url_for('index'))
 
         confirmed = '1'
         # Set email confirmed to true in database
@@ -451,6 +466,10 @@ def confirm_email(token):
         cur.execute(query, (confirmed, email))
         mysql.connection.commit()
         cur.close()
+
+        # Set session variable as well
+        session['email_confirmed'] = 1
+
         flash('Email Confirmed. Thank You.', 'success')
         return redirect(url_for('index'))
     except SignatureExpired:
@@ -579,7 +598,7 @@ def dashboard():
             name = str(session['name'])
             # Send verifcation email
             # First create token for email link
-            token = s.dumps(email)
+            token = s.dumps(email, salt='email_confirmation')
 
             # Create email message to NEW email
             msg = Message('Confirm Email at MyTopHHA.com',
@@ -623,7 +642,7 @@ def dashboard():
 
                 # If not, then send verifcation email
                 # First create token for email link
-                token = s.dumps(new_email)
+                token = s.dumps(new_email, salt='email_confirmation')
 
                 # Create email message to NEW email
                 msg1 = Message('Confirm Email at MyTopHHA.com',
@@ -647,9 +666,10 @@ def dashboard():
                 #------------------------------------------------------------#
 
                 # If their old email was previously confirmed, send the old
-                # email a message saying that their password was changed,
+                # email a message saying that their email was changed,
                 # otherwise, don't bother
-                if session['email_confirmed'] == '1':
+                if session['email_confirmed'] == 1:
+                    app.logger.info('IN OLD EMAIL SENDING')
                     # Create email message to OLD email
                     msg2 = Message('Email changed at MyTopHHA.com',
                         sender=("MyTopHHA", app.config['MAIL_USERNAME']),
@@ -696,7 +716,7 @@ def dashboard():
 
             # If user has confirmed their email, send them an email saying
             # that their password has changed. Otherwise don't bother
-            if session['email_confirmed'] != '1':
+            if session['email_confirmed'] == 1:
                 # Send email notifying them that their password has changed
                 # Create email message to
                 msg = Message('Password changed at MyTopHHA.com',
@@ -707,9 +727,11 @@ def dashboard():
                 msg.html = """Hello {}, <br /><br /> This is an email
                             notifying you that the password has been changed
                             for your account at MyTopHHA.com. If you did not
-                            make this change. Please contact us immediately at
-                            support@mytophha.com. Otherwise you may ignore
-                            this message""".format(str(session['name']))
+                            make this change. Please reset your password
+                            immediately. Otherwise you may ignore
+                            this message. <br/> <br/>
+                            If you have additional concerns, please email us at
+                            support@mytophha.com""".format(session['name'])
                 # Finally, send email
                 mail.send(msg)
             flash('Password changed', 'success')
@@ -750,12 +772,39 @@ def forgot_password():
         result = cur.execute(query, [email])
         if result > 0:
             data=cur.fetchone()
-            email_confirmed=str(data['email_confirmed'])
+            email_confirmed=data['email_confirmed']
             name = data['name']
-            if email_confirmed != '1':
+            if email_confirmed != 1:
+                # Send verification link
+                # First create token for email link
+                token = s.dumps(email, salt='email_confirmation')
+
+                # Create email message
+                msg = Message('Confirm Email to Reset Password at MyTopHHA.com',
+                    sender=("MyTopHHA", app.config['MAIL_USERNAME']),
+                    recipients=[email])
+                # Create confirmation link
+                link = url_for('confirm_email', token=token, _external=True)
+
+                # Message body
+                msg.html = """Hello {}, <br /><br /> You are receiving this
+                            email because you have requested a password reset
+                            for your account at MyTopHHA.com. However, before
+                            we can send a password reset, you must first verify
+                            your email address. Please confirm your email by
+                            clicking the link below: <br /><br />{}<br /><br />
+                            Once you confirm your email, you can request another
+                            password reset. This link will expire after 24 hours
+                             and you will have to request a new one.<br />
+                            <br />If you feel this email is in error, please
+                            contact us at support@mytophha.com.""".format(name,
+                            link)
+                # Finally, send confirmation email
+                mail.send(msg)
+
                 flash("""You must verify your email first before resetting
-                        your password. If your verification link has expired,
-                        please contact us at Support@MyTopHHA.com""", 'danger')
+                        your password. A new confirmation link has been sent
+                        to your email address.""", 'warning')
                 cur.close()
                 return redirect(url_for('forgot_password'))
         else:
@@ -800,6 +849,14 @@ def reset_with_token(token):
         return redirect(url_for('index'))
     try:
         email = s.loads(token, salt="password_recovery", max_age=86400)
+        # Make sure email is in database
+        cur = mysql.connection.cursor()
+        query = 'SELECT * FROM user WHERE email=%s'
+        result = cur.execute(query, [email])
+        if result < 1:
+            flash('That email does not belong to a registered user', 'danger')
+            return redirect(url_for('login'))
+
         passwordResetForm = ChangePasswordForm(request.form)
 
         if passwordResetForm.validate():
