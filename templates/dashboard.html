@@ -4,7 +4,9 @@
   {% if session.logged_in %}
     <h1>{{session['name']}}'s Dashboard</h1>
     <div class="dashboard_container">
+      <!-- CHANGE NAME FORM -->
       <div class="user_info">
+        <h2>Account Info</h2>
         <form class="edit_name" method="POST">
           <div class="form_element">
             <b>Name:</b><br />
@@ -38,6 +40,7 @@
 
         <br /><br /><br />
 
+        <!-- CHANG EMAIL FORM -->
         <form class="edit_email" method="POST">
           {% from 'includes/_formhelpers.html' import render_field %}
           <div class="form_element">
@@ -64,6 +67,10 @@
               <div class="dashboard_save_button">
                 <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#confirm_email_change" onclick="event.preventDefault();">Change Email</button>
               </div>
+              <br /><br />
+              {% if emailForm.email.errors %}
+                <ul class="errors">{% for error in emailForm.email.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+              {% endif %}
             </div>
 
             <!-- Dialog to confirm decision to change email -->
@@ -86,11 +93,64 @@
                 </div>
               </div>
             </div>
+          </div>
+        </form>
+
+        <br />
+
+        <!-- CHANGE PASSWORD FORM -->
+        <h2>Change Password</h2>
+        <form class="edit_password" method="POST">
+          {% from 'includes/_formhelpers.html' import render_field %}
+          <div class="form_element">
+            <div class="form-group">
+              <div class="password_label">
+                <dt>{{ passwordForm.password.label }}
+              </div>
+              <div class="password_box">
+                {{render_field(passwordForm.password, class_="form-control")}}
+              </div>
+              <br /><br />
+              {% if passwordForm.password.errors %}
+                <ul class="errors">{% for error in passwordForm.password.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+              {% endif %}
+              <br />
+              <div class="confirm_password_label">
+                <dt>{{ passwordForm.confirm.label }}
+              </div>
+              <div class="confirm_password_box">
+                {{render_field(passwordForm.confirm, class_="form-control")}}
+              </div>
+              {% if passwordForm.confirm.errors %}
+                <ul class="errors">{% for error in passwordForm.confirm.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+              {% endif %}
+              <br /><br /><br />
+              <div class="password_change_button">
+                <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#confirm_password_change" onclick="event.preventDefault();">Change Password</button>
+              </div>
             </div>
-            <br /><br />
-            {% if emailForm.email.errors %}
-              <ul class="errors">{% for error in emailForm.email.errors %}<li>{{ error }}</li>{% endfor %}</ul>
-            {% endif %}
+
+          </div>
+            <!-- Dialog to confirm decision to change password -->
+            <div class="modal fade" id="confirm_password_change" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="confirmationTitle">Change password?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body" id="confirmationBody">
+                    Are you sure you want to change the password for your account?</b>
+                  </div>
+                  <div class="changeEmail modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" name="save_button" value="change_password">Confirm</button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </form>
         <br /><br /><br />

@@ -91,7 +91,6 @@ def changecriteria():
         formName = 'criteria_'+category
         totalValue += int(request.form[formName])
 
-    app.logger.info(totalValue)
     # If combined total is not equal to 100, return error
     if totalValue != 100:
         return jsonify({'error': 'Category scores must add up to 100'})
@@ -443,7 +442,6 @@ def register():
 def confirm_email(token):
     try:
         email = s.loads(token)
-        app.logger.info(email)
 
         confirmed = '1'
         # Set email confirmed to true in database
@@ -542,22 +540,27 @@ def login():
 @app.route('/dashboard', methods=['GET','POST'])
 @login_required
 def dashboard():
-    emailForm = ChangeEmailForm(request.form, email=session['email'])
-    emailForm.email.process_data=session['email']
-
     # Check if email is verified and store in session variable
+    # Also store email in session variable
     cur = mysql.connection.cursor()
     query = "SELECT * FROM user WHERE id=%s"
     result = cur.execute(query, [str(session['user_id'])])
     if result > 0:
         data=cur.fetchone()
         session['email_confirmed']=data['email_confirmed']
+        session['email']=data['email']
     cur.close()
+
+    emailForm = ChangeEmailForm(request.form, email=session['email'])
+    passwordForm = ChangePasswordForm(request.form)
 
     if request.method == 'POST':
         user_id = str(session['user_id'])
         if request.form['save_button'] == 'change_name':
             new_name = str(request.form['name'])
+            if str(session['name']) == new_name:
+                flash('You are already using that name', 'danger')
+                return redirect(url_for('dashboard'))
 
             # Change name for account in database
             cur = mysql.connection.cursor()
@@ -604,7 +607,6 @@ def dashboard():
             old_email = session['email']
             new_email = emailForm.email.data
             name =  session['name']
-            app.logger.info((old_email, new_email))
             user_id = str(session['user_id'])
             # Make sure you aren't using the previous email
             if new_email == old_email:
@@ -641,26 +643,27 @@ def dashboard():
                 # Finally, send confirmation email
                 mail.send(msg1)
 
-                app.logger.info("HERE 1")
                 #------------------------------------------------------------#
 
-                # Send email to old email saying that their email has changed
-                # Create email message to OLD email
-                msg2 = Message('Email changed at MyTopHHA.com',
-                    sender=app.config['MAIL_USERNAME'],
-                    recipients=[old_email])
+                # If their old email was previously confirmed, send the old
+                # email a message saying that their password was changed,
+                # otherwise, don't bother
+                if session['email_confirmed'] == '1':
+                    # Create email message to OLD email
+                    msg2 = Message('Email changed at MyTopHHA.com',
+                        sender=app.config['MAIL_USERNAME'],
+                        recipients=[old_email])
 
-                # Message body
-                msg2.html = """Hello {}, <br /><br /> You have changed your email
-                            address for your account at MyTopHHA.com. Please
-                            confirm by clinking the confirmation link sent to
-                            the new email address. <br /> <br /> If you feel
-                            this email is in error, please contact us at
-                            support@mytophha.com.""".format(name)
-                # Finally, send confirmation email
-                mail.send(msg2)
-
-                app.logger.info("HERE 2")
+                    # Message body
+                    msg2.html = """Hello {}, <br /><br /> You have changed your
+                                email address for your account at MyTopHHA.com.
+                                Please confirm by clinking the confirmation link
+                                 sent to the new email address. <br /> <br />
+                                If you feel this email is in error, please
+                                contact us at
+                                support@mytophha.com.""".format(name)
+                    # Finally, send email
+                    mail.send(msg2)
 
                 # also set  email_confirmed flag to false
                 unconfirmed = '0'
@@ -671,7 +674,6 @@ def dashboard():
                 cur.close()
                 session['email_confirmed']=0
 
-                app.logger.info("HERE 3")
                 flash("""Your email changed. Please click the confirmation
                         link at your new email""", 'warning')
                 return redirect(url_for('dashboard'))
@@ -680,15 +682,61 @@ def dashboard():
                 flash('Email aready in use', 'danger')
                 cur.close()
                 return redirect(url_for('dashboard'))
+        elif request.form['save_button'] == 'change_password' and passwordForm.validate():
+            pw = passwordForm.password.data
+            password = bcrypt.generate_password_hash(pw).decode('utf-8')
 
+            # change password in databse
+            cur = mysql.connection.cursor()
+            query = "UPDATE user SET password=%s WHERE id=%s"
+            cur.execute(query, [password, str(session['user_id'])])
+            mysql.connection.commit()
+            cur.close()
+
+            # If user has confirmed their email, send them an email saying
+            # that their password has changed. Otherwise don't bother
+            if session['email_confirmed'] != '1':
+                # Send email notifying them that their password has changed
+                # Create email message to
+                msg = Message('Password changed at MyTopHHA.com',
+                    sender=app.config['MAIL_USERNAME'],
+                    recipients=[str(session['email'])])
+
+                # Message body
+                msg.html = """Hello {}, <br /><br /> This is an email
+                            notifying you that the password has been changed
+                            for your account at MyTopHHA.com. If you did not
+                            make this change. Please contact us immediately at
+                            support@mytophha.com. Otherwise you may ignore
+                            this message""".format(str(session['name']))
+                # Finally, send email
+                mail.send(msg)
+            flash('Password changed', 'success')
+            return redirect(url_for('dashboard'))
 
     return render_template('dashboard.html', emailForm=emailForm,
-        current_email=str(session['email']))
+        current_email=str(session['email']), passwordForm=passwordForm)
 
 # Change Email Form
 class ChangeEmailForm(Form):
     email = StringField('Email Address', [validators.Length(min=6, max=35),
         validators.email()])
+
+# Change {assword Form
+class ChangePasswordForm(Form):
+    password = PasswordField('New Password', [
+        validators.DataRequired(),
+        validators.EqualTo('confirm', message='Passwords must match')
+    ])
+    confirm = PasswordField('Confirm Password')
+
+# Logout
+@app.route('/forgot_password')
+def forgot_password():
+    if 'logged_in' in session:
+        flash('Cannot access that page', 'danger')
+        return redirect(url_for('index'))
+    return render_template('forgot_password.html')
 
 # Logout
 @app.route('/logout')
