@@ -9,6 +9,7 @@ from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadTimeSignature
 import sys
 from _mysql_exceptions import IntegrityError
+from flask_restful import Api
 
 
 app = Flask(__name__)
@@ -34,6 +35,14 @@ s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 # init bcrypt for hashing
 bcrypt = Bcrypt(app)
+
+api = Api(app, errors={
+    'Exception': {
+        'status': 400,
+        'message': 'bad_request',
+        'some_description': 'Something wrong with request'
+    }
+})
 
 def getCategoryList():
     # Rating Category list
