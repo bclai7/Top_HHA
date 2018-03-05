@@ -405,6 +405,64 @@ def register():
             mysql.connection.commit()
             cur.close()
 
+            # Get current session values for ratings and criteria, if any,
+            # and save them to the user account
+            # First save Criteria to account
+            all_categories_present = True
+            for category in getCategoryList():
+                if category not in session:
+                    all_categories_present = False
+            if all_categories_present:
+                # Set the category value in database
+                cur = mysql.connection.cursor()
+                query = """UPDATE user SET criteria_content = %s,
+                        criteria_delivery=%s, criteria_hits=%s,
+                        criteria_albums=%s, criteria_consistency=%s,
+                        criteria_longevity=%s, criteria_impact=%s,
+                        criteria_sales=%s, criteria_personality=%s,
+                        criteria_creativity=%s, criteria_popularity=%s
+                        WHERE email = %s"""
+
+                # Use session values to execute query
+                cur.execute(query, [session['content'], session['delivery'],
+                                    session['hits'], session['albums'],
+                                    session['consistency'],
+                                    session['longevity'], session['impact'],
+                                    session['sales'], session['personality'],
+                                    session['creativity'],
+                                    session['popularity'], email])
+                mysql.connection.commit()
+                cur.close()
+            # Now save each artist rating to account
+            # first get user id so we know which user_id to use when adding it
+            # to the ratings table
+            cur = mysql.connection.cursor()
+            query = 'SELECT * FROM user WHERE email=%s'
+            result = cur.execute(query, [email])
+            if result > 0:
+                data = cur.fetchone()
+                user_id = data['id']
+            cur.close()
+
+            # Now loop through each artist and add their ratings to database
+            if 'rated_artists' in session:
+                for artist in session['rated_artists']:
+                    # Get list of ratings for that particular artist
+                    li = session[artist]
+                    # Add ratings to database
+                    cur = mysql.connection.cursor()
+                    query = """INSERT INTO rating(user_id, artist_name, content,
+                            delivery, hits, albums, consistency, longevity,
+                            impact, sales, personality, creativity, popularity)
+                            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+                            %s, %s, %s)"""
+                    # Use values session list to execute query
+                    cur.execute(query, [user_id, artist, li[0], li[1], li[2],
+                                        li[3], li[4], li[5], li[6], li[7],
+                                        li[8], li[9], li[10]])
+                    mysql.connection.commit()
+                    cur.close()
+            #
             # Verify Email
             # First create token for email link
             token = s.dumps(email, salt='email_confirmation')
