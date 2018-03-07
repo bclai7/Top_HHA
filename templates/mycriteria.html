@@ -6,19 +6,19 @@
   {% else %}
     <h1>Criteria</h1>
   {% endif %}
-  <div class="criteria-form">
+  <div class="criteria-form" oninput="showSliderValues();">
+    <h2 class="totalScore" id="total_score"></h2>
     <form action="" method="POST">
-      <div class="criteria_container">
-
+      <div class="criteria_container" >
         <div class="criteriaColumnLeft">
           {% for category in categoryList %}
             {% if loop.index < ((categoryList|length)/2)+1 %}
-
-              <div class="criteria-label" id="criteria_label_{{category}}">{{category}}</div>
-              <div class="criteria-score" id="criteria_score_{{category}}">100</div>
+            <div class="criteriaGroup" id="criteria_group_{{category}}">
+              <div class="criteriaLabel" id="criteria_label_{{category}}">{{category}}</div>
+              <div class="criteriaScore" id="criteria_score_{{category}}"></div>
               <br />
               <input type="range" min="0" max="100" value="0" class="slider" id="criteria_{{category}}" name="criteria_{{category}}" oninput="maxCombinedValues('{{category}}');">
-
+            </div>
             {% endif %}
           {% endfor %}
         </div>
@@ -26,11 +26,12 @@
         <div class="criteriaColumnRight">
           {% for category in categoryList %}
             {% if loop.index >= ((categoryList|length)/2)+1 %}
-
-              <div class="criteria-label" id="criteria_label_{{category}}">{{category}}</div>
-              <div class="criteria-score" id="criteria_score_{{category}}">100</div>
+            <div class="criteriaGroup" id="criteria_group_{{category}}">
+              <div class="criteriaLabel" id="criteria_label_{{category}}">{{category}}</div>
+              <div class="criteriaScore" id="criteria_score_{{category}}"></div>
               <br />
               <input type="range" min="0" max="100" value="0" class="slider" id="criteria_{{category}}" name="criteria_{{category}}" oninput="maxCombinedValues('{{category}}');">
+            </div>
             {% endif %}
           {% endfor %}
         </div>
@@ -40,7 +41,7 @@
         <center>
           <div class="criteriaButtonSet">
             <button type="submit" class="criteriaSaveButton btn btn-primary" id="criteria_save_button">Save Criteria</button>
-            <button type="reset" class="criterieaResetButton btn btn-primary" id="criteria_reset_button">Reset All</button>
+            <button type="reset" class="criterieaResetButton btn btn-primary" id="criteria_reset_button" onclick="return resetSliders();">Reset All</button>
           </div>
         </center>
       </div>
@@ -64,7 +65,44 @@
         var slider_name = "criteria_"+categoryList[i];
         document.getElementById(slider_name).value = session[categoryList[i]];
       }
+
+      showSliderValues();
     }
+
+    function showSliderValues(){
+      // Individual sliders
+      var categoryList = {{ categoryList | tojson }}; // list of categories
+      for(i=0; i<categoryList.length;  i++){
+        // First get reference to slider to get its vlaue
+        var active_slider_name = "criteria_"+categoryList[i];
+        var activeSliderValue = document.getElementById(active_slider_name).value;
+
+        // Then update the score element for the corresponding category
+        var scoreElementName = 'criteria_score_'+categoryList[i];
+        document.getElementById(scoreElementName).innerHTML = activeSliderValue;
+      }
+
+      // Show total combined value
+      var totalValue=0;
+      for(i=0; i<categoryList.length;  i++){
+        // First get reference to slider to get its vlaue
+        var active_slider_name = "criteria_"+categoryList[i];
+        var activeSliderValue = document.getElementById(active_slider_name).value;
+        totalValue += Number(activeSliderValue);
+      }
+
+      document.getElementById('total_score').innerHTML=totalValue + '/100';
+
+    }
+
+    function resetSliders(){
+      setTimeout(function(){
+          showSliderValues();
+      }, 0);
+      return true;
+    }
+
+
 
     // Function to ensure that the combined max values of the sliders equal 100
     function maxCombinedValues(activeCategory){
@@ -87,6 +125,7 @@
         }
         var newVal = 100 - other_sliders_value;
         document.getElementById(active_slider_name).value = newVal;
+
       }
     }
   </script>
