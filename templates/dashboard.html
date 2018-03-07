@@ -2,7 +2,7 @@
 
 {% block body %}
   {% if session.logged_in %}
-    <h1>{{session['name']}}'s Dashboard</h1>
+    <h1 class="pageHeader">{{session['name']}}'s Dashboard</h1>
     <div class="dashboard_container">
       <!-- CHANGE NAME FORM -->
       <div class="user_info">
@@ -56,7 +56,7 @@
                 <div class="unverified_text">
                   Unverified
                 </div>
-                <button type="submit" class="link-button" data-toggle="modal" data-target="#confirm_send_verification" onclick="event.preventDefault();">
+                <button type="submit" class="link-button" id="send_email_confirmation_button" data-toggle="modal" data-target="#confirm_send_verification" onclick="event.preventDefault();">
                   Send Confirmation
                 </button>
               {% endif %}

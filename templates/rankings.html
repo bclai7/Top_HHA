@@ -2,11 +2,13 @@
 
 {% block body %}
 <div class="rankings_container">
+  <h1 class="pageHeader">
   {% if session.logged_in %}
-    <h1>{{session.name}}'s Artist Rankings</h1>
+    {{session.name}}'s Artist Rankings
   {% else %}
-    <h1>Artist Rankings</h1>
+    Artist Rankings
   {% endif %}
+  </h1>
 
   {% if isEmpty %}
     To view your list, you must first set your criteria and rate at least one artist

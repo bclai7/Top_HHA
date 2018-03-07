@@ -1,12 +1,14 @@
 {%extends 'layout.html'%}
 
 {% block body %}
-  {% if session.logged_in %}
-    <h1>{{session.name}}'s Criteria</h1>
-  {% else %}
-    <h1>Criteria</h1>
-  {% endif %}
   <div class="criteria-form" oninput="showSliderValues();">
+    <h1 class="pageHeader">
+    {% if session.logged_in %}
+      {{session.name}}'s Criteria
+    {% else %}
+      Criteria
+    {% endif %}
+    </h1>
     <center><h2 class="criteriaTotalScore" id="total_score"></h2></center>
     <form action="" method="POST">
       <div class="criteria_container" >
