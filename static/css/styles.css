@@ -108,6 +108,14 @@
   color:red;
 }
 
+.criteriaButtonSet{
+  margin-top: 40px;
+}
+
+.criterieaResetButton{
+  margin-left: 20px;
+}
+
 /* SLIDER */
 .slidecontainer, .criteria_container {
     width: 100%; /* Width of the outside container */
@@ -117,7 +125,7 @@
 .slider {
     -webkit-appearance: none;  /* Override default CSS styles */
     appearance: none;
-    width: 100%; /* Full-width */
+    width: 40%; /* Full-width */
     height: 15px; /* Specified height */
     border-radius: 15px;
     background: #d3d3d3; /* Grey background */
@@ -138,16 +146,16 @@
     -webkit-appearance: none; /* Override default look */
     appearance: none;
     border-radius: 50%;
-    width: 25px; /* Set a specific slider handle width */
+    width: 18px; /* Set a specific slider handle width */
     height: 25px; /* Slider handle height */
-    background: #0033cc; /* Green background */
+    background: #0033cc; /* Blue background */
     cursor: pointer; /* Cursor on hover */
 
     box-shadow: -810px 0 0 800px red;
 }
 
 .slider::-webkit-slider-runnable-track{
-  
+
 }
 
 .slider::-moz-range-thumb  {
