@@ -50,6 +50,22 @@ def getCategoryList():
         'longevity', 'impact', 'sales', 'personality', 'creativity',
         'popularity']
     return categoryList
+def getCategoryDescriptionDict():
+    categoryDescriptionList = {
+    'content': 'Description content',
+    'delivery': 'Description delivery',
+    'hits': 'Description hits',
+    'albums': 'Description albums',
+    'consistency': 'Description consistency',
+    'longevity': 'Description longevity',
+    'impact': 'Description impact',
+    'sales': 'Description sales',
+    'personality': 'Description personality',
+    'creativity': 'Description creativity',
+    'popularity': 'Description popularity',
+    }
+
+    return categoryDescriptionList
 def getArtistList():
     # Create MySQL Cursor
     cur = mysql.connection.cursor()
@@ -88,7 +104,9 @@ def mycriteria():
     for category in getCategoryList():
         if category not in session:
             session[category] = 0
-    return render_template('mycriteria.html', categoryList=getCategoryList())
+    return render_template('mycriteria.html',
+        categoryList=getCategoryList(),
+        categoryDescriptions = getCategoryDescriptionDict())
 
 # Saves artist rating when clicking the save button, called through AJAX
 @app.route('/changecriteria', methods=['POST'])

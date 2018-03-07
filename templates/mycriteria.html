@@ -13,10 +13,13 @@
     <form action="" method="POST">
       <div class="criteria_container" >
         <div class="criteriaColumnLeft">
-          {% for category in categoryList %}
-            {% if loop.index < ((categoryList|length)/2)+1 %}
+          {% for category, description in categoryDescriptions.items() %}
+            {% if loop.index < ((categoryDescriptions.items()|length)/2)+1 %}
             <div class="criteriaGroup" id="criteria_group_{{category}}">
               <div class="criteriaLabel" id="criteria_label_{{category}}">{{category}}</div>
+              <div class="criteriaTooltip" id="criteria_tooltip_{{category}}">
+                <img src="{{ url_for('static', filename="images/icons/info4.png")}}" data-toggle="tooltip" data-placement="right" title="{{ description }}" />
+              </div>
               <div class="criteriaScore" id="criteria_score_{{category}}"></div>
               <br />
               <input type="range" min="0" max="100" value="0" class="slider" id="criteria_{{category}}" name="criteria_{{category}}" oninput="maxCombinedValues('{{category}}');">
@@ -26,10 +29,13 @@
         </div>
 
         <div class="criteriaColumnRight">
-          {% for category in categoryList %}
-            {% if loop.index >= ((categoryList|length)/2)+1 %}
+          {% for category, description in categoryDescriptions.items() %}
+            {% if loop.index >= ((categoryDescriptions.items()|length)/2)+1 %}
             <div class="criteriaGroup" id="criteria_group_{{category}}">
               <div class="criteriaLabel" id="criteria_label_{{category}}">{{category}}</div>
+              <div class="criteriaTooltip" id="criteria_tooltip_{{category}}">
+                <img src="{{ url_for('static', filename="images/icons/info4.png")}}" data-toggle="tooltip" data-placement="right" title="{{ description }}"/>
+              </div>
               <div class="criteriaScore" id="criteria_score_{{category}}"></div>
               <br />
               <input type="range" min="0" max="100" value="0" class="slider" id="criteria_{{category}}" name="criteria_{{category}}" oninput="maxCombinedValues('{{category}}');">
