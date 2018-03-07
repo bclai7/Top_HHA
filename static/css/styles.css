@@ -132,7 +132,7 @@
   padding-top: 40px;
 }
 
-.criterieaResetButton{
+.criterieaResetButton, .criteriaRestoreButton{
   margin-left: 20px;
 }
 
@@ -160,6 +160,7 @@
     -webkit-transition: .2s; /* 0.2 seconds transition on hover */
     transition: opacity .2s;
     overflow: hidden;
+    border: solid 1px #0033cc;
 }
 
 /* Mouse-over effects */
@@ -173,10 +174,11 @@
     appearance: none;
     width: 18px; /* Set a specific slider handle width */
     height: 25px; /* Slider handle height */
-    background: #0033cc; /* Blue background */
+    background: #737373; /* Blue button color */
     cursor: pointer; /* Cursor on hover */
+    border: solid 1px black;
 
-    box-shadow: -810px 0 0 800px red;
+    box-shadow: -810px 0 0 800px #0033cc;
 }
 
 .slider::-webkit-slider-runnable-track{
@@ -194,14 +196,14 @@
 
 /** FF*/
 input[type="range"]::-moz-range-progress {
-  background-color: red;
+  background-color: #0033cc;
 }
 input[type="range"]::-moz-range-track {
   background-color: #9a905d;
 }
 /* IE*/
 input[type="range"]::-ms-fill-lower {
-  background-color: red;
+  background-color: #0033cc;
 }
 input[type="range"]::-ms-fill-upper {
   background-color: #9a905d;

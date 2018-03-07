@@ -41,6 +41,7 @@
         <center>
           <div class="criteriaButtonSet">
             <button type="submit" class="criteriaSaveButton btn btn-primary" id="criteria_save_button">Save Criteria</button>
+            <button type="button" class="criteriaRestoreButton btn btn-primary" id="criteria_restore_button" onclick="restoreSliderValues();">Restore Saved Criteria</button>
             <button type="reset" class="criterieaResetButton btn btn-primary" id="criteria_reset_button" onclick="return resetSliders();">Reset All</button>
           </div>
         </center>
@@ -56,6 +57,20 @@
 
   <script>
     window.onload = function loadCriteria(){
+      // Store session variable
+      var session = {{ session | tojson }}; // session variable
+      var categoryList = {{ categoryList | tojson }}; // list of categories
+
+      // For each rating, set the the corresponding slider value
+      for(i=0; i < categoryList.length; i++){
+        var slider_name = "criteria_"+categoryList[i];
+        document.getElementById(slider_name).value = session[categoryList[i]];
+      }
+
+      showSliderValues();
+    }
+
+    function restoreSliderValues(){
       // Store session variable
       var session = {{ session | tojson }}; // session variable
       var categoryList = {{ categoryList | tojson }}; // list of categories
