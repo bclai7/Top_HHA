@@ -1,15 +1,30 @@
 /*CUSTOMIZATIONS*/
-.criteria-form .form-group .form-control {
-  border-color: #0033cc;
-  width: 100px;
-  border-radius: 15px;
-  border-width: 1px;
+html, body{
+  background: #000099;
+}
+html{
+  height:100%;
+}
+body{
+  min-height: 100%;
+}
+
+body {
+  color: #fff;
+  text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
+  box-shadow: inset 0 0 15rem rgba(0, 0, 0, 15);
+}
+h1{
+  color: #ccc;
+}
+
+.jumbotron h1{
+  color: black;
 }
 
 .jumbotron{
-  width: 80%;
-  border: 1px solid #0033cc;
-  border-radius: 15px;
+  width: 100%;
+  background: #8c8c8c;
 }
 
 /* REGISTER FORM*/
@@ -36,10 +51,11 @@
   width: 85%;
   height: 100%;
   padding: 55px 15px 15px 150px;
-  border: solid 1.5px #0033cc;
+  border: solid 1px black;
   border-radius: 15px;
   margin: 0 auto;
   margin-top: 30px;
+  background: #f2f2f2;
 }
 
 .dashboard_container .user_info{
@@ -109,17 +125,34 @@
 }
 
 /* SLIDER */
+.criteria-form{
+}
+
+.criteria-form .form-group .form-control {
+  border-color: #0033cc;
+  width: 100px;
+  border-radius: 15px;
+  border-width: 1px;
+}
+
 .slidecontainer, .criteria_container {
     width: 100%; /* Width of the outside container */
     margin-top: 40px;
 }
 
+.criteriaTotalScore{
+  margin-top: 25px;
+}
+
 .criteriaLabel{
   float: left;
   margin-bottom: 10px;
+  font-weight: bold;
 }
 .criteriaScore{
   float: right;
+  font-weight: bold;
+  margin-right: 5px;
 }
 
 .criteriaGroup{
@@ -160,7 +193,7 @@
     -webkit-transition: .2s; /* 0.2 seconds transition on hover */
     transition: opacity .2s;
     overflow: hidden;
-    border: solid 1px #0033cc;
+    border: solid 2px #0033cc;
 }
 
 /* Mouse-over effects */

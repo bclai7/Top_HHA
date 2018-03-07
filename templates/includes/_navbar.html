@@ -6,56 +6,62 @@
     </button>
     <div class="collapse navbar-collapse" id="navbar">
       <!-- Left Nav Bar -->
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="/">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/mycriteria">My Criteria</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/artistratings">Rate Artists</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/rankings">My Top Artists</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/about">About</a>
-        </li>
-      </ul>
+      <div class="navBarLeft" id="navBarLeft">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/mycriteria">My Criteria</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/artistratings">Rate Artists</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/rankings">My Top Artists</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about">About</a>
+          </li>
+        </ul>
+      </div>
 
       <!-- Right Navbar -->
-      <ul class="navbar-nav navbar-right">
-        {% if session.logged_in %}
-          <li class="nav-item"><a class="nav-link" href="/dashboard">My Account</a></li>
-          <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
-        {% else %}
-          <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
-          <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
-        {% endif %}
-
-      </ul>
+      <div class="navBarRight" id="navBarRight">
+        <ul class="navbar-nav navbar-right">
+          {% if session.logged_in %}
+            <li class="nav-item"><a class="nav-link" href="/dashboard">My Account</a></li>
+            <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+          {% else %}
+            <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
+            <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+          {% endif %}
+        </ul>
+      </div>
     </div>
   </nav>
 </div>
 
 <style>
-.navbar{
-  background: black;
-  height: 55px;
-}
-  #navbar{
-    font-size: 20px;
+  .navbar{
   }
 
-  #navbar a{
+  #navbar{
+    font-size: 17px;
+  }
+
+  #navBarLeft a{
     padding-left: 25px;
-    padding-right: 25px;
-    color: #cccccc;
+  }
+  #navBarRight a{
+    padding-left: 10px;
   }
 
   #navbar a:hover{
-    background: #0033cc;
     color: #FFFFFF;
+  }
+
+  .navBarLeft{
+    margin: 0 auto;
   }
 </style>

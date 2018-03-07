@@ -7,7 +7,7 @@
     <h1>Criteria</h1>
   {% endif %}
   <div class="criteria-form" oninput="showSliderValues();">
-    <h2 class="totalScore" id="total_score"></h2>
+    <center><h2 class="criteriaTotalScore" id="total_score"></h2></center>
     <form action="" method="POST">
       <div class="criteria_container" >
         <div class="criteriaColumnLeft">
@@ -41,7 +41,7 @@
         <center>
           <div class="criteriaButtonSet">
             <button type="submit" class="criteriaSaveButton btn btn-primary" id="criteria_save_button">Save Criteria</button>
-            <button type="button" class="criteriaRestoreButton btn btn-primary" id="criteria_restore_button" onclick="restoreSliderValues();">Restore Saved Criteria</button>
+            <button type="button" class="criteriaRestoreButton btn btn-primary" id="criteria_restore_button" onclick="restoreSliderValues();">Restore</button>
             <button type="reset" class="criterieaResetButton btn btn-primary" id="criteria_reset_button" onclick="return resetSliders();">Reset All</button>
           </div>
         </center>
@@ -106,7 +106,7 @@
         totalValue += Number(activeSliderValue);
       }
 
-      document.getElementById('total_score').innerHTML=totalValue + '/100';
+      document.getElementById('total_score').innerHTML='Total: '+totalValue + '/100';
 
     }
 
