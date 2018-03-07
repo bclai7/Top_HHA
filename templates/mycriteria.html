@@ -9,24 +9,41 @@
   <div class="criteria-form">
     <form action="" method="POST">
       <div class="criteria_container">
-        {% for category in categoryList %}
-          <div class="criteria-label" style="{% if loop.index % 2 == 1 %} float: left; margin-left: 50px;{% else %} float: left; margin-left: 190px;{% endif %}">{{category}}</div>
-          <div class="criteria-score" style="{% if loop.index % 2 == 1 %} float: right; margin-right: 200px;{% else %} float: right; margin-right: 60px;{% endif %}">
-            100
-          </div>
-          <br />
-          <input type="range" min="0" max="100" value="0" class="slider" id="criteria_{{category}}" name="criteria_{{category}}" oninput="maxCombinedValues('{{category}}');"
-          style="{% if loop.index % 2 == 1 %} float: left; margin-left:50px;{% else %} float: right; margin-right:50px;{% endif %}">
-        {% endfor %}
-      </div>
-      <br /><br />
-      <center>
-        <div class="criteriaButtonSet">
-          <button type="submit" class="criteriaSaveButton btn btn-primary" id="criteria_save_button">Save Criteria</button>
-          <button type="reset" class="criterieaResetButton btn btn-primary" id="criteria_reset_button">Reset All</button>
-        </div>
-      </center>
 
+        <div class="criteriaColumnLeft">
+          {% for category in categoryList %}
+            {% if loop.index < ((categoryList|length)/2)+1 %}
+
+              <div class="criteria-label" id="criteria_label_{{category}}">{{category}}</div>
+              <div class="criteria-score" id="criteria_score_{{category}}">100</div>
+              <br />
+              <input type="range" min="0" max="100" value="0" class="slider" id="criteria_{{category}}" name="criteria_{{category}}" oninput="maxCombinedValues('{{category}}');">
+
+            {% endif %}
+          {% endfor %}
+        </div>
+
+        <div class="criteriaColumnRight">
+          {% for category in categoryList %}
+            {% if loop.index >= ((categoryList|length)/2)+1 %}
+
+              <div class="criteria-label" id="criteria_label_{{category}}">{{category}}</div>
+              <div class="criteria-score" id="criteria_score_{{category}}">100</div>
+              <br />
+              <input type="range" min="0" max="100" value="0" class="slider" id="criteria_{{category}}" name="criteria_{{category}}" oninput="maxCombinedValues('{{category}}');">
+            {% endif %}
+          {% endfor %}
+        </div>
+
+
+        <br /><br />
+        <center>
+          <div class="criteriaButtonSet">
+            <button type="submit" class="criteriaSaveButton btn btn-primary" id="criteria_save_button">Save Criteria</button>
+            <button type="reset" class="criterieaResetButton btn btn-primary" id="criteria_reset_button">Reset All</button>
+          </div>
+        </center>
+      </div>
     </form>
 
     <br />

@@ -110,10 +110,22 @@
 
 .criteriaButtonSet{
   margin-top: 40px;
+  margin-left: 100px;
+  margin: 0 auto;
 }
 
 .criterieaResetButton{
   margin-left: 20px;
+}
+
+.criteriaColumnLeft{
+  width: 40%;
+  float: left;
+}
+.criteriaColumnRight{
+  width: 40%;
+  float: left;
+  padding-left: 50px;
 }
 
 /* SLIDER */
@@ -125,7 +137,7 @@
 .slider {
     -webkit-appearance: none;  /* Override default CSS styles */
     appearance: none;
-    width: 40%; /* Full-width */
+    width: 100%; /* Full-width */
     height: 15px; /* Specified height */
     border-radius: 15px;
     background: #d3d3d3; /* Grey background */
