@@ -667,11 +667,12 @@ def dashboard():
 
     emailForm = EmailForm(request.form, email=session['email'])
     passwordForm = ChangePasswordForm(request.form)
+    nameForm = NameForm(request.form, name=session['name'])
 
     if request.method == 'POST':
         user_id = str(session['user_id'])
-        if request.form['save_button'] == 'change_name':
-            new_name = str(request.form['name'])
+        if request.form['save_button'] == 'change_name' and nameForm.validate():
+            new_name = nameForm.name.data
             if str(session['name']) == new_name:
                 flash('You are already using that name', 'danger')
                 return redirect(url_for('dashboard'))
@@ -832,7 +833,11 @@ def dashboard():
             return redirect(url_for('dashboard'))
 
     return render_template('dashboard.html', emailForm=emailForm,
-        current_email=str(session['email']), passwordForm=passwordForm)
+        current_email=str(session['email']), passwordForm=passwordForm,
+        nameForm=nameForm)
+# Name Form
+class NameForm(Form):
+    name = StringField('Name', [validators.Length(min=1, max=50)])
 
 # Change Email Form
 class EmailForm(Form):
