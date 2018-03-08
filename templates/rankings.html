@@ -1,7 +1,7 @@
 {%extends 'layout.html'%}
 
 {% block body %}
-<div class="rankings_container">
+<div class="rankings-container">
   <h1 class="pageHeader">
   {% if session.logged_in %}
     {{session.name}}'s Artist Rankings
@@ -11,7 +11,7 @@
   </h1>
 
   {% if isEmpty %}
-    To view your list, you must first set your criteria and rate at least one artist
+    <div class="accessErrorMessage">To view your list, you must first set your criteria and rate at least one artist</div>
   {% else %}
     <ul class="list-group" id="artist_ranking_list">
     {% for artist in rankingList %}
