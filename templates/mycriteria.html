@@ -12,15 +12,15 @@
     <center><h2 class="criteriaTotalScore" id="total_score"></h2></center>
     <form action="" method="POST">
       <div class="criteria_container" >
-        <div class="criteriaColumnLeft">
+        <div class="sliderColumnLeft">
           {% for category, description in categoryDescriptions.items() %}
             {% if loop.index < ((categoryDescriptions.items()|length)/2)+1 %}
-            <div class="criteriaGroup" id="criteria_group_{{category}}">
-              <div class="criteriaLabel" id="criteria_label_{{category}}">{{category}}</div>
-              <div class="criteriaTooltip" id="criteria_tooltip_{{category}}">
+            <div class="sliderGroup" id="slider_group_{{category}}">
+              <div class="sliderLabel" id="slider_label_{{category}}">{{category}}</div>
+              <div class="sliderTooltip" id="criteria_tooltip_{{category}}">
                 <img src="{{ url_for('static', filename="images/icons/info4.png")}}" data-toggle="tooltip" data-placement="right" title="{{ description }}" />
               </div>
-              <div class="criteriaScore" id="criteria_score_{{category}}"></div>
+              <div class="sliderScore" id="slider_score_{{category}}"></div>
               <br />
               <input type="range" min="0" max="100" value="0" class="slider" id="criteria_{{category}}" name="criteria_{{category}}" oninput="maxCombinedValues('{{category}}');">
             </div>
@@ -28,15 +28,15 @@
           {% endfor %}
         </div>
 
-        <div class="criteriaColumnRight">
+        <div class="sliderColumnRight">
           {% for category, description in categoryDescriptions.items() %}
             {% if loop.index >= ((categoryDescriptions.items()|length)/2)+1 %}
-            <div class="criteriaGroup" id="criteria_group_{{category}}">
-              <div class="criteriaLabel" id="criteria_label_{{category}}">{{category}}</div>
-              <div class="criteriaTooltip" id="criteria_tooltip_{{category}}">
+            <div class="sliderGroup" id="slider_group_{{category}}">
+              <div class="sliderLabel" id="slider_label_{{category}}">{{category}}</div>
+              <div class="sliderTooltip" id="criteria_tooltip_{{category}}">
                 <img src="{{ url_for('static', filename="images/icons/info4.png")}}" data-toggle="tooltip" data-placement="right" title="{{ description }}"/>
               </div>
-              <div class="criteriaScore" id="criteria_score_{{category}}"></div>
+              <div class="sliderScore" id="slider_score_{{category}}"></div>
               <br />
               <input type="range" min="0" max="100" value="0" class="slider" id="criteria_{{category}}" name="criteria_{{category}}" oninput="maxCombinedValues('{{category}}');">
             </div>
@@ -47,13 +47,13 @@
 
         <br /><br />
         <center>
-          <div class="criteriaButtonSet">
-            <button type="submit" class="criteriaSaveButton btn btn-primary" id="criteria_save_button">Save Criteria</button>
+          <div class="sliderButtonSet">
+            <button type="submit" class="btn btn-primary" id="criteria_save_button">Save Criteria</button>
             <!--
-            <button type="button" class="criteriaRestoreButton btn btn-primary"
+            <button type="button" class="sliderRestoreButton btn btn-primary"
               data-toggle="modal" data-target="#confirm_restore" onclick="event.preventDefault();">Restore</button>
              -->
-            <button type="reset" class="criterieaResetButton btn btn-primary"
+            <button type="reset" class="sliderResetButton btn btn-primary"
               data-toggle="modal" data-target="#confirm_reset" onclick="event.preventDefault();">Reset All</button>
           </div>
         </center>
@@ -155,7 +155,7 @@
         var activeSliderValue = document.getElementById(active_slider_name).value;
 
         // Then update the score element for the corresponding category
-        var scoreElementName = 'criteria_score_'+categoryList[i];
+        var scoreElementName = 'slider_score_'+categoryList[i];
         document.getElementById(scoreElementName).innerHTML = activeSliderValue;
       }
 

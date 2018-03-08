@@ -22,6 +22,21 @@ $(function() {
               $('#rating_creativity').val(ratingList[9]);
               $('#rating_popularity').val(ratingList[10]);
 
+              // Set Display scores to correct values
+              $('#slider_score_content').text(ratingList[0]);
+              $('#slider_score_delivery').text(ratingList[1]);
+              $('#slider_score_hits').text(ratingList[2]);
+              $('#slider_score_albums').text(ratingList[3]);
+              $('#slider_score_consistency').text(ratingList[4]);
+              $('#slider_score_longevity').text(ratingList[5]);
+              $('#slider_score_impact').text(ratingList[6]);
+              $('#slider_score_sales').text(ratingList[7]);
+              $('#slider_score_personality').text(ratingList[8]);
+              $('#slider_score_creativity').text(ratingList[9]);
+              $('#slider_score_popularity').text(ratingList[10]);
+
+
+
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log(errorThrown);

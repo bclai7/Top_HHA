@@ -189,7 +189,8 @@ def myratings():
         # track of who they rated
         session['rated_artists']=[]
     return render_template('myratings.html', artistList=getArtistList(),
-        categoryList=getCategoryList())
+        categoryList=getCategoryList(),
+        categoryDescriptions=getCategoryDescriptionDict())
 
 # Saves artist rating when clicking the save button, called through AJAX
 @app.route('/rated', methods=['POST'])

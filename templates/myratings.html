@@ -1,29 +1,93 @@
 {%extends 'layout.html'%}
 
 {% block body %}
-  <h1 class="pageHeader">Artist Ratings</h1>
-  <p>Select an artist to rate</p>
-  <div class="artist-rating" onchange="displayArtistName(); hideDefaultOnChange();">
+  <div class="artist-rating" onchange="displayArtistName(); hideDefaultOnChange();" oninput="showSliderValues();">
+    <h1 class="pageHeader">Artist Ratings</h1>
     <form class="artist-rater">
-      <!-- Artist Select -->
-      <select class="selectpicker" data-live-search="true" id="artist_name" name="artist_name">
-        <option disabled selected value style="display:none" id="default-option"> -- select an artist -- </option>
-        {% for artist in artistList %}
-          <option data-tokens="{{artist}}">{{artist}}</option>
-        {% endfor %}
-        <option disabled value style="display:none"> -- END -- </option> <!--This is to remove the blank space at the bottom when scrolling all the way down-->
-      </select>
-      <p id="name_display"></p>
+      <!-- Stuff at top of page (under heading)-->
+      <div class="ratingTopPage">
+        <div class="ratingInstructions">Select an artist to rate</div>
+        <!-- Artist Select -->
+        <div class="artistSelect">
+          <select class="selectpicker" data-live-search="true" id="artist_name" name="artist_name">
+            <option disabled selected value style="display:none" id="default-option"> -- select an artist -- </option>
+            {% for artist in artistList %}
+              <option data-tokens="{{artist}}">{{artist}}</option>
+            {% endfor %}
+            <option disabled value style="display:none"> -- END -- </option> <!--This is to remove the blank space at the bottom when scrolling all the way down-->
+          </select>
+        </div>
+        <center><div class="artistNameDisplay" id="name_display"></div></center>
+      </div>
 
       <!-- sliders -->
       <div class="slidercontainer" id="slidercontainer" style="display: none;">
-          {% for category in categoryList %}
-            <div class="slider-label">{{category}}</div><br />
-            <input type="range" min="1" max="10" value="1" class="slider" id="rating_{{category}}" name="rating_{{category}}">
-            <br /><br />
+        <div class="sliderColumnLeft">
+          {% for category, description in categoryDescriptions.items() %}
+            {% if loop.index < ((categoryDescriptions.items()|length)/2)+1 %}
+            <div class="sliderGroup" id="slider_group_{{category}}">
+              <div class="sliderLabel" id="slider_label_{{category}}">{{category}}</div>
+              <div class="sliderTooltip" id="criteria_tooltip_{{category}}">
+                <img src="{{ url_for('static', filename="images/icons/info4.png")}}" data-toggle="tooltip" data-placement="right" title="{{ description }}" />
+              </div>
+              <div class="sliderScore" id="slider_score_{{category}}"></div>
+              <br />
+              <input type="range" min="1" max="10" value="1" class="slider" id="rating_{{category}}" name="rating_{{category}}" oninput="maxCombinedValues('{{category}}');">
+            </div>
+            {% endif %}
           {% endfor %}
-          <button type="submit" class="btn btn-primary" id="rating_save_button">Save</button>
-          <button type="reset" class="btn btn-primary" id="rating_reset_button">Reset</button>
+        </div>
+
+        <div class="sliderColumnRight">
+          {% for category, description in categoryDescriptions.items() %}
+            {% if loop.index >= ((categoryDescriptions.items()|length)/2)+1 %}
+            <div class="sliderGroup" id="slider_group_{{category}}">
+              <div class="sliderLabel" id="slider_label_{{category}}">{{category}}</div>
+              <div class="sliderTooltip" id="criteria_tooltip_{{category}}">
+                <img src="{{ url_for('static', filename="images/icons/info4.png")}}" data-toggle="tooltip" data-placement="right" title="{{ description }}"/>
+              </div>
+              <div class="sliderScore" id="slider_score_{{category}}"></div>
+              <br />
+              <input type="range" min="1" max="10" value="1" class="slider" id="rating_{{category}}" name="rating_{{category}}" oninput="maxCombinedValues('{{category}}');">
+            </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+        <center>
+          <div class="sliderButtonSet">
+            <button type="submit" class="btn btn-primary" id="rating_save_button">Save Rating</button>
+            <!--
+            <button type="button" class="sliderRestoreButton btn btn-primary"
+              data-toggle="modal" data-target="#confirm_restore" onclick="event.preventDefault();">Restore</button>
+             -->
+            <button type="reset" class="sliderResetButton btn btn-primary"
+              data-toggle="modal" data-target="#confirm_reset" onclick="event.preventDefault();">Reset All</button>
+          </div>
+        </center>
+      </div>
+
+      <!-- Dialog to confirm decision to reset sliders -->
+      <div class="modal fade" id="confirm_reset" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="confirmationTitle">Reset All</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body" id="confirmationBody">
+              This will reset all values to zero<br /><br /><b>NOTE: </b>Your previously saved ratings will still be saved
+            </div>
+            <div class="confirmVerification modal-footer">
+              <form method="POST">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="rating_reset_button"
+                  onclick="return resetSliders();">Reset</button>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
     </form>
 
@@ -39,7 +103,7 @@
     function displayArtistName(){
       var selected_artist = document.getElementById("artist_name").selectedIndex;
       var artist_name = document.getElementsByTagName("option")[selected_artist].value;
-      document.getElementById('name_display').innerHTML = artist_name;
+      document.getElementById('name_display').innerHTML = '<h2>'+artist_name+'\'s Ratings</h2>';
     }
 
     // Operations to run after page is loaded
@@ -65,6 +129,38 @@
         sliderSet.style.display = "block";
       }
     }
+
+    function resetSliders(){
+      var categoryList = {{ categoryList | tojson }}; // list of categories
+      for(i=0; i<categoryList.length;  i++){
+        // First get name of slider
+        var active_slider_name = "rating_"+categoryList[i];
+        // Then set the value to 0
+        document.getElementById(active_slider_name).value=0;
+        // Then update the score element for the corresponding category
+        var scoreElementName = 'slider_score_'+categoryList[i];
+        document.getElementById(scoreElementName).innerHTML = 1;
+      }
+      // Close dialog
+      $('#confirm_reset').modal('hide');
+
+      return true;
+    }
+
+    function showSliderValues(){
+      // Individual sliders
+      var categoryList = {{ categoryList | tojson }}; // list of categories
+      for(i=0; i<categoryList.length;  i++){
+        // First get reference to slider to get its vlaue
+        var active_slider_name = "rating_"+categoryList[i];
+        var activeSliderValue = document.getElementById(active_slider_name).value;
+
+        // Then update the score element for the corresponding category
+        var scoreElementName = 'slider_score_'+categoryList[i];
+        document.getElementById(scoreElementName).innerHTML = activeSliderValue;
+      }
+    }
+
   </script>
 
 {% endblock %}

@@ -239,81 +239,7 @@ a{
   color:red;
 }
 
-/* SLIDER */
-.criteria-form{
-  background-color: #777;
-  box-shadow: inset 0 0 15rem rgba(0, 0, 0, 15);
-}
-
-.criteria-form .form-group .form-control {
-  border-color: #0033cc;
-  width: 100px;
-  border-radius: 15px;
-  border-width: 1px;
-}
-
-.slidecontainer, .criteria_container {
-    width: 100%; /* Width of the outside container */
-    margin-top: 40px;
-}
-
-.criteriaTotalScore{
-  margin-top: 25px;
-}
-
-.criteriaLabel{
-  float: left;
-  font-weight: bold;
-}
-
-.criteriaTooltip img{
-  width: 20px;
-  height: 20px;
-  margin-left: 10px;
-
-  /* Not draggable or selectable */
-  user-drag: none;
-  user-select: none;
-  -moz-user-select: none;
-  -webkit-user-drag: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-}
-
-.criteriaTooltip img:hover{
-  cursor: pointer;
-}
-
-.criteriaScore{
-  float: right;
-  font-weight: bold;
-  margin-right: 5px;
-}
-
-.criteriaGroup{
-  margin-bottom: 30px;
-  text-transform: capitalize;
-}
-
-.criteriaButtonSet{
-  clear: both;
-  padding-top: 40px;
-}
-
-.criterieaResetButton, .criteriaRestoreButton{
-  margin-left: 20px;
-}
-
-.criteriaColumnLeft{
-  width: 40%;
-  float: left;
-  margin-left: 70px;
-}
-.criteriaColumnRight{
-  width: 40%;
-  float: left;
-  margin-left: 150px;
-}
+/* SLIDERS */
 
 /* The slider itself */
 .slider {
@@ -360,6 +286,105 @@ a{
     background: #0033cc; /* Green background */
     cursor: pointer; /* Cursor on hover */
 }
+
+.criteria-form, .artist-rating{
+  background-color: #777;
+  box-shadow: inset 0 0 15rem rgba(0, 0, 0, 15);
+}
+
+/* Artist Dropdown*/
+.artistSelect{
+  float: left;
+}
+
+/* Stuff at top of rating page (minus the header)*/
+.ratingTopPage{
+  margin: 20px 0 80px 70px;
+}
+
+.ratingInstructions{
+  margin-bottom: 15px;
+}
+
+.artistNameDisplay{
+  clear: left;
+  margin-left: 25px;
+  font-weight: bold;
+  text-shadow: black 0px 0px 2px;
+  padding-right: 100px;
+}
+
+.criteria-form .form-group .form-control {
+  border-color: #0033cc;
+  width: 100px;
+  border-radius: 15px;
+  border-width: 1px;
+}
+
+.slidercontainer, .criteria_container {
+    width: 100%; /* Width of the outside container */
+    margin-top: 40px;
+    clear: left;
+}
+
+.criteriaTotalScore{
+  margin-top: 25px;
+}
+
+.sliderLabel{
+  float: left;
+  font-weight: bold;
+}
+
+.sliderTooltip img{
+  width: 20px;
+  height: 20px;
+  margin-left: 10px;
+
+  /* Not draggable or selectable */
+  user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+.sliderTooltip img:hover{
+  cursor: pointer;
+}
+
+.sliderScore{
+  float: right;
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.sliderGroup{
+  margin-bottom: 30px;
+  text-transform: capitalize;
+}
+
+.sliderButtonSet{
+  clear: both;
+  padding-top: 40px;
+}
+
+.sliderResetButton, .sliderRestoreButton{
+  margin-left: 20px;
+}
+
+.sliderColumnLeft{
+  width: 40%;
+  float: left;
+  margin-left: 70px;
+}
+.sliderColumnRight{
+  width: 40%;
+  float: left;
+  margin-left: 150px;
+}
+
 
 /* Change color of tooltip */
 .tooltip-inner {
