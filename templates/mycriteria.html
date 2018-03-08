@@ -18,7 +18,7 @@
             <div class="criteriaGroup" id="criteria_group_{{category}}">
               <div class="criteriaLabel" id="criteria_label_{{category}}">{{category}}</div>
               <div class="criteriaTooltip" id="criteria_tooltip_{{category}}">
-                <img src="{{ url_for('static', filename="images/icons/info4.png")}}" data-toggle="tooltip" data-placement="right" title="{{ description }}" />
+                <img src="{{ url_for('static', filename="images/icons/info4.png")}}" data-toggle="tooltip" data-placement="top" title="{{ description }}" />
               </div>
               <div class="criteriaScore" id="criteria_score_{{category}}"></div>
               <br />
@@ -34,7 +34,7 @@
             <div class="criteriaGroup" id="criteria_group_{{category}}">
               <div class="criteriaLabel" id="criteria_label_{{category}}">{{category}}</div>
               <div class="criteriaTooltip" id="criteria_tooltip_{{category}}">
-                <img src="{{ url_for('static', filename="images/icons/info4.png")}}" data-toggle="tooltip" data-placement="right" title="{{ description }}"/>
+                <img src="{{ url_for('static', filename="images/icons/info4.png")}}" data-toggle="tooltip" data-placement="top" title="{{ description }}"/>
               </div>
               <div class="criteriaScore" id="criteria_score_{{category}}"></div>
               <br />
@@ -49,10 +49,38 @@
         <center>
           <div class="criteriaButtonSet">
             <button type="submit" class="criteriaSaveButton btn btn-primary" id="criteria_save_button">Save Criteria</button>
-            <button type="button" class="criteriaRestoreButton btn btn-primary" id="criteria_restore_button" onclick="restoreSliderValues();">Restore</button>
-            <button type="reset" class="criterieaResetButton btn btn-primary" id="criteria_reset_button" onclick="return resetSliders();">Reset All</button>
+            <!-- 
+            <button type="button" class="criteriaRestoreButton btn btn-primary"
+              data-toggle="modal" data-target="#confirm_restore" onclick="event.preventDefault();">Restore</button>
+             -->
+            <button type="reset" class="criterieaResetButton btn btn-primary"
+              data-toggle="modal" data-target="#confirm_reset" onclick="event.preventDefault();">Reset All</button>
           </div>
         </center>
+      </div>
+
+      <!-- Dialog to confirm decision to reset sliders -->
+      <div class="modal fade" id="confirm_reset" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="confirmationTitle">Reset All</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body" id="confirmationBody">
+              This will reset all values to zero<br /><br /><b>NOTE: </b>Your previously saved settings will still be saved
+            </div>
+            <div class="confirmVerification modal-footer">
+              <form method="POST">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="reset" class="btn btn-primary" id="criteria_reset_button"
+                  onclick="return resetSliders();">Reset</button>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
     </form>
 
@@ -61,6 +89,29 @@
     <div id="successAlert" class="alert alert-success" role="alert" style="display:none;"></div>
 	  <div id="errorAlert" class="alert alert-danger" role="alert" style="display:none;"></div>
     <br />
+  </div>
+
+  <!-- Dialog to confirm decision to restore sliders -->
+  <div class="modal fade" id="confirm_restore" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmationTitle">Restore Criteria Settings</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="confirmationBody">
+          This will restore the criteria settings to their previously saved values
+        </div>
+        <div class="confirmVerification modal-footer">
+          <form method="POST">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" id="criteria_restore_button" onclick="restoreSliderValues();">Restore</button>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -90,6 +141,9 @@
       }
 
       showSliderValues();
+
+      // Close dialog
+      $('#confirm_restore').modal('hide');
     }
 
     function showSliderValues(){
@@ -122,6 +176,10 @@
       setTimeout(function(){
           showSliderValues();
       }, 0);
+
+      // Close dialog
+      $('#confirm_reset').modal('hide');
+
       return true;
     }
 

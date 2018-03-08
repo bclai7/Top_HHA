@@ -31,11 +31,31 @@ a{
 }
 
 /* Button Color */
-.btn{
+.btn-primary{
   background: #0033cc;
   border-color: #0033cc;
   color: #ccc;
 }
+
+.btn-secondary{
+  background: #ccc;
+  border-color: black;
+  color: black;
+}
+
+.btn-secondary:hover{
+  background: #e6e6e6;
+  color: black;
+}
+
+/* Close button on dialog boxes */
+.modal-content .close{
+  color: #ccc;
+}
+.modal-content .close:hover{
+  color: white;
+}
+
 
 /* Forms */
 
@@ -296,7 +316,7 @@ a{
 .criteriaColumnLeft{
   width: 40%;
   float: left;
-  margin-left: 60px;
+  margin-left: 70px;
 }
 .criteriaColumnRight{
   width: 40%;
@@ -350,6 +370,28 @@ a{
     cursor: pointer; /* Cursor on hover */
 }
 
+/* Change color of tooltip */
+.tooltip-inner {
+  background-color: #0033cc !important;
+  /*!important is not necessary if you place custom.css at the end of your css calls. For the purpose of this demo, it seems to be required in SO snippet*/
+  color: #fff;
+}
+
+.tooltip.top .tooltip-arrow {
+  border-top-color: #0033cc;
+}
+
+.tooltip.right .tooltip-arrow {
+  border-right-color: #0033cc;
+}
+
+.tooltip.bottom .tooltip-arrow {
+  border-bottom-color: #0033cc;
+}
+
+.tooltip.left .tooltip-arrow {
+  border-left-color: #0033cc;
+}
 
 /** FF*/
 input[type="range"]::-moz-range-progress {
