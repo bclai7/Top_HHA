@@ -52,17 +52,26 @@ def getCategoryList():
     return categoryList
 def getCategoryDescriptionDict():
     categoryDescriptionList = {
-    'content': 'Description content',
-    'delivery': 'Description delivery',
-    'hits': 'Description hits',
-    'albums': 'Description albums',
-    'consistency': 'Description consistency',
-    'longevity': 'Description longevity',
-    'impact': 'Description impact',
-    'sales': 'Description sales',
-    'personality': 'Description personality',
-    'creativity': 'Description creativity',
-    'popularity': 'Description popularity',
+    'content': """The lyrical content, the message sent through their
+        music.""",
+    'delivery': """How well the artist delivers on the beat. Things to
+        consider: Flow, Cadence, catchy-ness,
+        ability to perform a good hook""",
+    'hits': """The ability to make hit songs""",
+    'albums': """The ability to put out full projects (Albums, EPs,
+        Mixtapes, etc.)""",
+    'consistency': """How consistently the artist releases quality
+        music""",
+    'longevity': """How long an artist and/or their music will last.
+        Can they stand the test of time?""",
+    'impact': """The artist's impact on their peers, future generations,
+        and overall sound of the genre""",
+    'sales': """The ability to sell records""",
+    'personality': """Personality and Style of the artist. Charisma,
+        fashion, etc.""",
+    'creativity': """How creative the artist is in their music. Do they
+        have a distinct and original sound?""",
+    'popularity': """How well-known the artist is""",
     }
 
     return categoryDescriptionList
