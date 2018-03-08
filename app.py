@@ -53,25 +53,23 @@ def getCategoryList():
 def getCategoryDescriptionDict():
     categoryDescriptionList = {
     'content': """The lyrical content, the message sent through their
-        music.""",
-    'delivery': """How well the artist delivers on the beat. Things to
-        consider: Flow, Cadence, catchy-ness,
-        ability to perform a good hook""",
+        music""",
+    'delivery': """How well the artist delivers on the beat. Things such as
+        their flow, cadence, ability to perform a good hook, etc.""",
     'hits': """The ability to make hit songs""",
-    'albums': """The ability to put out full projects (Albums, EPs,
+    'albums': """The ability to release quality projects (Albums, EPs,
         Mixtapes, etc.)""",
     'consistency': """How consistently the artist releases quality
         music""",
-    'longevity': """How long an artist and/or their music will last.
-        Can they stand the test of time?""",
+    'longevity': """How long an artist and/or their music will last""",
     'impact': """The artist's impact on their peers, future generations,
-        and overall sound of the genre""",
+        and on the genre overall""",
     'sales': """The ability to sell records""",
-    'personality': """Personality and Style of the artist. Charisma,
+    'personality': """Personality and Style of the artist. Charisma, Swagger,
         fashion, etc.""",
-    'creativity': """How creative the artist is in their music. Do they
-        have a distinct and original sound?""",
-    'popularity': """How well-known the artist is""",
+    'creativity': """How creative the artist is in their music. How distinct
+        and original their music is.""",
+    'popularity': """How well-known or recognizable the artist is""",
     }
 
     return categoryDescriptionList
@@ -371,7 +369,7 @@ def rankings():
                 cur = mysql.connection.cursor()
                 query = """DELETE FROM rating
                             WHERE user_id = %s """
-                cur.execute(query, (str(session['user_id'])))
+                cur.execute(query, [str(session['user_id'])])
                 mysql.connection.commit()
                 cur.close()
             # If user is not logged in

@@ -117,6 +117,9 @@
       else {
         sliderSet.style.display = "block";
       }
+
+      // Rename certain category labels
+      renameCategories();
     }
 
     function hideDefaultOnChange(){
@@ -159,6 +162,17 @@
         var scoreElementName = 'slider_score_'+categoryList[i];
         document.getElementById(scoreElementName).innerHTML = activeSliderValue;
       }
+    }
+
+    // Function to rename some of the categories, done in javascript
+    // So I don't have to change all of the variable names
+    function renameCategories(){
+      // Rename "Albums" to "Projects"
+      document.getElementById('slider_label_albums').innerHTML='Projects';
+      // Rename "Personality" to "Style"
+      document.getElementById('slider_label_personality').innerHTML='Style';
+      // Rename "Sales" to "Commercial Success"
+      document.getElementById('slider_label_sales').innerHTML='Commercial Success';
     }
 
   </script>
