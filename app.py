@@ -335,7 +335,7 @@ def rankings():
                 categoryScore = int(session[category]) * int(row[category])
                 totalScore += categoryScore
             ranking_list.append((row['artist_name'], totalScore))
-
+    # Else if not logged in
     else:
         # check if user has set criteria, if not, then return a page with
         # error message

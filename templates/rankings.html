@@ -9,12 +9,12 @@
     Artist Rankings
   {% endif %}
   </h1>
-  <div class="deleteAllRatingsButton"><button class="btn btn-primary" id="delete_all_ratings" data-toggle="modal"
-    data-target="#delete_all_confirmation">Delete All Ratings</button></div>
 
   {% if isEmpty %}
     <div class="accessErrorMessage">To view your list, you must first set your criteria and rate at least one artist</div>
   {% else %}
+  <div class="deleteAllRatingsButton"><button class="btn btn-primary" id="delete_all_ratings" data-toggle="modal"
+    data-target="#delete_all_confirmation">Delete All Ratings</button></div>
   <div class="rankingList">
     <ul class="list-group" id="artist_ranking_list">
     {% for artist in rankingList %}
