@@ -307,6 +307,7 @@ a, .close{
   margin-top: 10px;
 }
 
+
 /* adds rounded corners to first and last items of list */
 .rankItem:first-child, .rankItem:last-child{
     border-radius: 20px;
