@@ -348,3 +348,20 @@ a, .close{
 .paginationLinks .pagination{
   margin-bottom: 100px;
 }
+
+/* CAROUSEL */
+.carousel img{
+  user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+.carousel .first-slide{
+  opacity: 0.35;
+}
+
+.carousel .second-slide, .carousel .third-slide, .carousel .fourth-slide{
+  opacity: 0.1;
+}
