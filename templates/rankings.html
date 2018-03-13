@@ -19,7 +19,7 @@
     <ul class="list-group" id="artist_ranking_list">
     {% for artist in listing %}
       <li class="rankItem list-group-item" id="{{artist}}_item">
-        <div class="artist_rank">{{loop.index}}</div>
+        <div class="artist_rank">{{rankingList.index(artist) + 1}}</div>
         <div class="artist_name">{{artist[0]}}</div>
         <div class="artist_delete">
           <button type="button" class="deleteArtistDialog close" aria-label="Close" id="delete_{{artist[0]}}" data-toggle="modal" data-target="#delete_single_confirmation">
@@ -31,7 +31,7 @@
     {% endfor %}
     </ul>
   </div>
-  
+
   <center>
     <div class="paginationLinks">
       <ul class="pagination d-inline-flex">
