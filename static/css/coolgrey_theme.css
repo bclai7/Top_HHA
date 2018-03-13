@@ -24,8 +24,7 @@ body {
 .pageInstructions{
   border: solid 1px black;
   border-radius: 15px;
-  background: #333;
-  box-shadow: inset 0 0 1rem rgba(0, 0, 0, .5);
+  background: #404040;
 }
 
 /* Button Color */
@@ -130,25 +129,25 @@ body {
 
 /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
 .slider::-webkit-slider-thumb {
-    background: #737373; /* Blue button color */
+    background: #737373; /* grey button color */
     border: solid 1px black;
     box-shadow: -810px 0 0 800px #333;
 }
 
 .slider::-moz-range-thumb  {
-    background: #0033cc; /* Green background */
+    background: #333; /* grey background */
 }
 
 /* FF Slider progress */
 input[type="range"]::-moz-range-progress {
-  background-color: #0033cc;
+  background-color: #333;
 }
 input[type="range"]::-moz-range-track {
   background-color: #9a905d;
 }
 /* IE Slider progress */
 input[type="range"]::-ms-fill-lower {
-  background-color: #0033cc;
+  background-color: #333;
 }
 input[type="range"]::-ms-fill-upper {
   background-color: #9a905d;
