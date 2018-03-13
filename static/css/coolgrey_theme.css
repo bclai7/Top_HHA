@@ -220,6 +220,7 @@ input[type="range"]::-ms-fill-upper {
 }
 .aboutContent .nav .nav-link:hover{
   color: white;
+  background: #737373;
 }
 .aboutContent .nav .active{
   background: #333;
