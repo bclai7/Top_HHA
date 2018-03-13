@@ -16,7 +16,7 @@ body {
 /* Instructions at the top of each page */
 .pageInstructions{
   width: 90%;
-  padding: 5px 5px 5px 10px;
+  padding: 5px 5px 10px 10px;
   margin: 30px 0 0 60px;
 }
 
