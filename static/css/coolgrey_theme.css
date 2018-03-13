@@ -195,3 +195,15 @@ input[type="range"]::-ms-fill-upper {
 .rankItem .deleteArtistDialog:hover{
   color: white;
 }
+
+/* Pagination */
+.paginationLinks .pagination{
+  border: solid 1px black;
+}
+.paginationLinks .page-link{
+  color: black;
+}
+.paginationLinks .active .page-link{
+  background: #333;
+  border: solid 1px #333;
+}
