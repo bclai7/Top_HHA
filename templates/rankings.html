@@ -17,7 +17,7 @@
     data-target="#delete_all_confirmation">Delete All Ratings</button></div>
   <div class="rankingList">
     <ul class="list-group" id="artist_ranking_list">
-    {% for artist in rankingList %}
+    {% for artist in listing %}
       <li class="rankItem list-group-item" id="{{artist}}_item">
         <div class="artist_rank">{{loop.index}}</div>
         <div class="artist_name">{{artist[0]}}</div>
@@ -32,6 +32,20 @@
     </ul>
   </div>
   <br />
+
+<ul class="pagination">
+  {%if listing.page == 1%}
+    <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+  {%else%}
+    <li class="page-item"><a class="page-link" href="/rankings/{{listing.page-1}}">Previous</a></li>
+  {%endif%}
+
+  {% if listing.page == numOfPages %}
+    <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+  {%else%}
+    <li class="page-item"><a class="page-link" href="{{listing}}">Next</a></li>
+  {%endif%}
+</ul>
   {% endif %}
 
   <!-- Confirmation Message Popups -->

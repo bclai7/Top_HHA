@@ -10,6 +10,7 @@ from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadTimeSignat
 import sys
 from _mysql_exceptions import IntegrityError
 from flask_restful import Api
+import math
 
 
 app = Flask(__name__)
@@ -44,6 +45,11 @@ api = Api(app, errors={
     }
 })
 
+# Global variables and functions
+# VARIABLES
+ratings_per_page = 5 # Amount of ratings shown per page on rankings page
+
+# FUNCTIONS
 def getCategoryList():
     # Rating Category list
     categoryList = ['content', 'delivery', 'hits', 'albums', 'consistency',
@@ -311,9 +317,21 @@ def artistchanged():
     # return as json list, will be parsed in AJAX function
     return json.dumps(rating_list)
 
+class PageResult:
+   def __init__(self, data, page = 1, number = ratings_per_page):
+     self.__dict__ = dict(zip(['data', 'page', 'number'], [data, page, number]))
+     self.full_listing = [self.data[i:i+number] for i in range(0,
+        len(self.data), number)]
+   def __iter__(self):
+     for i in self.full_listing[self.page-1]:
+       yield i
+   def __repr__(self): #used for page linking
+     return "/rankings/{}".format(self.page+1) #view the next page
+
+
 # Page to display top artist rankings
-@app.route('/rankings', methods=['GET', 'POST'])
-def rankings():
+@app.route('/rankings/<pagenum>', methods=['GET', 'POST'])
+def rankings(pagenum):
     # List of artists containing tuples with artist name and their overall score
     ranking_list = []
     # Boolean checking whether or not list is empty
@@ -382,7 +400,7 @@ def rankings():
         # Button clicked to delete single artist rating
         if request.form['action_button'][0:7] == 'delete_' and request.form['action_button']:
             artist_to_delete = request.form['action_button'][7:]
-            # If artist is logged in
+            # If logged in
             if 'logged_in' in session:
                 # Run query to delete single artist from database
                 cur = mysql.connection.cursor()
@@ -391,17 +409,23 @@ def rankings():
                 cur.execute(query, (str(session['user_id']), artist_to_delete))
                 mysql.connection.commit()
                 cur.close()
-            # if artist is not logged in
+            # if not logged in
             else:
                 # Remove artist key from session dictionary
                 session.pop(artist_to_delete, None)
                 # And remove him from list of artists
                 session['rated_artists'].remove(artist_to_delete)
 
-        return redirect(url_for('rankings'))
+        return redirect(url_for('rankings', pagenum='1'))
+
+    # Get number of pages needed
+    PAGE_NUM = 0
+    if sorted_ranking_list:
+        PAGE_NUM = math.ceil((len(sorted_ranking_list)/ratings_per_page))
 
     return render_template('rankings.html', rankingList=sorted_ranking_list,
-        isEmpty=isEmpty)
+        isEmpty=isEmpty, listing = PageResult(sorted_ranking_list,
+        int(pagenum)), numOfPages=PAGE_NUM)
 
 # About page
 @app.route('/about')
@@ -638,7 +662,7 @@ def login():
                 session['popularity']=popularity
 
                 flash('Successfully Logged In', 'success')
-                return redirect(url_for('rankings'))
+                return redirect(url_for('rankings', pagenum='1'))
             else:
                 return render_template('login.html',
                     error = 'Email and password combination is incorrect')
