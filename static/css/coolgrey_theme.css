@@ -225,3 +225,7 @@ input[type="range"]::-ms-fill-upper {
 .aboutContent .nav .active{
   background: #333;
 }
+.aboutContent .nav .active:hover{
+  color: white;
+  background: #333;
+}
