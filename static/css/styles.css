@@ -72,6 +72,12 @@ a, .close{
   width: 60%;
 }
 
+.register-container .pageInstructions{
+  width: 12%;
+  background: none;
+  border: none;
+}
+
 .login-container .form-group label{
   font-weight: bold;
 }
@@ -121,6 +127,7 @@ a, .close{
     margin-top: 7rem;
   }
 }
+
 
 /* USER DASHBOARD */
 .dashboard_container{
@@ -172,6 +179,7 @@ a, .close{
 
 .email_box{
   padding-bottom: 2px;
+  clear: both;
 }
 
 /* Link Buttons */
@@ -383,4 +391,14 @@ a, .close{
 .aboutContent{
   margin: 20px 60px 0 60px;
   padding: 0 0 200px 0;
+}
+
+/* Contact form */
+.contactFormContainer{
+  width: 60%;
+  margin: 0 auto;
+}
+
+.contactFormContainer .form-group{
+  margin-bottom: 25px;
 }

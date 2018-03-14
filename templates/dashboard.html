@@ -8,14 +8,14 @@
       <div class="user_info">
         <h2>Account Info</h2>
         <form class="edit_name" method="POST">
-          {% from 'includes/_formhelpers.html' import render_field %}
+          {{ nameForm.csrf_token }}
           <div class="form_element">
             <div class="form-group">
               <div class="name_label">
                 <dt>{{ nameForm.name.label }}
               </div>
               <div class="name_box">
-                {{render_field(nameForm.name, class_="form-control")}}
+                {{ nameForm.name(class_="form-control") }}
               </div>
               <div class="dashboard_save_button">
                 <button type="submit" class="btn btn-primary" id="change_name" data-toggle="modal" data-target="#confirm_name_change" onclick="event.preventDefault();">Change Name</button>
@@ -53,7 +53,7 @@
 
         <!-- CHANG EMAIL FORM -->
         <form class="edit_email" method="POST">
-          {% from 'includes/_formhelpers.html' import render_field %}
+          {{ emailForm.csrf_token }}
           <div class="form_element">
             <div class="form-group">
               <div class="email_label">
@@ -73,7 +73,7 @@
               {% endif %}
               <br />
               <div class="email_box">
-                {{render_field(emailForm.email, class_="form-control")}}
+                {{ emailForm.email(class_="form-control") }}
               </div>
               <div class="dashboard_save_button">
                 <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#confirm_email_change" onclick="event.preventDefault();">Change Email</button>
@@ -112,14 +112,14 @@
         <!-- CHANGE PASSWORD FORM -->
         <h2>Change Password</h2>
         <form class="edit_password" method="POST">
-          {% from 'includes/_formhelpers.html' import render_field %}
+          {{ passwordForm.csrf_token }}
           <div class="form_element">
             <div class="form-group">
               <div class="password_label">
                 <dt>{{ passwordForm.password.label }}
               </div>
               <div class="password_box">
-                {{render_field(passwordForm.password, class_="form-control")}}
+                {{ passwordForm.password(class_="form-control") }}
               </div>
               <br /><br />
               {% if passwordForm.password.errors %}
@@ -130,7 +130,7 @@
                 <dt>{{ passwordForm.confirm.label }}
               </div>
               <div class="confirm_password_box">
-                {{render_field(passwordForm.confirm, class_="form-control")}}
+                {{ passwordForm.confirm(class_="form-control") }}
               </div>
               {% if passwordForm.confirm.errors %}
                 <ul class="errors">{% for error in passwordForm.confirm.errors %}<li>{{ error }}</li>{% endfor %}</ul>

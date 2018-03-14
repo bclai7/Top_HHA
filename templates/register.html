@@ -6,12 +6,13 @@
 {% else %}
   <div class="register-container">
     <h1 class="pageHeader">Register</h1>
+    <div class="pageInstructions">* All fields required</div>
     <div class="register-form">
       <form method="POST" action="">
-        {% from 'includes/_formhelpers.html' import render_field %}
+        {{ form.csrf_token }}
         <div class="form-group">
           <dt>{{ form.name.label }}
-          {{render_field(form.name, class_="form-control")}}
+          {{ form.name(class_="form-control") | safe }}
         </div>
         {% if form.name.errors %}
           <ul class="errors">{% for error in form.name.errors %}<li>{{ error }}</li>{% endfor %}</ul>
@@ -19,7 +20,7 @@
 
         <div class="form-group">
           <dt>{{ form.email.label }}
-          {{render_field(form.email, class_="form-control")}}
+            {{ form.email(class_="form-control") | safe }}
         </div>
         {% if form.email.errors %}
           <ul class="errors">{% for error in form.email.errors %}<li>{{ error }}</li>{% endfor %}</ul>
@@ -27,7 +28,7 @@
 
         <div class="form-group">
           <dt>{{ form.password.label }}
-          {{render_field(form.password, class_="form-control")}}
+          {{ form.password(class_="form-control") | safe }}
         </div>
         {% if form.password.errors %}
           <ul class="errors">{% for error in form.password.errors %}<li>{{ error }}</li>{% endfor %}</ul>
@@ -35,10 +36,17 @@
 
         <div class="form-group">
           <dt>{{ form.confirm.label }}
-          {{render_field(form.confirm, class_="form-control")}}
+          {{ form.confirm(class_="form-control") | safe }}
         </div>
         {% if form.confirm.errors %}
           <ul class="errors">{% for error in form.confirm.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+        {% endif %}
+
+        <div class="form-group">
+          {{ form.recaptcha(class_="form-control") }}
+        </div>
+        {% if form.recaptcha.errors %}
+          <ul class="errors">{% for error in form.recaptcha.errors %}<li>{{ error }}</li>{% endfor %}</ul>
         {% endif %}
 
         <p><input type="submit" class="btn btn-primary" value="Register" /></p>

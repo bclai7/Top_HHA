@@ -1,6 +1,7 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, logging, request, jsonify, g
 from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
+from flask_wtf import FlaskForm, RecaptchaField
 from passlib.hash import sha256_crypt
 from flask.ext.bcrypt import Bcrypt
 from functools import wraps
@@ -45,6 +46,9 @@ api = Api(app, errors={
     }
 })
 
+# RECAPTCHA KEYS
+RECAPTCHA_PUBLIC_KEY = app.config['RECAPTCHA_PUBLIC_KEY']
+RECAPTCHA_PRIVATE_KEY = app.config['RECAPTCHA_PRIVATE_KEY']
 # Global variables and functions
 # VARIABLES
 ratings_per_page = 5 # Amount of ratings shown per page on rankings page
@@ -427,13 +431,33 @@ def rankings(pagenum):
         isEmpty=isEmpty, listing = PageResult(sorted_ranking_list,
         int(pagenum)), numOfPages=PAGE_NUM)
 
+class ContactForm(FlaskForm):
+    name = StringField('Name', [validators.Length(min=1, max=50)])
+    email = StringField('Email Address', [validators.Length(min=6, max=35),
+        validators.email()])
+    subject = StringField('Subject', [validators.Length(min=1, max=50)])
+    message = TextAreaField('Message', [validators.Length(min=10, max=10000)])
+    recaptcha = RecaptchaField()
+
 # About page
-@app.route('/about')
+@app.route('/about', methods=['GET', 'POST'])
 def about():
-    return render_template('about.html')
+    if 'logged_in' in session:
+        contactForm = ContactForm(request.form, name=session['name'],
+            email=session['email'])
+    else:
+        contactForm = ContactForm(request.form)
+
+    if request.method == 'POST' and contactForm.validate():
+        name = contactForm.name.data
+        email = contactForm.email.data
+        subject = contactForm.subject.data
+        message = contactForm.message.data
+        
+    return render_template('about.html', contactForm=contactForm)
 
 # Registration Form
-class RegistrationForm(Form):
+class RegistrationForm(FlaskForm):
     name = StringField('Name', [validators.Length(min=1, max=50)])
     email = StringField('Email Address', [validators.Length(min=6, max=35),
         validators.email()])
@@ -442,6 +466,8 @@ class RegistrationForm(Form):
         validators.EqualTo('confirm', message='Passwords must match')
     ])
     confirm = PasswordField('Confirm Password')
+    recaptcha = RecaptchaField()
+
 
 # Registration Page
 @app.route('/register', methods=['GET', 'POST'])
@@ -452,11 +478,13 @@ def register():
         return redirect(url_for('index'))
     form = RegistrationForm(request.form)
     if request.method == 'POST' and form.validate():
+        app.logger.info('IM HERE')
         name = form.name.data
         email = form.email.data
         password = bcrypt.generate_password_hash(str(form.password.data)).decode('utf-8')
 
         try:
+            app.logger.info('IM HERE')
             # Add user to database
             cur = mysql.connection.cursor()
             query = "INSERT INTO user(name, email, password) VALUES(%s, %s, %s)"
@@ -859,16 +887,16 @@ def dashboard():
         current_email=str(session['email']), passwordForm=passwordForm,
         nameForm=nameForm)
 # Name Form
-class NameForm(Form):
+class NameForm(FlaskForm):
     name = StringField('Name', [validators.Length(min=1, max=50)])
 
 # Change Email Form
-class EmailForm(Form):
+class EmailForm(FlaskForm):
     email = StringField('Email Address', [validators.Length(min=6, max=35),
         validators.email()])
 
 # Change Password Form
-class ChangePasswordForm(Form):
+class ChangePasswordForm(FlaskForm):
     password = PasswordField('New Password', [
         validators.DataRequired(),
         validators.EqualTo('confirm', message='Passwords must match')

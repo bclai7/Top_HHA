@@ -19,11 +19,12 @@
     <div class="tab-content" id="pills-tabContent">
       <!-- About Page -->
       <div class="tab-pane fade show active" id="pills-about" role="tabpanel" aria-labelledby="pills-about-tab">
-        This is about page
+        <h3>About</h3>
       </div>
 
       <!-- FAQ Page -->
       <div class="tab-pane fade" id="pills-faq" role="tabpanel" aria-labelledby="pills-faq-tab">
+        <h3>FAQ</h3>
         <div class="accordion" id="accordion">
 
           <div class="card">
@@ -129,7 +130,57 @@
 
       <!-- Contact Page -->
       <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
-        Contact
+        <h3>Contact</h3>
+
+        <div class="contactFormContainer">
+          <p>* All fields required</p>
+          <form method="POST" action="">
+            {{ contactForm.csrf_token }}
+            <div class="form-group">
+              <dt>{{ contactForm.name.label }}
+              {{ contactForm.name(class_="form-control") }}
+            </div>
+            {% if contactForm.name.errors %}
+              <ul class="errors">{% for error in contactForm.name.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+            {% endif %}
+
+            <div class="form-group">
+              <dt>{{ contactForm.email.label }}
+              {{ contactForm.email(class_="form-control") }}
+            </div>
+            {% if contactForm.email.errors %}
+              <ul class="errors">{% for error in contactForm.email.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+            {% endif %}
+
+            <div class="form-group">
+              <dt>{{ contactForm.subject.label }}
+              {{ contactForm.subject(class_="form-control") }}
+            </div>
+            {% if contactForm.subject.errors %}
+              <ul class="errors">{% for error in contactForm.name.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+            {% endif %}
+
+            <div class="form-group">
+              <dt>{{ contactForm.message.label }}
+              {{ contactForm.message(rows='7',class_="form-control") }}
+            </div>
+            {% if contactForm.message.errors %}
+              <ul class="errors">{% for error in contactForm.message.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+            {% endif %}
+
+            <center>
+              <div class="form-group">
+                {{ contactForm.recaptcha(class_="form-control") }}
+              </div>
+              {% if contactForm.recaptcha.errors %}
+                <ul class="errors">{% for error in contactForm.recaptcha.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+              {% endif %}
+              <input type="submit" class="btn btn-primary" value="Send" />
+            </center>
+            <br />
+          </form>
+        </div>
+
       </div>
     </div>
   </div>
