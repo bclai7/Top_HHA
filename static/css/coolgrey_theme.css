@@ -229,3 +229,38 @@ input[type="range"]::-ms-fill-upper {
   color: white;
   background: #333;
 }
+
+/* FAQ */
+.accordion{
+  border: solid 1px #ccc;
+}
+.accordion .card {
+  border-color: #333;
+  padding-bottom: 2px;
+  background: #ccc;
+}
+
+.accordion .card .card-header{
+  background: #333;
+  box-shadow: inset 0 0 .5rem black;
+}
+
+.accordion .card .card-header .btn-link{
+  color: #ccc;
+}
+
+.accordion .card .card-header .btn-link:hover{
+  color: white;
+  text-decoration: none;
+}
+
+.accordion .card .card-header .btn-link:active,
+.accordion .card .card-header .btn-link:focus{
+  text-decoration: none;
+}
+
+.accordion .card .card-body{
+  background: #ccc;
+  color: #333;
+  border: solid 1px #333;
+}
