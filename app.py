@@ -442,6 +442,7 @@ class ContactForm(FlaskForm):
 # About page
 @app.route('/about', methods=['GET', 'POST'])
 def about():
+    session['active_about_tab']='info'
     if 'logged_in' in session:
         contactForm = ContactForm(request.form, name=session['name'],
             email=session['email'])
@@ -470,6 +471,9 @@ def about():
         flash('Your message has been sent. You will receive a response shortly',
             'success')
         return redirect(url_for('about'))
+    if request.method == 'POST' and not contactForm.validate():
+
+        flash('Message not sent. Please make sure form is filled correctly', 'danger')
     return render_template('about.html', contactForm=contactForm)
 
 # Registration Form
