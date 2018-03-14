@@ -584,7 +584,8 @@ def register():
                         expire after 24 hours and you will have to request a new
                          one.<br /> <br />If you feel this email is in error,
                         please contact us at
-                        support@mytophha.com.""".format(name, link)
+                        support@mytophha.com or through the contact form on our
+                        website.""".format(name, link)
             # Finally, send confirmation email
             mail.send(msg)
 
@@ -778,7 +779,8 @@ def dashboard():
                         expire after 24 hours and you will have to request
                         a new one. <br /> <br /> If you feel this email is
                         in error, please contact us at
-                        support@mytophha.com.""".format(name, link)
+                        support@mytophha.com or through the contact form on our
+                        website.""".format(name, link)
             # Finally, send confirmation email
             mail.send(msg)
             flash("""Your confirmation link has been sent. Please confirm at
@@ -821,7 +823,8 @@ def dashboard():
                             expire after 24 hours and you will have to request
                             a new one. <br /> <br /> If you feel this email is
                             in error, please contact us at
-                            support@mytophha.com.""".format(name, link)
+                            support@mytophha.com or through the contact form on our
+                            website.""".format(name, link)
                 # Finally, send confirmation email
                 mail.send(msg1)
 
@@ -844,7 +847,8 @@ def dashboard():
                                  sent to the new email address. <br /> <br />
                                 If you feel this email is in error, please
                                 contact us at
-                                support@mytophha.com.""".format(name)
+                                support@mytophha.com or through the contact form on
+                                our website.""".format(name)
                     # Finally, send email
                     mail.send(msg2)
 
@@ -893,7 +897,8 @@ def dashboard():
                             immediately. Otherwise you may ignore
                             this message. <br/> <br/>
                             If you have additional concerns, please email us at
-                            support@mytophha.com""".format(session['name'])
+                            support@mytophha.com or through the contact form on our
+                            website""".format(session['name'])
                 # Finally, send email
                 mail.send(msg)
             flash('Password changed', 'success')
@@ -963,8 +968,8 @@ def forgot_password():
                             password reset. This link will expire after 24 hours
                              and you will have to request a new one.<br />
                             <br />If you feel this email is in error, please
-                            contact us at support@mytophha.com.""".format(name,
-                            link)
+                            contact us at support@mytophha.com or through the contact
+                            form on our website.""".format(name, link)
                 # Finally, send confirmation email
                 mail.send(msg)
 
@@ -998,7 +1003,8 @@ def forgot_password():
                     This link will expire after 24 hours and you will have to
                     request a new one. <br /> <br /> If you feel this email is
                     in error, please contact us at
-                    support@mytophha.com.""".format(name, link)
+                    support@mytophha.com or through the contact form on our
+                    website.""".format(name, link)
         # Finally, send pw reset email
         mail.send(msg)
         flash("""Password Reset Link has been sent. Click the link in your email
