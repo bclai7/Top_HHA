@@ -453,7 +453,23 @@ def about():
         email = contactForm.email.data
         subject = contactForm.subject.data
         message = contactForm.message.data
-        
+
+        # Create email message
+        msg = Message('[MyTopHHA.com Message]: '+subject,
+            sender=('MyTopHHA User', app.config['MAIL_USERNAME']),
+            reply_to=email,
+            recipients=['support@MyTopHHA.com'])
+
+        # Message body
+        msg.html = """You have a received a message from the contact form on
+            MyTopHHA.com <br/><br/><b>Name:</b> {}<br/><b>Email:</b> {}<br/>
+            <b>Subject:</b> {}<br/><b>Message:</b><br/><br/> {}<br/>""".format(name,
+            email, subject, message)
+        # Finally, send confirmation email
+        mail.send(msg)
+        flash('Your message has been sent. You will receive a response shortly',
+            'success')
+        return redirect(url_for('about'))
     return render_template('about.html', contactForm=contactForm)
 
 # Registration Form
