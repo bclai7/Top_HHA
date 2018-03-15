@@ -7,23 +7,23 @@
   <div class="aboutContent">
     <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
       <li class="nav-item">
-        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-info" role="tab" aria-controls="pills-info" aria-selected="true">Info</a>
+        <a class="nav-link {% if session.active_about_tab=='info'%}active{% endif %}" id="pills-home-tab" data-toggle="pill" href="#pills-info" role="tab" aria-controls="pills-info" aria-selected="true">Info</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-faq" role="tab" aria-controls="pills-faq" aria-selected="false">FAQ</a>
+        <a class="nav-link {% if session.active_about_tab=='faq'%}active{% endif %}" id="pills-profile-tab" data-toggle="pill" href="#pills-faq" role="tab" aria-controls="pills-faq" aria-selected="false">FAQ</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Contact</a>
+        <a class="nav-link {% if session.active_about_tab=='contact'%}active{% endif %}" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Contact</a>
       </li>
     </ul>
     <div class="tab-content" id="pills-tabContent">
       <!-- About Page -->
-      <div class="tab-pane fade show active" id="pills-info" role="tabpanel" aria-labelledby="pills-info-tab">
+      <div class="tab-pane fade {% if session.active_about_tab=='info'%}show active{% endif %}" id="pills-info" role="tabpanel" aria-labelledby="pills-info-tab">
         <h3>Info</h3>
       </div>
 
       <!-- FAQ Page -->
-      <div class="tab-pane fade" id="pills-faq" role="tabpanel" aria-labelledby="pills-faq-tab">
+      <div class="tab-pane fade {% if session.active_about_tab=='faq'%}show active{% endif %}" id="pills-faq" role="tabpanel" aria-labelledby="pills-faq-tab">
         <h3>FAQ</h3>
         <div class="accordion" id="accordion">
 
@@ -89,7 +89,7 @@
               <div class="card-body">
                 If you did not receive an email confirmation link, first double check to make sure that your email is entered correctly on the website.
                 If your email is correct, then please check the Spam folder in your email inbox for the confirmation link. If you still can't find the
-                confirmation email, please contact us through the contact form on the "Contact Us" tab of the about page
+                confirmation email, please contact us through the contact form on the "Contact" tab of the about page
               </div>
             </div>
           </div>
@@ -129,7 +129,7 @@
       </div>
 
       <!-- Contact Page -->
-      <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+      <div class="tab-pane fade {% if session.active_about_tab=='contact'%}show active{% endif %}" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
         <h3>Contact</h3>
 
         <div class="contactFormContainer">
@@ -157,7 +157,7 @@
               {{ contactForm.subject(class_="form-control") }}
             </div>
             {% if contactForm.subject.errors %}
-              <ul class="errors">{% for error in contactForm.name.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+              <ul class="errors">{% for error in contactForm.subject.errors %}<li>{{ error }}</li>{% endfor %}</ul>
             {% endif %}
 
             <div class="form-group">

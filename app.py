@@ -432,16 +432,20 @@ def rankings(pagenum):
         int(pagenum)), numOfPages=PAGE_NUM)
 
 class ContactForm(FlaskForm):
-    name = StringField('Name', [validators.Length(min=1, max=50)])
-    email = StringField('Email Address', [validators.Length(min=6, max=35),
-        validators.email()])
-    subject = StringField('Subject', [validators.Length(min=1, max=50)])
-    message = TextAreaField('Message', [validators.Length(min=10, max=10000)])
+    name = StringField('Name', [validators.DataRequired(),
+        validators.Length(max=50)])
+    email = StringField('Email Address', [validators.DataRequired(),
+        validators.Length(min=6, max=35), validators.email()])
+    subject = StringField('Subject', [validators.DataRequired(),
+        validators.Length(max=50)])
+    message = TextAreaField('Message', [validators.DataRequired(),
+        validators.Length(max=10000)])
     recaptcha = RecaptchaField()
 
 # About page
 @app.route('/about', methods=['GET', 'POST'])
 def about():
+    # default selected tab when loading the page
     session['active_about_tab']='info'
     if 'logged_in' in session:
         contactForm = ContactForm(request.form, name=session['name'],
@@ -468,22 +472,28 @@ def about():
             email, subject, message)
         # Finally, send confirmation email
         mail.send(msg)
+
+        # make sure default tab is back to info
+        session['active_about_tab']='info'
         flash('Your message has been sent. You will receive a response shortly',
             'success')
         return redirect(url_for('about'))
     if request.method == 'POST' and not contactForm.validate():
-
+        # switch default tab to contact tab so it loads the form back
+        session['active_about_tab']='contact'
         flash('Message not sent. Please make sure form is filled correctly', 'danger')
     return render_template('about.html', contactForm=contactForm)
 
 # Registration Form
 class RegistrationForm(FlaskForm):
-    name = StringField('Name', [validators.Length(min=1, max=50)])
-    email = StringField('Email Address', [validators.Length(min=6, max=35),
-        validators.email()])
+    name = StringField('Name', [validators.DataRequired(),
+        validators.Length(max=50)])
+    email = StringField('Email Address', [validators.DataRequired(),
+        validators.Length(min=6, max=35), validators.email()])
     password = PasswordField('Password', [
         validators.DataRequired(),
-        validators.EqualTo('confirm', message='Passwords must match')
+        validators.EqualTo('confirm', message='Passwords must match'),
+        validators.Length(min=6)
     ])
     confirm = PasswordField('Confirm Password')
     recaptcha = RecaptchaField()
@@ -924,7 +934,8 @@ class EmailForm(FlaskForm):
 class ChangePasswordForm(FlaskForm):
     password = PasswordField('New Password', [
         validators.DataRequired(),
-        validators.EqualTo('confirm', message='Passwords must match')
+        validators.EqualTo('confirm', message='Passwords must match'),
+        validators.Length(min=6)
     ])
     confirm = PasswordField('Confirm Password')
 
