@@ -53,6 +53,7 @@ RECAPTCHA_PRIVATE_KEY = app.config['RECAPTCHA_PRIVATE_KEY']
 # VARIABLES
 ratings_per_page = 5 # Amount of ratings shown per page on rankings page
 
+
 # FUNCTIONS
 def getCategoryList():
     # Rating Category list
@@ -590,6 +591,8 @@ def register():
                 recipients=[email])
             # Create confirmation link
             link = url_for('confirm_email', token=token, _external=True)
+            # External link to website
+            website_link = url_for('index', _external=True)
 
             # Message body
             msg.html = """Hello {}, <br /><br /> Thank you for registering at
@@ -599,7 +602,7 @@ def register():
                          one.<br /> <br />If you feel this email is in error,
                         please contact us at
                         support@mytophha.com or through the contact form on our
-                        website.""".format(name, link)
+                        website.<br/><br/>{}""".format(name, link, website_link)
             # Finally, send confirmation email
             mail.send(msg)
 
@@ -783,6 +786,8 @@ def dashboard():
                 recipients=[email])
             # Create confirmation link
             link = url_for('confirm_email', token=token, _external=True)
+            # External link to website
+            website_link = url_for('index', _external=True)
 
             # Message body
             msg.html = """Hello {}, <br /><br /> You have requested a
@@ -794,7 +799,7 @@ def dashboard():
                         a new one. <br /> <br /> If you feel this email is
                         in error, please contact us at
                         support@mytophha.com or through the contact form on our
-                        website.""".format(name, link)
+                        website.<br/><br/>{}""".format(name, link, website_link)
             # Finally, send confirmation email
             mail.send(msg)
             flash("""Your confirmation link has been sent. Please confirm at
@@ -828,6 +833,8 @@ def dashboard():
                     recipients=[new_email])
                 # Create confirmation link
                 link = url_for('confirm_email', token=token, _external=True)
+                # External link to website
+                website_link = url_for('index', _external=True)
 
                 # Message body
                 msg1.html = """Hello {}, <br /><br /> You have set this email
@@ -838,7 +845,7 @@ def dashboard():
                             a new one. <br /> <br /> If you feel this email is
                             in error, please contact us at
                             support@mytophha.com or through the contact form on our
-                            website.""".format(name, link)
+                            website.<br/><br/>{}""".format(name, link,website_link)
                 # Finally, send confirmation email
                 mail.send(msg1)
 
@@ -854,6 +861,9 @@ def dashboard():
                         sender=("MyTopHHA", app.config['MAIL_USERNAME']),
                         recipients=[old_email])
 
+                    # External link to website
+                    website_link = url_for('index', _external=True)
+
                     # Message body
                     msg2.html = """Hello {}, <br /><br /> You have changed your
                                 email address for your account at MyTopHHA.com.
@@ -862,7 +872,7 @@ def dashboard():
                                 If you feel this email is in error, please
                                 contact us at
                                 support@mytophha.com or through the contact form on
-                                our website.""".format(name)
+                                our website.<br/><br/>{}""".format(name, website_link)
                     # Finally, send email
                     mail.send(msg2)
 
@@ -903,6 +913,9 @@ def dashboard():
                     sender=("MyTopHHA", app.config['MAIL_USERNAME']),
                     recipients=[str(session['email'])])
 
+                # External link to website
+                website_link = url_for('index', _external=True)
+
                 # Message body
                 msg.html = """Hello {}, <br /><br /> This is an email
                             notifying you that the password has been changed
@@ -912,7 +925,8 @@ def dashboard():
                             this message. <br/> <br/>
                             If you have additional concerns, please email us at
                             support@mytophha.com or through the contact form on our
-                            website""".format(session['name'])
+                            website<br/><br/>{}""".format(session['name'],
+                            website_link)
                 # Finally, send email
                 mail.send(msg)
             flash('Password changed', 'success')
@@ -971,6 +985,8 @@ def forgot_password():
                     recipients=[email])
                 # Create confirmation link
                 link = url_for('confirm_email', token=token, _external=True)
+                # External link to website
+                website_link = url_for('index', _external=True)
 
                 # Message body
                 msg.html = """Hello {}, <br /><br /> You are receiving this
@@ -984,7 +1000,8 @@ def forgot_password():
                              and you will have to request a new one.<br />
                             <br />If you feel this email is in error, please
                             contact us at support@mytophha.com or through the contact
-                            form on our website.""".format(name, link)
+                            form on our website.<br/><br/>{}""".format(name, link,
+                            website_link)
                 # Finally, send confirmation email
                 mail.send(msg)
 
@@ -1009,6 +1026,8 @@ def forgot_password():
             recipients=[email])
         # Create confirmation link
         link = url_for('reset_with_token', token=token, _external=True)
+        # External link to website
+        website_link = url_for('index', _external=True)
 
         # Message body
         msg.html = """Hello {}, <br /><br /> You have requested a
@@ -1019,7 +1038,7 @@ def forgot_password():
                     request a new one. <br /> <br /> If you feel this email is
                     in error, please contact us at
                     support@mytophha.com or through the contact form on our
-                    website.""".format(name, link)
+                    website.<br/><br/>{}""".format(name, link, website_link)
         # Finally, send pw reset email
         mail.send(msg)
         flash("""Password Reset Link has been sent. Click the link in your email
