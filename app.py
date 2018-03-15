@@ -1095,6 +1095,11 @@ def logout():
         flash('You have been logged out', 'success')
     return redirect(url_for('login'))
 
+# No javascript error page
+@app.route('/noscripterror')
+def noscripterror():
+    return render_template('noscripterror.html')
+
 if __name__ == '__main__':
     app.secret_key=app.config['SECRET_KEY']
     app.run(debug=True)
