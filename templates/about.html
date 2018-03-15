@@ -136,7 +136,7 @@
           <p>* All fields required</p>
           <form method="POST" action="">
             {{ contactForm.csrf_token }}
-            <div class="form-group">
+            <div class="form-group" onkeypress="return event.keyCode != 13;">
               <dt>{{ contactForm.name.label }}
               {{ contactForm.name(class_="form-control") }}
             </div>
@@ -144,7 +144,7 @@
               <ul class="errors">{% for error in contactForm.name.errors %}<li>{{ error }}</li>{% endfor %}</ul>
             {% endif %}
 
-            <div class="form-group">
+            <div class="form-group" onkeypress="return event.keyCode != 13;">
               <dt>{{ contactForm.email.label }}
               {{ contactForm.email(class_="form-control") }}
             </div>
@@ -152,7 +152,7 @@
               <ul class="errors">{% for error in contactForm.email.errors %}<li>{{ error }}</li>{% endfor %}</ul>
             {% endif %}
 
-            <div class="form-group">
+            <div class="form-group" onkeypress="return event.keyCode != 13;">
               <dt>{{ contactForm.subject.label }}
               {{ contactForm.subject(class_="form-control") }}
             </div>
