@@ -1093,6 +1093,19 @@ def logout():
 def noscripterror():
     return render_template('noscripterror.html')
 
+@app.route('/tos')
+def tos():
+    return render_template('tos.html')
+
+@app.route('/privacypolicy')
+def privacypolicy():
+    return render_template('privacypolicy.html')
+
+@app.route('/cookies')
+def cookies():
+    return render_template('cookies.html')
+
+
 if __name__ == '__main__':
     app.secret_key=app.config['SECRET_KEY']
     app.run(debug=True)

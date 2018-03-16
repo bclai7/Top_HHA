@@ -435,3 +435,9 @@ a, .close{
 .infoContent a{
   text-decoration: underline;
 }
+
+/* ToS, Privacy Policy, and Cookies Policy */
+.tosBody, .privacypolicyBody, .cookiesBody{
+  margin: 20px 60px 40px 60px;
+  padding: 20px 15px 15px 25px;
+}

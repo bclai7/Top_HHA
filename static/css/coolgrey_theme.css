@@ -11,7 +11,8 @@ body {
 /* Background for the containers on each page */
 .criteria-form, .artist-rating, .login-container,
 .register-container, .rankings-container, .forgot_password_container,
-.reset_password_container, .carousel-item, .aboutContainer{
+.reset_password_container, .carousel-item, .aboutContainer, .tosContainer,
+.cookiesContainer, .privacypolicyContainer{
   background-color: #777;
   box-shadow: inset 0 0 15rem rgba(0, 0, 0, 15);
 }
@@ -232,7 +233,7 @@ input[type="range"]::-ms-fill-upper {
 }
 
 /* Info Tab */
-.infoContent{
+.infoContent, .tosBody, .privacypolicyBody, .cookiesBody{
   border: solid 1px black;
   border-radius: 15px;
   background: #333;
