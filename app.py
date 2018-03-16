@@ -51,7 +51,7 @@ RECAPTCHA_PUBLIC_KEY = app.config['RECAPTCHA_PUBLIC_KEY']
 RECAPTCHA_PRIVATE_KEY = app.config['RECAPTCHA_PRIVATE_KEY']
 # Global variables and functions
 # VARIABLES
-ratings_per_page = 5 # Amount of ratings shown per page on rankings page
+ratings_per_page = 10 # Amount of ratings shown per page on rankings page
 
 
 # FUNCTIONS

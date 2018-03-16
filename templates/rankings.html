@@ -18,15 +18,15 @@
   <div class="rankingList">
     <ul class="list-group" id="artist_ranking_list">
     {% for artist in listing %}
-      <li class="rankItem list-group-item" id="{{artist}}_item">
+      <li class="rankItem list-group-item" id="{{artist}}_item" data-toggle="tooltip" data-placement="left" title="{{ artist[1] }}">
         <div class="artist_rank">{{rankingList.index(artist) + 1}}</div>
-        <div class="artist_name">{{artist[0]}}</div>
+        <div class="artist_name" >{{artist[0]}}</div>
         <div class="artist_delete">
           <button type="button" class="deleteArtistDialog close" aria-label="Close" id="delete_{{artist[0]}}" data-toggle="modal" data-target="#delete_single_confirmation">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="artist_score">{{artist[1]}}</div>
+        <!-- <div class="artist_score">{{artist[1]}}</div> -->
       </li>
     {% endfor %}
     </ul>
