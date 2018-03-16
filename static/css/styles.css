@@ -9,6 +9,12 @@ body {
   overflow-y: scroll;
 }
 
+/* Remove blue outline when button is clicked */
+.btn:focus, .btn:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 /* Headers at the top of each page */
 .pageHeader{
   padding: 30px 0 0 60px;
@@ -266,10 +272,24 @@ a, .close{
   font-weight: bold;
 }
 
+/* Tooltip icon */
 .sliderTooltip img{
   width: 20px;
   height: 20px;
   margin-left: 10px;
+
+  /* Not draggable or selectable */
+  user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+/* tooltip icon shown on about page, same as above but with no margin-left*/
+.infoContent img{
+  width: 20px;
+  height: 20px;
 
   /* Not draggable or selectable */
   user-drag: none;
@@ -398,8 +418,20 @@ a, .close{
 .contactFormContainer{
   width: 60%;
   margin: 0 auto;
+  padding: 20px 15px 15px 25px;
 }
 
 .contactFormContainer .form-group{
   margin-bottom: 25px;
+}
+
+/* Info Tab */
+
+.infoContent{
+  margin-right: 150px;
+  padding: 20px 15px 15px 25px;
+}
+
+.infoContent a{
+  text-decoration: underline;
 }

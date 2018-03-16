@@ -19,7 +19,55 @@
     <div class="tab-content" id="pills-tabContent">
       <!-- About Page -->
       <div class="tab-pane fade {% if session.active_about_tab=='info'%}show active{% endif %}" id="pills-info" role="tabpanel" aria-labelledby="pills-info-tab">
-        <h3>Info</h3>
+        <div class="infoContent">
+          <h3>About MyTopHHA.com</h3>
+          <p>
+            MyTopHHA.com is a website where you can make a list of your top Hip Hop Artists based off of the criteria that you've set.
+            First, you set your criteria from a list of categories. Next, you give ratings to whichever Hip Hop artists you'd like to rate.
+            After you are done setting the criteria and making your ratings, you can view a list of your top Hip Hop artists.
+          </p>
+          <br />
+          <h5>Setting your Criteria</h5>
+          <p>
+            Before rating any artists, you should first set your criteria on the "My Criteria" page. Here, you will set a criteria based off of what <i>you</i>
+            think makes a great Hip Hop artist. You will be shown a list of categories and will be able to give scores to each category. You should give higher
+            scores to the categories that you believe are more important to determining a great Hip Hop artist. The categories you score higher will weigh more
+            to an artists rating than the categories you give a lower score to. All category scores must add up to 100 before you save your criteria.
+            If you need an explanation for any of the categories, hover over the
+            <img src="{{ url_for('static', filename="images/icons/info4.png")}}"/> icon next to the category name.
+          </p>
+          <br />
+          <h5>Rating Artists</h5>
+          <p>
+            After your criteria is set, you then should go to the "Rate Artists" page where you can choose from a selection of artists to rate. Simply search
+            for and select an artist from the dropdown. Once an artist is selected, you can then give the artist a rating from 1 to 10 in each of the
+            categories. The better you believe the artist is in a particular category, the higher score you should give them.
+            You can do this for as many artists as you want. Make sure to click the "Save Rating" button when you are done rating an artist.
+          </p>
+          <br />
+          <h5>Viewing your Top Hip Hop Artists</h5>
+          <p>
+            After your criteria is set and you're done rating artists, you can finally view your top Hip Hop artist list. Head to the "My Top Artists" page
+            and you will see a list of your top artists. Each artist will have a "score" based off both your criteria and the ratings you gave to them. This score The artists
+            are then listed in order by this score. Depending on how many artists you have rated, this list might span over multiple pages. Note that your top
+            artist list will not show until you have set your criteria and rated at least 1 artist.
+          </p>
+          <p>
+            On the "My Top Artists" page you can also delete ratings. You can choose to delete individual artist ratings by clicking the <span aria-hidden="true">&times;</span>
+            icon in the top right corner of the artist's rating box. You can also delete all of your saved artist ratings by clicking the "Delete All Ratings" button
+            at the top of the page. Be warned that this erases your entire top artist list.
+          </p>
+          <br />
+          <h3>Terms of Service</h3>
+          <p>
+            By using this website, you agree to our <a href="">Terms of Service</a> and <a href="">Privacy Policy</a>. This website uses <a href="">cookies</a>.
+          </p>
+          <br />
+          <h3>Thank you for Visiting</h3>
+          <p>
+            Thank you for visiting MyTopHHA.com. If you have any feedback to give, please don't hesitate to send it through the contact form.
+          </p>
+        </div>
       </div>
 
       <!-- FAQ Page -->
@@ -65,14 +113,13 @@
             <div class="card-header" id="headingThree">
               <h5 class="mb-0">
                 <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                  Why should I verify my email?
+                  What if I don't want to register right away?
                 </button>
               </h5>
             </div>
             <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
               <div class="card-body">
-                Verifying your email allows you to reset your password whenever you forget it. Otherwise, you will not be able to reset your password until
-                your email is verified.
+                That's fine. If you ever do decide to register, your previously saved criteria and artists ratings will all be saved to your new account.
               </div>
             </div>
           </div>
@@ -81,11 +128,27 @@
             <div class="card-header" id="headingFour">
               <h5 class="mb-0">
                 <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                  I never got an email confirmation link
+                    Why should I verify my email?
                 </button>
               </h5>
             </div>
             <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+              <div class="card-body">
+                Verifying your email allows you to reset your password whenever you forget it. Otherwise, you will not be able to reset your password until
+                your email is verified.
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header" id="headingFive">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                  I never got an email confirmation link
+                </button>
+              </h5>
+            </div>
+            <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
               <div class="card-body">
                 If you did not receive an email confirmation link, first double check to make sure that your email is entered correctly on the website.
                 If your email is correct, then please check the Spam folder in your email inbox for the confirmation link. If you still can't find the
@@ -95,14 +158,14 @@
           </div>
 
           <div class="card">
-            <div class="card-header" id="headingFive">
+            <div class="card-header" id="headingSix">
               <h5 class="mb-0">
-                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
                   I have a problem with my account
                 </button>
               </h5>
             </div>
-            <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
+            <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordion">
               <div class="card-body">
                 If you are having any trouble with your account, please let us know through the contact form.
               </div>
@@ -110,16 +173,16 @@
           </div>
 
           <div class="card">
-            <div class="card-header" id="headingSix">
+            <div class="card-header" id="headingSeven">
               <h5 class="mb-0">
-                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-                  I have a suggestion to make about this website
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                  I have a suggestion for this website
                 </button>
               </h5>
             </div>
-            <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordion">
+            <div id="collapseSeven" class="collapse" aria-labelledby="headingSeven" data-parent="#accordion">
               <div class="card-body">
-                Let us know! Any feedback is welcome. Contact us through the contact form.
+                Let us know! Any feedback is welcome. If you have a suggestion or have found a problem with this website, contact us through the contact form.
               </div>
             </div>
           </div>

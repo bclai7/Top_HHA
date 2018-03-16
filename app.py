@@ -509,13 +509,11 @@ def register():
         return redirect(url_for('index'))
     form = RegistrationForm(request.form)
     if request.method == 'POST' and form.validate():
-        app.logger.info('IM HERE')
         name = form.name.data
         email = form.email.data
         password = bcrypt.generate_password_hash(str(form.password.data)).decode('utf-8')
 
         try:
-            app.logger.info('IM HERE')
             # Add user to database
             cur = mysql.connection.cursor()
             query = "INSERT INTO user(name, email, password) VALUES(%s, %s, %s)"
@@ -628,7 +626,6 @@ def confirm_email(token):
         query = """SELECT * FROM user WHERE email = %s"""
         result = cur.execute(query, [email])
         if result > 0:
-            app.logger.info("RESULT > 0")
             data = cur.fetchone()
             email_confirmed = data['email_confirmed']
             if email_confirmed == 1:
@@ -855,7 +852,6 @@ def dashboard():
                 # email a message saying that their email was changed,
                 # otherwise, don't bother
                 if session['email_confirmed'] == 1:
-                    app.logger.info('IN OLD EMAIL SENDING')
                     # Create email message to OLD email
                     msg2 = Message('Email changed at MyTopHHA.com',
                         sender=("MyTopHHA", app.config['MAIL_USERNAME']),
@@ -963,7 +959,6 @@ def forgot_password():
     forgotPasswordForm = EmailForm(request.form)
 
     if request.method == 'POST' and forgotPasswordForm.validate():
-        app.logger.info('IN POST')
         email = forgotPasswordForm.email.data
 
         # First make sure email has been verified

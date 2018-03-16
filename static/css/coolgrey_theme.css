@@ -27,6 +27,7 @@ body {
   background: #333;
 }
 
+
 /* Button Color */
 .btn-primary{
   background: #333;
@@ -230,6 +231,21 @@ input[type="range"]::-ms-fill-upper {
   background: #333;
 }
 
+/* Info Tab */
+.infoContent{
+  border: solid 1px black;
+  border-radius: 15px;
+  background: #333;
+  box-shadow: inset 0 0 2rem rgba(0, 0, 0, .5);
+}
+
+.infoContent a{
+  color: #e6e6e6;
+}
+
+.infoContent a:hover{
+  color: white;
+}
 /* FAQ */
 .accordion{
   border: solid 1px #ccc;
@@ -263,4 +279,16 @@ input[type="range"]::-ms-fill-upper {
   background: #ccc;
   color: #333;
   border: solid 1px #333;
+}
+
+/* Contact Tab */
+.contactFormContainer{
+  border: solid 1px black;
+  border-radius: 15px;
+  background: #333;
+  box-shadow: inset 0 0 2rem rgba(0, 0, 0, .5);
+}
+
+.contactFormContainer .btn{
+  background: #4d4d4d;
 }
