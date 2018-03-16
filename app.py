@@ -1081,8 +1081,6 @@ def reset_with_token(token):
     except:
         abort(404)
 
-
-
     return render_template('reset_password.html',
         passwordResetForm=passwordResetForm,
         token=token)
