@@ -46,7 +46,7 @@
           {{ form.recaptcha(class_="form-control") }}
         </div>
         {% if form.recaptcha.errors %}
-          <ul class="errors">{% for error in form.recaptcha.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+          <ul class="errors">{% for error in form.recaptcha.errors %}<li>reCAPTCHA field must be completed</li>{% endfor %}</ul>
         {% endif %}
 
         <p><input type="submit" class="btn btn-primary" value="Register" /></p>
