@@ -12,6 +12,8 @@ import sys
 from _mysql_exceptions import IntegrityError
 from flask_restful import Api
 import math
+import time
+import datetime
 
 
 app = Flask(__name__)
@@ -719,6 +721,18 @@ def login():
                 session['personality']=personality
                 session['creativity']=creativity
                 session['popularity']=popularity
+
+                # Record login
+                # Get timestamp
+                ts = time.time()
+                timestamp = datetime.datetime.fromtimestamp(ts).strftime("""%Y-%m-%d
+                    %H:%M:%S""")
+                # Add record of login event to database
+                cur = mysql.connection.cursor()
+                query = 'INSERT INTO user_login(user_id, login_time) VALUES(%s, %s)'
+                result = cur.execute(query, (user_id, timestamp))
+                mysql.connection.commit()
+                cur.close()
 
                 flash('Successfully Logged In', 'success')
                 return redirect(url_for('rankings', pagenum='1'))
