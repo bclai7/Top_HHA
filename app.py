@@ -19,7 +19,7 @@ import datetime
 app = Flask(__name__)
 
 # Load from config file
-app.config.from_pyfile('dev_config.cfg')
+app.config.from_pyfile('prod_config.cfg')
 
 #Configure MySQL database
 app.config['MYSQL_HOST'] = app.config['DATABASE_HOST']
