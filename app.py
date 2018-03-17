@@ -88,7 +88,8 @@ def getCategoryDescriptionDict():
     Swagger, fashion, etc.""",
     'creativity': """How creative the artist is in their music. How
     distinct and original their music is.""",
-    'popularity': """How well-known or recognizable the artist is""",
+    'popularity': """How well-known or recognizable the artist is. How relevant
+        the artist is.""",
     }
 
     return categoryDescriptionList
