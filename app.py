@@ -19,7 +19,7 @@ import datetime
 app = Flask(__name__)
 
 # Load from config file
-app.config.from_pyfile('prod_config.cfg')
+app.config.from_pyfile('dev_config.cfg')
 
 #Configure MySQL database
 app.config['MYSQL_HOST'] = app.config['DATABASE_HOST']
@@ -673,7 +673,6 @@ class LoginForm(FlaskForm):
 # Login
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
-    app.logger.info('In login page')
     # If user is already logged in, redirect them to home page
     if 'logged_in' in session:
         flash('You are already logged in', 'danger')
@@ -681,7 +680,6 @@ def login():
 
     loginForm = LoginForm(request.form)
     if request.method == 'POST' and loginForm.validate():
-        app.logger.info('In Post')
         # clear session just in case user made changes before logging in
         session.clear()
         # Get form fields
@@ -752,13 +750,11 @@ def login():
                 flash('Successfully Logged In', 'success')
                 return redirect(url_for('rankings', pagenum='1'))
             else:
-                app.logger.info('Combo bad')
                 flash('Email and Password combination is incorrect', 'danger')
                 return redirect(url_for('login'))
             # Close connection
             cur.close()
         else:
-            app.logger.info('No user w address')
             flash('No user found with that email address', 'danger')
             return redirect(url_for('login'))
     return render_template('login.html', loginForm=loginForm)
