@@ -28,6 +28,12 @@ app.config['MYSQL_PASSWORD'] = app.config['DATABASE_PW']
 app.config['MYSQL_DB'] = app.config['DATABASE_NAME']
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
+# Make sessions permanent
+@app.before_request
+def make_session_permanent():
+    session.permanent = True
+    # Permanent sessions last 31 days by default
+
 # init MySQL
 mysql = MySQL(app)
 
