@@ -19,10 +19,10 @@ import datetime
 app = Flask(__name__)
 
 # Load from config file
-app.config.from_pyfile('config.cfg')
+app.config.from_pyfile('prod_config.cfg')
 
 #Configure MySQL database
-app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_HOST'] = app.config['DATABASE_HOST']
 app.config['MYSQL_USER'] = app.config['DATABASE_USER']
 app.config['MYSQL_PASSWORD'] = app.config['DATABASE_PW']
 app.config['MYSQL_DB'] = app.config['DATABASE_NAME']
@@ -1138,5 +1138,4 @@ def cookies():
 
 
 if __name__ == '__main__':
-    app.secret_key=app.config['SECRET_KEY']
-    app.run(debug=True)
+    app.run()
