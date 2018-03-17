@@ -93,6 +93,8 @@ a, .close{
 
 .register-container .pageInstructions{
   width: 12%;
+}
+.register-container .pageInstructions, .forgot_password_form .pageInstructions{
   background: none;
   border: none;
 }
@@ -426,6 +428,17 @@ a, .close{
   padding: 0 0 200px 0;
 }
 
+/* Info Tab */
+
+.infoContent{
+  padding: 20px 15px 15px 25px;
+  margin: 0 auto;
+}
+
+.infoContent a{
+  text-decoration: underline;
+}
+
 /* Contact form */
 .contactFormContainer{
   width: 60%;
@@ -437,19 +450,86 @@ a, .close{
   margin-bottom: 25px;
 }
 
-/* Info Tab */
-
-.infoContent{
-  margin-right: 150px;
-  padding: 20px 15px 15px 25px;
-}
-
-.infoContent a{
-  text-decoration: underline;
-}
-
 /* ToS, Privacy Policy, and Cookies Policy */
 .tosBody, .privacypolicyBody, .cookiesBody{
   margin: 20px 60px 40px 60px;
   padding: 20px 15px 15px 25px;
+}
+
+/* MOBILE/SMALLER SCREEN MODIFICATIONS */
+
+/* When window is shrunk and sliders have to be in one row*/
+@media only screen and (max-width: 1116px) {
+    .sliderColumnRight{
+      clear: left;
+    }
+}
+
+/* Mobile Screens */
+@media only screen and (max-width: 768px) {
+  /* Slider Columns*/
+  .sliderColumnRight{
+    clear: left;
+  }
+
+  .sliderColumnLeft, .sliderColumnRight{
+    float: none;
+    width: 75%;
+    margin: 0 auto;
+  }
+
+  /* Page Instructions/Messages */
+  .pageInstructions, .accessErrorMessage{
+    float: none;
+    margin: 0 auto;
+  }
+  .accessErrorMessage{
+    padding: 5px 5px 40px 20px;
+  }
+
+  .register-container .pageInstructions{
+    width: 80%;
+    margin: 0 auto;
+    background: none;
+    border: none;
+  }
+  .forgot_password_form .pageInstructions{
+    margin: 0;
+    padding: 0 0 20px 0;
+  }
+
+  /* Forms */
+
+  .register-container .form-group .form-control, .login-container .form-group .form-control{
+    width: 90%;
+  }
+
+  /*FAQ*/
+  .faqContent .card-header button{
+    white-space: normal;
+  }
+
+  /* Contact */
+  .contactFormContainer{
+    width: 100%;
+  }
+
+  /* Top Artists page */
+  .rankItem{
+    padding: 20px 30px 20px 30px;
+  }
+
+  /* Dashboard */
+  .dashboard_container{
+    padding: 25px 5px 5px 25px;
+    border-radius: 15px;
+    margin: 0 auto;
+    margin-top: 30px;
+    float: none;
+    clear: both;
+  }
+  .user_info input, .forgot_password_form .form-control, .reset_password_form .form-control{
+    width: 90%;
+    float:none;
+  }
 }

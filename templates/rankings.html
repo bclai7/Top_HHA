@@ -4,14 +4,14 @@
 <div class="rankings-container">
   <h1 class="pageHeader">
   {% if session.logged_in %}
-    {{session.name}}'s Artist Rankings
+    {{session.name}}'s Top Artists
   {% else %}
-    Artist Rankings
+    My Top Artists
   {% endif %}
   </h1>
 
   {% if isEmpty %}
-    <div class="accessErrorMessage">To view your list, you must first set your criteria and rate at least one artist</div>
+    <p class="accessErrorMessage">To view your list, you must first set your criteria and rate at least one artist</p>
   {% else %}
   <div class="deleteAllRatingsButton"><button class="btn btn-primary" id="delete_all_ratings" data-toggle="modal"
     data-target="#delete_all_confirmation">Delete All Ratings</button></div>
