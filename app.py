@@ -664,20 +664,29 @@ def confirm_email(token):
         flash('Invalid confirmation link', 'danger')
         return redirect(url_for('index'))
 
+# Login Form
+class LoginForm(FlaskForm):
+    email = StringField('Email Address', [validators.DataRequired(),
+        validators.email()])
+    password = PasswordField('Password', [validators.DataRequired()])
 
 # Login
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
+    app.logger.info('In login page')
     # If user is already logged in, redirect them to home page
     if 'logged_in' in session:
         flash('You are already logged in', 'danger')
         return redirect(url_for('index'))
-    if request.method == 'POST':
+
+    loginForm = LoginForm(request.form)
+    if request.method == 'POST' and loginForm.validate():
+        app.logger.info('In Post')
         # clear session just in case user made changes before logging in
         session.clear()
         # Get form fields
-        email = request.form['email']
-        password_candidate = request.form['password']
+        email = loginForm.email.data
+        password_candidate = loginForm.password.data
 
         # Create MySQL Cursor
         cur = mysql.connection.cursor()
@@ -743,14 +752,16 @@ def login():
                 flash('Successfully Logged In', 'success')
                 return redirect(url_for('rankings', pagenum='1'))
             else:
-                return render_template('login.html',
-                    error = 'Email and password combination is incorrect')
+                app.logger.info('Combo bad')
+                flash('Email and Password combination is incorrect', 'danger')
+                return redirect(url_for('login'))
             # Close connection
             cur.close()
         else:
-            return render_template('login.html',
-                error = 'No user found with that email address')
-    return render_template('login.html')
+            app.logger.info('No user w address')
+            flash('No user found with that email address', 'danger')
+            return redirect(url_for('login'))
+    return render_template('login.html', loginForm=loginForm)
 
 # User Dashboard
 @app.route('/dashboard', methods=['GET','POST'])
