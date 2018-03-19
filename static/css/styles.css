@@ -467,6 +467,12 @@ a, .close{
     .sliderColumnRight{
       clear: left;
     }
+    .sliderColumnRight{
+      margin-left: 70px;
+    }
+    .sliderColumnLeft, .sliderColumnRight{
+      width: 75%;
+    }
 }
 
 /* Mobile Screens */
