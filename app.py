@@ -84,7 +84,7 @@ def getCategoryDescriptionDict():
     'impact': """The artist's impact on their peers, future generations,
         and on the genre overall""",
     'sales': """The ability to sell records""",
-    'personality': """Personality, Charisma, Fashion, etc.""",
+    'personality': """Personality, Humor, Style, etc.""",
     'creativity': """How creative the artist is in their music. How
     distinct and original their music is.""",
     'popularity': """How well-known and relevant the artist is.""",
