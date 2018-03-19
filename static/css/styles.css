@@ -422,6 +422,10 @@ a, .close{
   opacity: 0.15;
 }
 
+.carousel .fifth-slide{
+  opacity: 0.25;
+}
+
 /* ABOUT PAGE */
 .aboutContent{
   margin: 20px 60px 0 60px;

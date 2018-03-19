@@ -3,7 +3,7 @@ from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from flask_wtf import FlaskForm, RecaptchaField
 from passlib.hash import sha256_crypt
-from flask.ext.bcrypt import Bcrypt
+from flask_bcrypt import Bcrypt
 from functools import wraps
 import simplejson as json
 from flask_mail import Mail, Message
