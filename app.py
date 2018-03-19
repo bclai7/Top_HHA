@@ -76,20 +76,18 @@ def getCategoryDescriptionDict():
     'delivery': """How well the artist delivers on the beat. Things such
         as their flow, energy, cadence, song hooks, etc.""",
     'hits': """Ability to make hit songs""",
-    'albums': """Ability to release quality projects (Albums, EPs,
+    'albums': """Ability to make quality projects (Albums, EPs,
         Mixtapes, etc.)""",
     'consistency': """How consistently the artist releases quality
         music""",
-    'longevity': """How long an artist and/or their music will last""",
+    'longevity': """How long an artist and their music will last""",
     'impact': """The artist's impact on their peers, future generations,
         and on the genre overall""",
     'sales': """The ability to sell records""",
-    'personality': """Personality and Style of the artist. Charisma,
-    Swagger, fashion, etc.""",
+    'personality': """Personality, Charisma, Fashion, etc.""",
     'creativity': """How creative the artist is in their music. How
     distinct and original their music is.""",
-    'popularity': """How well-known or recognizable the artist is. How relevant
-        the artist is.""",
+    'popularity': """How well-known and relevant the artist is.""",
     }
 
     return categoryDescriptionList
