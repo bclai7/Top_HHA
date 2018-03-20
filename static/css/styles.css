@@ -414,6 +414,11 @@ a, .close{
   -webkit-user-select: none;
   -ms-user-select: none;
 }
+
+.carouselSlideImage{
+  width: 100%;
+  height: 100%;
+}
 .carousel .first-slide{
   opacity: 0.35;
 }
@@ -541,5 +546,12 @@ a, .close{
   .user_info input, .forgot_password_form .form-control, .reset_password_form .form-control{
     width: 90%;
     float:none;
+  }
+
+  .second-slide, .third-slide{
+    width: 200%;
+  }
+  .fourth-slide{
+    width: 175%;
   }
 }

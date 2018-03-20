@@ -22,7 +22,7 @@ app = Flask(__name__)
 app.config.from_pyfile('prod_config.cfg')
 
 # Force SSL
-if app.config['ENABLE_SSL']:
+if app.config['ENABLE_SSL'] == True:
     sslify = SSLify(app)
 
 #Configure MySQL database
