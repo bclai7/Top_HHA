@@ -14,12 +14,16 @@ from flask_restful import Api
 import math
 import time
 import datetime
-
+from flask_sslify import SSLify
 
 app = Flask(__name__)
 
 # Load from config file
 app.config.from_pyfile('prod_config.cfg')
+
+# Force SSL
+if app.config['ENABLE_SSL']:
+    sslify = SSLify(app)
 
 #Configure MySQL database
 app.config['MYSQL_HOST'] = app.config['DATABASE_HOST']
