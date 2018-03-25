@@ -1,4 +1,4 @@
-# Top_HHA
+# MyTopHHA
 ## About MyTopHHA.com
 MyTopHHA.com is a website where you can make a list of your top Hip Hop Artists based off of the criteria that you've set. First, you set your criteria from a list of categories. Next, you give ratings to whichever Hip Hop artists you'd like to rate. After you are done setting the criteria and making your ratings, you can view a list of your top Hip Hop artists.
 
@@ -25,3 +25,5 @@ Depending on how many artists you have rated, this list might span over multiple
 Your top artist list will not show until you have set your criteria and rated at least 1 artist.
 
 On the "My Top Artists" page you can also delete ratings. You can choose to delete individual artist ratings by clicking the × icon on the right side of the artist's tab. You can also delete all of your saved artist ratings by clicking the "Delete All Ratings" button at the top of the page. Be warned that this erases your entire top artist list.
+
+[Link to Website](https://mytophha.com/)
