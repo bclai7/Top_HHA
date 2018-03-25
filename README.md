@@ -26,4 +26,4 @@ Your top artist list will not show until you have set your criteria and rated at
 
 On the "My Top Artists" page you can also delete ratings. You can choose to delete individual artist ratings by clicking the × icon on the right side of the artist's tab. You can also delete all of your saved artist ratings by clicking the "Delete All Ratings" button at the top of the page. Be warned that this erases your entire top artist list.
 
-[Link to Website](https://mytophha.com/)
+[Link to Website](https://www.mytophha.com/)
