@@ -1,5 +1,5 @@
 # Top_HHA
-##About MyTopHHA.com
+## About MyTopHHA.com
 MyTopHHA.com is a website where you can make a list of your top Hip Hop Artists based off of the criteria that you've set. First, you set your criteria from a list of categories. Next, you give ratings to whichever Hip Hop artists you'd like to rate. After you are done setting the criteria and making your ratings, you can view a list of your top Hip Hop artists.
 
 
